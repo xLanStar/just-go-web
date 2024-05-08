@@ -1,4 +1,6 @@
-const NoMatch = () => {
+import React from "react";
+
+const NoMatch: React.FunctionComponent = () => {
   return (
     <div>
       <h1>404</h1>

@@ -4,6 +4,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Divider, Flex, Form, Input } from "antd";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
 
@@ -12,7 +13,7 @@ interface LoginFormData {
   password: string;
 }
 
-const Signin = () => {
+const Signin: React.FunctionComponent = () => {
   const navigate = useNavigate();
 
   const [form] = Form.useForm();

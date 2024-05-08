@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import React from "react";
 import {
   decrement,
   increment,
@@ -6,7 +7,7 @@ import {
 } from "../feature/counter/counterSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
-const Home = () => {
+const Home: React.FunctionComponent = () => {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
 
