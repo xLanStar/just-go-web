@@ -12,11 +12,6 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["react-refresh", "react"],
   rules: {
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
-    "no-restricted-imports": "off",
     "@typescript-eslint/no-restricted-imports": [
       "warn",
       {
@@ -26,6 +21,7 @@ module.exports = {
           "Use typed hooks `useAppDispatch` and `useAppSelector` instead.",
       },
     ],
+    "no-restricted-imports": "off",
     "prettier/prettier": [
       "warn",
       {},
@@ -34,6 +30,11 @@ module.exports = {
       },
     ],
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react-refresh/only-export-components": [
+      "warn",
+      { allowConstantExport: true },
+    ],
   },
   settings: {
     react: {
