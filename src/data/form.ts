@@ -9,4 +9,12 @@ export const CommonRules: { [name: string]: Rule } = {
     required: true,
     message: "此欄位為必填!",
   },
+  CheckPassword: ({ getFieldValue }) => ({
+    validator(_: unknown, value: string) {
+      if (!value || getFieldValue("password") === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error("再次輸入密碼必須和密碼一致"));
+    },
+  }),
 };

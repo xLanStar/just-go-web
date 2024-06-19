@@ -1,7 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./feature/counter/counterSlice";
+import userSlice from "./feature/user/userSlice";
 
-const rootReducer = combineReducers({ counter: counterSlice.reducer });
+const rootReducer = combineReducers({
+  counter: counterSlice.reducer,
+  user: userSlice.reducer,
+});
 
 const store = configureStore({
   reducer: rootReducer,
