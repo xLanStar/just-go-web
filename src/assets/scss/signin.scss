@@ -1,0 +1,40 @@
+.signin_page {
+  width: 100%;
+  overflow-y: auto;
+}
+
+@media screen and (min-width: 768px) {
+  .logo_image {
+    width: 480px;
+  }
+  
+  .signin_form {
+    width: 480px;
+  }
+}
+
+@media screen and (max-width: 767px) and (min-width: 480px) {
+  .logo_image {
+    width: 360px;
+  }
+  
+  .signin_form {
+    width: 360px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .logo_image {
+    width: 240px;
+  }
+  
+  .signin_form {
+    width: 240px;
+  }
+}
+
+@media screen and (max-height: 768px) {
+  .signin_page {
+    padding: 30px 0px;
+  }
+}
