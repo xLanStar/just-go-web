@@ -149,7 +149,7 @@ const Signin: React.FunctionComponent = () => {
               htmlType="submit"
               style={{ width: "100%" }}
             >
-              登入
+              {isSignin ? "登入" : "註冊"}
             </Button>
             <Divider>或</Divider>
             <Button

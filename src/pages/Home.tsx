@@ -1,15 +1,24 @@
 import { Button } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   decrement,
   increment,
   incrementByAmount,
 } from "../feature/counter/counterSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import { useNavigate } from "react-router-dom";
+import { getJwtToken } from "../apis/auth";
 
 const Home: React.FunctionComponent = () => {
-  const count = useAppSelector((state) => state.counter.value);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const count = useAppSelector((state) => state.counter.value);
+
+  useEffect(() => {
+    if (!getJwtToken()) {
+      navigate("/signin", { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div>
