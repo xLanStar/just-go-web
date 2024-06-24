@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./feature/counter/counterSlice";
 import userSlice from "./feature/user/userSlice";
+import tripSlice from "./feature/trip/tripSlice";
 
 const rootReducer = combineReducers({
   counter: counterSlice.reducer,
   user: userSlice.reducer,
+  trip: tripSlice.reducer,
 });
 
 const store = configureStore({

@@ -1,13 +1,12 @@
 import { Card, Row, Col, Flex } from "antd";
-import React from "react";
-
-import "../assets/scss/tripCard.scss";
 import { DeleteOutlined, LikeOutlined } from "@ant-design/icons";
+import React from "react";
 import { Color } from "../data/color";
+import "../assets/scss/tripCard.scss";
 
 interface Props {
-  image: string;
   title: string;
+  image: string;
   update: number;
   labels: string[];
   like: number;
@@ -15,8 +14,8 @@ interface Props {
 }
 
 const TripCard: React.FunctionComponent<Props> = ({
-  image,
   title,
+  image,
   update,
   labels,
   like,
@@ -33,10 +32,18 @@ const TripCard: React.FunctionComponent<Props> = ({
     height: "41px",
   };
 
+  const clickLike = () => {
+    console.log("click like");
+  };
+
+  const clickDelete = () => {
+    console.log("click delete");
+  };
+
   return (
     <Card
       style={{
-        width: "300px",
+        width: "280px",
         height: "300px",
         borderRadius: "12px",
       }}
@@ -52,7 +59,7 @@ const TripCard: React.FunctionComponent<Props> = ({
         <img
           src={image}
           alt="sights"
-          width={260}
+          width={240}
           height={180}
           style={{
             borderRadius: "8px",
@@ -104,8 +111,9 @@ const TripCard: React.FunctionComponent<Props> = ({
               ...tripFooter,
             }}
           >
-            {labels.map((label) => (
+            {labels.map((label, index) => (
               <h3
+                key={index}
                 style={{
                   whiteSpace: "nowrap",
                   textAlign: "center",
@@ -136,6 +144,7 @@ const TripCard: React.FunctionComponent<Props> = ({
                 style={tripFooter}
               >
                 <LikeOutlined
+                  onClick={clickLike}
                   style={{
                     fontSize: "24px",
                   }}
@@ -144,6 +153,7 @@ const TripCard: React.FunctionComponent<Props> = ({
               </Flex>
             )}
             <DeleteOutlined
+              onClick={clickDelete}
               style={{
                 fontSize: "24px",
               }}
