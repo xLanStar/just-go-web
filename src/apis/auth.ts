@@ -1,7 +1,8 @@
 import axios from "axios";
-import { AxiosResponse, AxiosError } from "axios";
-import { User } from "../feature/user/userSlice";
+import { AxiosResponse } from "axios";
 import type { LoginFormData } from "../pages/auth/Signin";
+import { handleError } from "../utils/handleError";
+import { User } from "../types/userInterface";
 
 export const getJwtToken = (): string | null => {
   return localStorage.getItem("jwtToken");
@@ -52,17 +53,7 @@ export const register = async (form: LoginFormData) => {
   }
 };
 
-const handleError = (error: unknown, message: string) => {
-  if (error instanceof AxiosError) {
-    const status = error.response?.status;
-    switch (status) {
-      case 404:
-        throw new Error(message);
-      case 500:
-        throw new Error("系統發生錯誤，請稍後再試");
-    }
-  } else {
-    console.error(error);
-    throw new Error("系統發生錯誤，請稍後再試");
-  }
-};
+export const logout = () => {
+  localStorage.removeItem("jwtToken");
+  localStorage.removeItem("user");
+}

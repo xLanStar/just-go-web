@@ -1,5 +1,6 @@
 import {
   CalendarOutlined,
+  CompassOutlined,
   LogoutOutlined,
   PlusOutlined,
   UserOutlined,
@@ -7,6 +8,7 @@ import {
 import type { MenuProps } from "antd";
 import { Layout as AntdLayout, Button, Dropdown, Space } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
+import { logout } from "../apis/auth";
 
 const { Header, Footer, Content } = AntdLayout;
 
@@ -23,7 +25,10 @@ const Layout = () => {
       key: "2",
       icon: <LogoutOutlined />,
       label: "登出",
-      onClick: () => navigate("/signin"),
+      onClick: () => {
+        logout();
+        navigate("/signin");
+      },
     },
   ];
 
@@ -41,8 +46,15 @@ const Layout = () => {
         }}
       >
         <Space>
-          (Logo)
-          <Button icon={<CalendarOutlined />} type="text">
+          <img src="src/assets/logo.png" alt="logo" height={48} />
+          <Button icon={<CompassOutlined />} type="text">
+            景點探索
+          </Button>
+          <Button
+            icon={<CalendarOutlined />}
+            type="text"
+            onClick={() => navigate("/dashboard")}
+          >
             規劃行程
           </Button>
         </Space>

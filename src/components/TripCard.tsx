@@ -1,26 +1,29 @@
 import { Card, Row, Col, Flex } from "antd";
-import { DeleteOutlined, LikeOutlined } from "@ant-design/icons";
+import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
 import { Color } from "../data/color";
 import "../assets/scss/tripCard.scss";
+import { TripInfo } from "../types/tripInterface";
 
 interface Props {
-  title: string;
-  image: string;
-  update: number;
-  labels: string[];
-  like: number;
-  isShare: boolean;
+  trip: TripInfo;
+  toggleFavor: (id: number) => void;
+  removeTrip: (id: number) => void;
 }
 
 const TripCard: React.FunctionComponent<Props> = ({
-  title,
-  image,
-  update,
-  labels,
-  like,
-  isShare,
+  trip,
+  toggleFavor,
+  removeTrip,
 }) => {
+  const clickLike = () => {
+    toggleFavor(trip.id);
+  };
+
+  const clickDelete = () => {
+    removeTrip(trip.id);
+  };
+
   const tripTitle = {
     padding: "4px 0px",
     width: "100%",
@@ -30,14 +33,6 @@ const TripCard: React.FunctionComponent<Props> = ({
   const tripFooter = {
     width: "100%",
     height: "41px",
-  };
-
-  const clickLike = () => {
-    console.log("click like");
-  };
-
-  const clickDelete = () => {
-    console.log("click delete");
   };
 
   return (
@@ -57,7 +52,7 @@ const TripCard: React.FunctionComponent<Props> = ({
         }}
       >
         <img
-          src={image}
+          src={trip.image}
           alt="sights"
           width={240}
           height={180}
@@ -74,7 +69,7 @@ const TripCard: React.FunctionComponent<Props> = ({
             align="center"
             style={tripTitle}
           >
-            <h1>{title}</h1>
+            <h1>{trip.title}</h1>
           </Flex>
         </Col>
         <Col span={8}>
@@ -89,14 +84,14 @@ const TripCard: React.FunctionComponent<Props> = ({
                 color: Color.greyHeavy,
               }}
             >
-              {update > 30 ? 30 : update} 天前更新
+              {trip.update > 30 ? 30 : trip.update} 天前更新
             </h3>
           </Flex>
         </Col>
       </Row>
       <Row>
         <Col
-          span={isShare ? 16 : 20}
+          span={trip.isShare ? 16 : 20}
           style={{
             paddingRight: "12px",
           }}
@@ -107,11 +102,9 @@ const TripCard: React.FunctionComponent<Props> = ({
             justify="flex-start"
             align="center"
             gap="small"
-            style={{
-              ...tripFooter,
-            }}
+            style={tripFooter}
           >
-            {labels.map((label, index) => (
+            {trip.labels.map((label, index) => (
               <h3
                 key={index}
                 style={{
@@ -128,36 +121,45 @@ const TripCard: React.FunctionComponent<Props> = ({
             ))}
           </Flex>
         </Col>
-        <Col span={isShare ? 8 : 4}>
+        <Col span={trip.isShare ? 8 : 4}>
           <Flex
             vertical={false}
             justify="flex-end"
             align="center"
+            gap="small"
             style={tripFooter}
           >
-            {isShare && (
+            {trip.isShare && (
               <Flex
                 vertical={false}
-                justify="center"
+                justify="flex-end"
                 align="center"
                 gap="small"
                 style={tripFooter}
               >
-                <LikeOutlined
-                  onClick={clickLike}
-                  style={{
-                    fontSize: "24px",
-                  }}
-                />
-                <h3>{like > 999 ? "999+" : like}</h3>
+                {trip.likeByMe ? (
+                  <LikeTwoTone
+                    onClick={clickLike}
+                    style={{ fontSize: "24px" }}
+                  />
+                ) : (
+                  <LikeOutlined
+                    onClick={clickLike}
+                    style={{ fontSize: "24px" }}
+                  />
+                )}
+
+                <h3>{trip.like > 999 ? "999+" : trip.like}</h3>
               </Flex>
             )}
-            <DeleteOutlined
-              onClick={clickDelete}
-              style={{
-                fontSize: "24px",
-              }}
-            />
+            {trip.deletable && (
+              <DeleteOutlined
+                onClick={clickDelete}
+                style={{
+                  fontSize: "24px",
+                }}
+              />
+            )}
           </Flex>
         </Col>
       </Row>

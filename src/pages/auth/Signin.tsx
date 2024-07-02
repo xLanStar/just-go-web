@@ -15,7 +15,8 @@ import {
   setJwtToken,
   signin,
 } from "../../apis/auth";
-import { User, setUser } from "../../feature/user/userSlice";
+import { setUser } from "../../store/user/userSlice";
+import { User } from "../../types/userInterface";
 import { useAppDispatch } from "../../hooks";
 
 import "../../assets/scss/signin.scss";

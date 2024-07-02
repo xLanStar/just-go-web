@@ -4,7 +4,7 @@ import {
   decrement,
   increment,
   incrementByAmount,
-} from "../feature/counter/counterSlice";
+} from "../store/counter/counterSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../apis/auth";
