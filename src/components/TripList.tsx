@@ -1,11 +1,10 @@
-import { Col, Flex, Row } from "antd";
+import { useEffect, useState } from "react";
+import { App, Col, Flex, Row } from "antd";
 import { Fragment } from "react/jsx-runtime";
 import TripCard from "./TripCard";
 import { TripInfo } from "../types/tripInterface";
-
-import "../assets/scss/tripList.scss";
-import { useEffect, useState } from "react";
 import { deleteTrip, favorTrip, loadTripsByMe } from "../apis/trip";
+import "../assets/scss/tripList.scss";
 
 interface Props {
   title: string;
@@ -13,32 +12,51 @@ interface Props {
 }
 
 const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
+  const { message } = App.useApp();
   const [tripList, setTripList] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    loadTripsByMe(category).then((response) => {
-      setTripList(response.data);
-    });
+    loadTripsByMe(category)
+      .then((response) => {
+        setTripList(response.data);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          message.error(error.message);
+        }
+      });
   }, []);
 
   const toggleFavor = async (id: number) => {
-    const response = await favorTrip(id);
-    const { likeByMe } = response.data;
-    const newTripList = [...tripList];
-    const trip = newTripList.find((trip) => trip.id === id);
-    if (likeByMe) {
-      (trip as TripInfo).like++;
-    } else {
-      (trip as TripInfo).like--;
+    try {
+      const response = await favorTrip(id);
+      const { likeByMe } = response.data;
+      const newTripList = [...tripList];
+      const trip = newTripList.find((trip) => trip.id === id);
+      if (likeByMe) {
+        (trip as TripInfo).like++;
+      } else {
+        (trip as TripInfo).like--;
+      }
+      (trip as TripInfo).likeByMe = likeByMe;
+      setTripList(newTripList);
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(error.message);
+      }
     }
-    (trip as TripInfo).likeByMe = likeByMe;
-    setTripList(newTripList);
   };
 
   const removeTrip = async (id: number) => {
-    const response = await deleteTrip(id);
-    const newTripList = tripList.filter((trip) => trip.id !== id);
-    setTripList(newTripList);
+    try {
+      const response = await deleteTrip(id);
+      const newTripList = tripList.filter((trip) => trip.id !== id);
+      setTripList(newTripList);
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(error.message);
+      }
+    }
   };
 
   return (

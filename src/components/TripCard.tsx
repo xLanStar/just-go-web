@@ -2,8 +2,8 @@ import { Card, Row, Col, Flex } from "antd";
 import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
 import { Color } from "../data/color";
-import "../assets/scss/tripCard.scss";
 import { TripInfo } from "../types/tripInterface";
+import "../assets/scss/tripCard.scss";
 
 interface Props {
   trip: TripInfo;

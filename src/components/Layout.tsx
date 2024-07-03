@@ -43,6 +43,7 @@ const Layout = () => {
           paddingInline: 48,
           lineHeight: "64px",
           backgroundColor: "white",
+          overflowX: "auto",
         }}
       >
         <Space>
