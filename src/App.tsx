@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import NoMatch from "./pages/NoMatch";
 import Signin from "./pages/auth/Signin";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 
 const App: React.FunctionComponent = () => (
   <ConfigProvider locale={zhTW}>
@@ -16,6 +17,7 @@ const App: React.FunctionComponent = () => (
           <Route index element={<Home />} />
           {/* <Route path="about" element={<About />} />*/}
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />
