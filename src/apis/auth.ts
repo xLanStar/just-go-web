@@ -1,8 +1,8 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import type { LoginFormData } from "../pages/auth/Signin";
 import { handleError } from "../utils/handleError";
 import { User } from "../types/userInterface";
+import { LoginForm } from "../types/formInterface";
 
 export const getJwtToken = (): string | null => {
   return localStorage.getItem("jwtToken");
@@ -21,6 +21,7 @@ export const getUser = (): User => {
     uuid: "",
     name: "",
     email: "",
+    avatar: "",
   };
 };
 
@@ -28,7 +29,7 @@ export const saveUser = (user: User): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const signin = async (form: LoginFormData) => {
+export const signin = async (form: LoginForm) => {
   try {
     const response: AxiosResponse = await axios.post("/api/user/login", {
       email: form.email,
@@ -40,7 +41,7 @@ export const signin = async (form: LoginFormData) => {
   }
 };
 
-export const register = async (form: LoginFormData) => {
+export const register = async (form: LoginForm) => {
   try {
     const response: AxiosResponse = await axios.post("/api/user/register", {
       name: form.name,
