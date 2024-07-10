@@ -18,15 +18,9 @@ import {
 import { setUser } from "../../store/user/userSlice";
 import { User } from "../../types/userInterface";
 import { useAppDispatch } from "../../hooks";
+import { LoginForm } from "../../types/formInterface";
 
 import "../../assets/scss/signin.scss";
-
-export interface LoginFormData {
-  name?: string;
-  email: string;
-  password: string;
-  checkPassword?: string;
-}
 
 const Signin: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -41,7 +35,7 @@ const Signin: React.FunctionComponent = () => {
     }
   }, [navigate]);
 
-  const onFinish = async (data: LoginFormData) => {
+  const onFinish = async (data: LoginForm) => {
     try {
       const response = isSignin
         ? await signin({

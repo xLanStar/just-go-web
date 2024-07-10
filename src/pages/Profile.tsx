@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  App,
   Avatar,
   Button,
   Col,
@@ -11,6 +12,7 @@ import {
   Row,
   Upload,
 } from "antd";
+import type { UploadProps } from "antd";
 import {
   CloseCircleOutlined,
   MailOutlined,
@@ -18,20 +20,23 @@ import {
   UploadOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
-import { getJwtToken } from "../apis/auth";
+import { getJwtToken, saveUser } from "../apis/auth";
+import { ProfileForm } from "../types/formInterface";
+import { changeUser } from "../apis/user";
+import { User } from "../types/userInterface";
+import { setUser } from "../store/user/userSlice";
 
 import "../assets/scss/profile.scss";
 
-export interface ProfileFormData {
-  name: string;
-  email: string;
-}
-
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+  const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const { message } = App.useApp();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -40,8 +45,37 @@ const Profile: React.FunctionComponent = () => {
     }
   }, [navigate]);
 
-  const onFinish = async (data: ProfileFormData) => {
-    console.log(data);
+  const uploadProps: UploadProps = {
+    beforeUpload: (avatar) => {
+      const isImage =
+        avatar.type === "image/png" || avatar.type === "image/jpeg";
+
+      if (!isImage) {
+        message.error(`${avatar.name}不是一個圖片檔`);
+        return Upload.LIST_IGNORE;
+      }
+
+      setAvatar(avatar);
+      setAvatarUrl(URL.createObjectURL(avatar));
+
+      return false;
+    },
+    maxCount: 1,
+    showUploadList: false,
+  };
+
+  const onFinish = async (data: ProfileForm) => {
+    try {
+      const response = await changeUser(user.uuid, data, avatar);
+      const newUser: User = response.data;
+      saveUser(newUser);
+      dispatch(setUser(newUser));
+      navigate(-1);
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(error.message);
+      }
+    }
   };
 
   return (
@@ -94,10 +128,17 @@ const Profile: React.FunctionComponent = () => {
                     height: "100%",
                   }}
                 >
-                  <Avatar
-                    src={<img src="src/assets/avatar.jpg" alt="avatar" />}
-                    size={80}
-                  />
+                  {avatarUrl ? (
+                    <Avatar
+                      src={<img src={avatarUrl} alt="avatar" />}
+                      size={80}
+                    />
+                  ) : (
+                    <Avatar
+                      src={<img src="src/assets/avatar.jpg" alt="avatar" />}
+                      size={80}
+                    />
+                  )}
                   <h2>你的照片</h2>
                 </Flex>
               </Col>
@@ -111,7 +152,7 @@ const Profile: React.FunctionComponent = () => {
                     height: "100%",
                   }}
                 >
-                  <Upload>
+                  <Upload {...uploadProps}>
                     <Button
                       icon={<UploadOutlined />}
                       size="large"
@@ -179,7 +220,12 @@ const Profile: React.FunctionComponent = () => {
                   >
                     儲存
                   </Button>
-                  <Button icon={<CloseCircleOutlined />} size="large">
+                  <Button
+                    icon={<CloseCircleOutlined />}
+                    size="large"
+                    htmlType="button"
+                    onClick={() => navigate(-1)}
+                  >
                     取消
                   </Button>
                 </Flex>
