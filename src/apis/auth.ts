@@ -1,8 +1,6 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import { handleError } from "../utils/handleError";
 import { User } from "../types/userInterface";
-import { LoginForm } from "../types/formInterface";
 
 export const getJwtToken = (): string | null => {
   return localStorage.getItem("jwtToken");
@@ -29,29 +27,32 @@ export const saveUser = (user: User): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const signin = async (form: LoginForm) => {
-  try {
-    const response: AxiosResponse = await axios.post("/api/user/login", {
-      email: form.email,
-      password: form.password,
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error, "帳號或密碼錯誤");
-  }
+export const signin = async (email: string, password: string) => {
+  const response: AxiosResponse = await axios.post("/api/user/login", {
+    email, password
+  });
+
+  const user: User = response.data.data;
+  const token: string = response.data.token;
+
+  setJwtToken(token);
+  saveUser(user);
+
+  return user;
 };
 
-export const register = async (form: LoginForm) => {
-  try {
-    const response: AxiosResponse = await axios.post("/api/user/register", {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error, "帳號已存在");
-  }
+export const register = async (name: string, email: string, password: string) => {
+  const response: AxiosResponse = await axios.post("/api/user/register", {
+    name, email, password
+  });
+
+  const user: User = response.data.data;
+  const token: string = response.data.token;
+
+  setJwtToken(token);
+  saveUser(user);
+  
+  return user;
 };
 
 export const logout = () => {
