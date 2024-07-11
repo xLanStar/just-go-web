@@ -15,7 +15,8 @@ import {
   setJwtToken,
   signin,
 } from "../../apis/auth";
-import { User, setUser } from "../../feature/user/userSlice";
+import { setUser } from "../../store/user/userSlice";
+import { User } from "../../types/userInterface";
 import { useAppDispatch } from "../../hooks";
 
 import "../../assets/scss/signin.scss";
@@ -149,7 +150,7 @@ const Signin: React.FunctionComponent = () => {
               htmlType="submit"
               style={{ width: "100%" }}
             >
-              登入
+              {isSignin ? "登入" : "註冊"}
             </Button>
             <Divider>或</Divider>
             <Button
