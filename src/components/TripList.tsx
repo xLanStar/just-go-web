@@ -4,8 +4,8 @@ import { Fragment } from "react/jsx-runtime";
 import TripCard from "./TripCard";
 import { TripInfo } from "../types/tripInterface";
 import { deleteTrip, favorTrip, loadTripsByMe } from "../apis/trip";
+
 import "../assets/scss/tripList.scss";
-import { handleAxiosError } from "../utils/handleError";
 
 interface Props {
   title: string;
@@ -20,8 +20,11 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
     loadTripsByMe(category)
       .then((trips: TripInfo[]) => setTripList(trips))
       .catch((error: any) => {
-        const result = handleAxiosError(error, "載入行程失敗");
-        message.error(result.message);
+        if (error.name === "ResponseError") {
+          message.error("載入行程失敗");
+        } else {
+          message.error(error.message);
+        }
       });
   }, []);
 
@@ -40,8 +43,11 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
       (trip as TripInfo).likeByMe = likeByMe;
       setTripList(newTripList);
     } catch (error: any) {
-      const result = handleAxiosError(error, "點擊收藏失敗");
-      message.error(result.message);
+      if (error.name === "ResponseError") {
+        message.error("點擊收藏失敗");
+      } else {
+        message.error(error.message);
+      }
     }
   };
 
@@ -51,8 +57,11 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
       const newTripList = tripList.filter((trip) => trip.id !== id);
       setTripList(newTripList);
     } catch (error: any) {
-      const result = handleAxiosError(error, "點擊刪除失敗");
-      message.error(result.message);
+      if (error.name === "ResponseError") {
+        message.error("點擊刪除失敗");
+      } else {
+        message.error(error.message);
+      }
     }
   };
 

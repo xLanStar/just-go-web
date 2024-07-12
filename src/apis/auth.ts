@@ -1,6 +1,6 @@
-import axios from "axios";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { User } from "../types/userInterface";
+import { responseErrorHandler } from "../utils/request";
 
 export const getJwtToken = (): string | null => {
   return localStorage.getItem("jwtToken");
@@ -28,31 +28,39 @@ export const saveUser = (user: User): void => {
 };
 
 export const signin = async (email: string, password: string) => {
-  const response: AxiosResponse = await axios.post("/api/user/login", {
-    email, password
-  });
-
-  const user: User = response.data.data;
-  const token: string = response.data.token;
-
-  setJwtToken(token);
-  saveUser(user);
-
-  return user;
+  try {
+    const response: AxiosResponse = await axios.post("/api/user/login", {
+      email, password
+    });
+  
+    const user: User = response.data.data;
+    const token: string = response.data.token;
+  
+    setJwtToken(token);
+    saveUser(user);
+  
+    return user;
+  } catch (error: any) {
+    return responseErrorHandler(error);
+  }
 };
 
 export const register = async (name: string, email: string, password: string) => {
-  const response: AxiosResponse = await axios.post("/api/user/register", {
-    name, email, password
-  });
-
-  const user: User = response.data.data;
-  const token: string = response.data.token;
-
-  setJwtToken(token);
-  saveUser(user);
+  try {
+    const response: AxiosResponse = await axios.post("/api/user/register", {
+      name, email, password
+    });
   
-  return user;
+    const user: User = response.data.data;
+    const token: string = response.data.token;
+  
+    setJwtToken(token);
+    saveUser(user);
+    
+    return user;
+  } catch (error: any) {
+    return responseErrorHandler(error);
+  }
 };
 
 export const logout = () => {

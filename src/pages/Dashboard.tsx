@@ -10,6 +10,7 @@ import {
 import { Color } from "../data/color";
 import { useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
+
 import "../assets/scss/dashboard.scss";
 
 enum Mode {
