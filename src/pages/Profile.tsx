@@ -22,13 +22,11 @@ import {
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
-import { getJwtToken, saveUser } from "../apis/auth";
+import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
-import { changeUser } from "../apis/user";
-import { User } from "../types/userInterface";
-import { setUser } from "../store/user/userSlice";
 
 import "../assets/scss/profile.scss";
+import { updateUser } from "../store/user/userSlice";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -64,12 +62,16 @@ const Profile: React.FunctionComponent = () => {
     showUploadList: false,
   };
 
-  const onFinish = async (data: ProfileForm) => {
+  const onFinish = async (form: ProfileForm) => {
     try {
-      const response = await changeUser(user.uuid, data, avatar);
-      const newUser: User = response.data;
-      saveUser(newUser);
-      dispatch(setUser(newUser));
+      await dispatch(
+        updateUser({
+          uuid: user.uuid,
+          name: form.name,
+          email: form.email,
+          avatar: avatar,
+        })
+      );
       navigate(-1);
     } catch (error) {
       if (error instanceof Error) {

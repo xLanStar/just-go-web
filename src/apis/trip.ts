@@ -1,39 +1,36 @@
-import axios from "axios";
-import { AxiosResponse } from "axios";
-import { handleError } from "../utils/handleError";
+import request from "../utils/request";
+import { TripInfo } from "../types/tripInterface";
+
+interface TripResponse {
+  data: TripInfo[];
+}
+
+interface LikeResponse {
+  likeByMe: boolean;
+}
+
+interface DeleteResponse {
+  message: string;
+}
 
 export const loadTrips = async() => {
-    try {
-        const response: AxiosResponse = await axios.get("/api/trip");
-        return response.data;
-    } catch (error) {
-        handleError(error, "載入行程失敗");
-    }
+  const response: TripResponse = await request.get("/api/trip");
+  return response.data;
 }
 
 export const loadTripsByMe = async(type: string) => {
-    try {
-        const response: AxiosResponse = await axios.get(`/api/trip/${type}`);
-        return response.data;
-    } catch (error) {
-        handleError(error, "載入行程失敗");
-    }
+  const response: TripResponse = await request.get(`/api/trip/${type}`);
+  const trips: TripInfo[] = response.data;
+  return trips;
 }
 
 export const favorTrip = async(id: number) => {
-    try {
-        const response: AxiosResponse = await axios.put(`/api/trip/${id}/favor`);
-        return response.data;
-    } catch (error) {
-        handleError(error, "點擊收藏失敗");
-    }
+  const response: LikeResponse = await request.put(`/api/trip/${id}/favor`);
+  const likeByMe: boolean = response.likeByMe
+  return likeByMe;
 }
 
 export const deleteTrip = async(id: number) => {
-    try {
-        const response: AxiosResponse = await axios.delete(`/api/trip/${id}`)
-        return response.data;
-    } catch (error) {
-        handleError(error, "刪除行程失敗");
-    }
+  const response: DeleteResponse = await request.delete(`/api/trip/${id}`)
+  return response.message;
 }

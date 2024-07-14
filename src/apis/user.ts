@@ -1,22 +1,25 @@
-import axios, { AxiosResponse } from "axios";
-import { ProfileForm } from "../types/formInterface";
-import { handleError } from "../utils/handleError";
+import { User } from "../types/userInterface";
+import request from "../utils/request";
+import { saveUser } from "./auth";
 
-export const changeUser = async(uuid: string, form: ProfileForm, avatar: File | null) => {
+interface UserResponse {
+  data: User
+}
+
+export const changeUser = async(uuid: string, name: string, email: string, avatar: File | null) => {
   const formData = new FormData();
-  formData.append("name", form.name);
-  formData.append("email", form.email);
+  formData.append("name", name);
+  formData.append("email", email);
 
   if (avatar) {
     formData.append("avatar", avatar);
   } else {
     formData.append("avatar", "");
   }
+
+  const response: UserResponse = await request.put(`/api/user/${uuid}`, formData);
+  const user: User = response.data;
+  saveUser(user);
   
-  try {
-    const response: AxiosResponse = await axios.put(`/api/user/${uuid}`, formData);
-    return response.data;
-  } catch (error) {
-    handleError(error, "發生錯誤");
-  }
+  return user;
 }

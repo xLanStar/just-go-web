@@ -8,17 +8,10 @@ import { App, Button, Divider, Flex, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
-import {
-  getJwtToken,
-  register,
-  saveUser,
-  setJwtToken,
-  signin,
-} from "../../apis/auth";
-import { setUser } from "../../store/user/userSlice";
-import { User } from "../../types/userInterface";
+import { getJwtToken } from "../../apis/auth";
 import { useAppDispatch } from "../../hooks";
-import { LoginForm } from "../../types/formInterface";
+import { SigninForm } from "../../types/formInterface";
+import { registerUser, signinUser } from "../../store/user/userSlice";
 
 import "../../assets/scss/signin.scss";
 
@@ -35,22 +28,21 @@ const Signin: React.FunctionComponent = () => {
     }
   }, [navigate]);
 
-  const onFinish = async (data: LoginForm) => {
+  const onFinish = async (form: SigninForm) => {
     try {
-      const response = isSignin
-        ? await signin({
-            email: data.email,
-            password: data.password,
+      if (isSignin) {
+        await dispatch(
+          signinUser({ email: form.email, password: form.password })
+        );
+      } else {
+        await dispatch(
+          registerUser({
+            name: form.name as string,
+            email: form.email,
+            password: form.password,
           })
-        : await register({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-          });
-      const user: User = response.data;
-      setJwtToken(response.token);
-      saveUser(user);
-      dispatch(setUser(user));
+        );
+      }
       navigate("/", { replace: true });
     } catch (error) {
       if (error instanceof Error) {

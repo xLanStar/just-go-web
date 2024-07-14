@@ -4,6 +4,7 @@ import { Fragment } from "react/jsx-runtime";
 import TripCard from "./TripCard";
 import { TripInfo } from "../types/tripInterface";
 import { deleteTrip, favorTrip, loadTripsByMe } from "../apis/trip";
+
 import "../assets/scss/tripList.scss";
 
 interface Props {
@@ -17,11 +18,11 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
 
   useEffect(() => {
     loadTripsByMe(category)
-      .then((response) => {
-        setTripList(response.data);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
+      .then((trips: TripInfo[]) => setTripList(trips))
+      .catch((error: any) => {
+        if (error.name === "ResponseError") {
+          message.error("載入行程失敗");
+        } else {
           message.error(error.message);
         }
       });
@@ -29,19 +30,22 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
 
   const toggleFavor = async (id: number) => {
     try {
-      const response = await favorTrip(id);
-      const { likeByMe } = response.data;
+      const likeByMe = await favorTrip(id);
       const newTripList = [...tripList];
       const trip = newTripList.find((trip) => trip.id === id);
+
       if (likeByMe) {
         (trip as TripInfo).like++;
       } else {
         (trip as TripInfo).like--;
       }
+
       (trip as TripInfo).likeByMe = likeByMe;
       setTripList(newTripList);
-    } catch (error) {
-      if (error instanceof Error) {
+    } catch (error: any) {
+      if (error.name === "ResponseError") {
+        message.error("點擊收藏失敗");
+      } else {
         message.error(error.message);
       }
     }
@@ -49,11 +53,13 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
 
   const removeTrip = async (id: number) => {
     try {
-      const response = await deleteTrip(id);
+      await deleteTrip(id);
       const newTripList = tripList.filter((trip) => trip.id !== id);
       setTripList(newTripList);
-    } catch (error) {
-      if (error instanceof Error) {
+    } catch (error: any) {
+      if (error.name === "ResponseError") {
+        message.error("點擊刪除失敗");
+      } else {
         message.error(error.message);
       }
     }
