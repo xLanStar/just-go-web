@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./store/counter/counterSlice";
 import userSlice from "./store/user/userSlice";
+import pageSlice from "./store/page/pageSlice";
 
 const rootReducer = combineReducers({
   counter: counterSlice.reducer,
   user: userSlice.reducer,
+  page: pageSlice.reducer,
 });
 
 const store = configureStore({

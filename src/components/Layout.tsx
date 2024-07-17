@@ -2,27 +2,78 @@ import {
   CalendarOutlined,
   CompassOutlined,
   LogoutOutlined,
+  MenuOutlined,
   PlusOutlined,
+  SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout as AntdLayout, Button, Dropdown, Space } from "antd";
+import {
+  Layout as AntdLayout,
+  Avatar,
+  Button,
+  Col,
+  Dropdown,
+  Flex,
+  Row,
+} from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../apis/auth";
+import { useAppSelector } from "../hooks";
+import { cursor, fullSize } from "../data/reference";
+
+import "../assets/scss/layout.scss";
 
 const { Header, Footer, Content } = AntdLayout;
 
 const Layout = () => {
   const navigate = useNavigate();
+  const page = useAppSelector((state) => state.page.name);
+  const user = useAppSelector((state) => state.user.user);
 
-  const items: MenuProps["items"] = [
+  const buttonMenu: MenuProps["items"] = [
     {
-      key: "1",
-      icon: <UserOutlined />,
-      label: "基本資料",
+      key: "add_trip",
+      icon: <PlusOutlined />,
+      label: "建立行程",
     },
     {
-      key: "2",
+      key: "explore",
+      icon: <CompassOutlined />,
+      label: "景點探索",
+      onClick: () => {
+        navigate("/explore");
+      },
+    },
+    {
+      key: "trip_plan",
+      icon: <CalendarOutlined />,
+      label: "行程規劃",
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
+  ];
+
+  const avatarMenu: MenuProps["items"] = [
+    {
+      key: "trip_manage",
+      icon: <CalendarOutlined />,
+      label: "行程管理",
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
+    {
+      key: "setting",
+      icon: <SettingOutlined />,
+      label: "設定",
+      onClick: () => {
+        navigate("/profile");
+      },
+    },
+    {
+      key: "logout",
       icon: <LogoutOutlined />,
       label: "登出",
       onClick: () => {
@@ -34,42 +85,89 @@ const Layout = () => {
 
   return (
     <AntdLayout style={{ height: "100%" }}>
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: 64,
-          paddingInline: 48,
-          lineHeight: "64px",
-          backgroundColor: "white",
-          overflowX: "auto",
-        }}
-      >
-        <Space>
-          <img src="src/assets/logo.png" alt="logo" height={48} />
-          <Button icon={<CompassOutlined />} type="text">
-            景點探索
-          </Button>
-          <Button
-            icon={<CalendarOutlined />}
-            type="text"
-            onClick={() => navigate("/dashboard")}
-          >
-            規劃行程
-          </Button>
-        </Space>
-        <Space>
-          <Button icon={<PlusOutlined />}>建立新行程</Button>
-          <Dropdown menu={{ items }} placement="bottomRight">
-            <Button
-              icon={<UserOutlined />}
-              shape="circle"
-              type="text"
-              size="large"
-            />
-          </Dropdown>
-        </Space>
+      <Header>
+        <Row
+          style={{
+            height: 64,
+            lineHeight: "64px",
+            overflowX: "auto",
+          }}
+        >
+          <Col xs={6} sm={8}>
+            <Flex
+              vertical={false}
+              justify="flex-start"
+              align="center"
+              gap="small"
+              style={fullSize}
+            >
+              <img
+                className="logo"
+                src="src/assets/logo.png"
+                alt="logo"
+                onClick={() => navigate("/")}
+                style={cursor}
+              />
+              <Button
+                className="navigate_bar"
+                icon={<CompassOutlined />}
+                type="text"
+                onClick={() => navigate("/explore")}
+              >
+                景點探索
+              </Button>
+              <Button
+                className="navigate_bar"
+                icon={<CalendarOutlined />}
+                type="text"
+                onClick={() => navigate("/dashboard")}
+              >
+                行程規劃
+              </Button>
+            </Flex>
+          </Col>
+          <Col xs={12} sm={8}>
+            <Flex
+              vertical={false}
+              justify="center"
+              align="center"
+              style={fullSize}
+            >
+              <h2 className="title_name">{page}</h2>
+            </Flex>
+          </Col>
+          <Col xs={6} sm={8}>
+            <Flex
+              className="right_flex"
+              vertical={false}
+              justify="flex-end"
+              align="center"
+              style={fullSize}
+            >
+              <Dropdown
+                className="button_menu"
+                menu={{ items: buttonMenu }}
+                placement="bottomLeft"
+              >
+                <Button icon={<MenuOutlined />} type="text" size="large" />
+              </Dropdown>
+              <Button className="add_trip" icon={<PlusOutlined />}>
+                建立新行程
+              </Button>
+              <Dropdown menu={{ items: avatarMenu }} placement="bottomRight">
+                {user.avatar ? (
+                  <Avatar
+                    src={<img src={user.avatar} alt="avatar" />}
+                    size="large"
+                    style={cursor}
+                  />
+                ) : (
+                  <Avatar icon={<UserOutlined />} size="large" style={cursor} />
+                )}
+              </Dropdown>
+            </Flex>
+          </Col>
+        </Row>
       </Header>
       <Content>
         <Outlet />

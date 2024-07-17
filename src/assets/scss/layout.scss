@@ -1,0 +1,53 @@
+.logo {
+  height: 48px;
+}
+
+.ant-layout-header {
+  padding: 0px 64px;
+}
+
+.right_flex {
+  gap: 16px;
+}
+
+.button_menu {
+  display: none;
+}
+
+@media screen and (max-width: 991px) {
+  .button_menu {
+    display: block;
+  }
+
+  .navigate_bar {
+    display: none;
+  }
+
+  .add_trip {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .ant-layout-header {
+    padding: 0px 36px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .ant-layout-header {
+    padding: 0px 12px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .title_name {
+    font-size: 20px;
+  }
+
+  .right_flex {
+    gap: 8px;
+  }
+}

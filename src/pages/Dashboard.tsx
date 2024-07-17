@@ -8,8 +8,9 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Color } from "../data/color";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
+import { setPage } from "../store/page/pageSlice";
 
 import "../assets/scss/dashboard.scss";
 
@@ -20,6 +21,7 @@ enum Mode {
 
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
   const [listMode, setListMode] = useState<Mode>(Mode.Own);
@@ -37,6 +39,7 @@ const Dashboard: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/", { replace: true });
     }
+    dispatch(setPage("行程管理"));
   }, [navigate]);
 
   return (
