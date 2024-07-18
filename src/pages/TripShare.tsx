@@ -1,11 +1,11 @@
 import { useEffect } from "react";
+import { getJwtToken } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { Mode } from "../types/modeInterface";
 
-const Explore: React.FunctionComponent = () => {
+const TripShare: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -13,11 +13,11 @@ const Explore: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
-    dispatch(setPage("景點探索"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setPage("別人的行程"));
+    dispatch(setMode(Mode.Share));
   }, [navigate]);
 
-  return <div>景點探索</div>;
+  return <div>別人的行程</div>;
 };
 
-export default Explore;
+export default TripShare;

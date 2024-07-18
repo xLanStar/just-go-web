@@ -1,11 +1,11 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
+import { useEffect } from "react";
 import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { Mode } from "../types/modeInterface";
 
-const Explore: React.FunctionComponent = () => {
+const TripEdit: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -13,11 +13,11 @@ const Explore: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
-    dispatch(setPage("景點探索"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setPage("行程安排"));
+    dispatch(setMode(Mode.Edit));
   }, [navigate]);
 
-  return <div>景點探索</div>;
+  return <div>行程安排</div>;
 };
 
-export default Explore;
+export default TripEdit;

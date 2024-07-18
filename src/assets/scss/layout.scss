@@ -1,30 +1,38 @@
-.logo {
-  height: 48px;
-}
-
 .ant-layout-header {
   padding: 0px 64px;
 }
 
-.right_flex {
-  gap: 16px;
+.left_flex {
+  gap: 8px;
 }
 
-.button_menu {
+.logo {
+  height: 48px;
+}
+
+.left_title {
+  display: none;
+}
+
+.right_flex {
+  gap: 8px;
+}
+
+.right_menu {
   display: none;
 }
 
 @media screen and (max-width: 991px) {
-  .button_menu {
-    display: block;
-  }
-
   .navigate_bar {
     display: none;
   }
 
-  .add_trip {
+  .right_button {
     display: none;
+  }
+
+  .right_menu {
+    display: block;
   }
 }
 
@@ -39,15 +47,24 @@
     padding: 0px 12px;
   }
 
-  .logo {
-    height: 40px;
+  .left_flex {
+    gap: 16px;
   }
 
-  .title_name {
+  .logo {
+    height: 36px;
+  }
+
+  .left_title {
+    display: block;
     font-size: 20px;
   }
 
+  .center_title {
+    display: none;
+  }
+
   .right_flex {
-    gap: 8px;
+    gap: 0px;
   }
 }

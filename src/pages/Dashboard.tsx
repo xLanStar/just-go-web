@@ -10,11 +10,12 @@ import {
 import { Color } from "../data/color";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
-import { setPage } from "../store/page/pageSlice";
+import { setMode, setPage } from "../store/page/pageSlice";
+import { Mode } from "../types/modeInterface";
 
 import "../assets/scss/dashboard.scss";
 
-enum Mode {
+enum Tag {
   Own,
   Keep,
 }
@@ -24,7 +25,7 @@ const Dashboard: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
-  const [listMode, setListMode] = useState<Mode>(Mode.Own);
+  const [listMode, setListMode] = useState<Tag>(Tag.Own);
 
   const buttonStyle = {
     borderEndStartRadius: "0px",
@@ -40,6 +41,7 @@ const Dashboard: React.FunctionComponent = () => {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));
+    dispatch(setMode(Mode.Default));
   }, [navigate]);
 
   return (
@@ -85,7 +87,7 @@ const Dashboard: React.FunctionComponent = () => {
           type="text"
           size="large"
           style={
-            listMode === Mode.Own
+            listMode === Tag.Own
               ? {
                   ...buttonStyle,
                   ...buttonActive,
@@ -93,7 +95,7 @@ const Dashboard: React.FunctionComponent = () => {
               : buttonStyle
           }
           onClick={() => {
-            setListMode(Mode.Own);
+            setListMode(Tag.Own);
           }}
         >
           我的行程
@@ -103,7 +105,7 @@ const Dashboard: React.FunctionComponent = () => {
           type="text"
           size="large"
           style={
-            listMode === Mode.Keep
+            listMode === Tag.Keep
               ? {
                   ...buttonStyle,
                   ...buttonActive,
@@ -111,13 +113,13 @@ const Dashboard: React.FunctionComponent = () => {
               : buttonStyle
           }
           onClick={() => {
-            setListMode(Mode.Keep);
+            setListMode(Tag.Keep);
           }}
         >
           我的收藏
         </Button>
       </Flex>
-      {listMode === Mode.Own ? (
+      {listMode === Tag.Own ? (
         <>
           <TripList title="已發布行程" category="Publish" />
           <TripList title="我的行程" category="Own" />

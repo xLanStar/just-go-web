@@ -1,10 +1,15 @@
 import {
   CalendarOutlined,
   CompassOutlined,
+  HeartOutlined,
+  InfoCircleOutlined,
+  LockOutlined,
   LogoutOutlined,
   MenuOutlined,
   PlusOutlined,
+  SaveOutlined,
   SettingOutlined,
+  UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
@@ -21,6 +26,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../apis/auth";
 import { useAppSelector } from "../hooks";
 import { cursor, fullSize } from "../data/reference";
+import { Mode } from "../types/modeInterface";
 
 import "../assets/scss/layout.scss";
 
@@ -28,15 +34,45 @@ const { Header, Footer, Content } = AntdLayout;
 
 const Layout = () => {
   const navigate = useNavigate();
-  const page = useAppSelector((state) => state.page.name);
   const user = useAppSelector((state) => state.user.user);
+  const page = useAppSelector((state) => state.page.name);
+  const mode = useAppSelector((state) => state.page.mode);
 
-  const buttonMenu: MenuProps["items"] = [
+  const defaultMenu: MenuProps["items"] = [
     {
       key: "add_trip",
       icon: <PlusOutlined />,
       label: "建立行程",
     },
+  ];
+
+  const editMenu: MenuProps["items"] = [
+    {
+      key: "copy_trip",
+      icon: <SaveOutlined />,
+      label: "建立副本",
+    },
+    {
+      key: "keep_trip",
+      icon: <HeartOutlined />,
+      label: "收藏",
+    },
+  ];
+
+  const shareMenu: MenuProps["items"] = [
+    {
+      key: "trip_setting",
+      icon: <InfoCircleOutlined />,
+      label: "設定",
+    },
+    {
+      key: "co_edit",
+      icon: <LockOutlined />,
+      label: "共用",
+    },
+  ];
+
+  const rightMenu: MenuProps["items"] = [
     {
       key: "explore",
       icon: <CompassOutlined />,
@@ -90,15 +126,14 @@ const Layout = () => {
           style={{
             height: 64,
             lineHeight: "64px",
-            overflowX: "auto",
           }}
         >
-          <Col xs={6} sm={8}>
+          <Col sm={8} xs={15}>
             <Flex
+              className="left_flex"
               vertical={false}
               justify="flex-start"
               align="center"
-              gap="small"
               style={fullSize}
             >
               <img
@@ -124,19 +159,20 @@ const Layout = () => {
               >
                 行程規劃
               </Button>
+              <h2 className="left_title">{page}</h2>
             </Flex>
           </Col>
-          <Col xs={12} sm={8}>
+          <Col sm={8} xs={0}>
             <Flex
               vertical={false}
               justify="center"
               align="center"
               style={fullSize}
             >
-              <h2 className="title_name">{page}</h2>
+              <h2 className="center_title">{page}</h2>
             </Flex>
           </Col>
-          <Col xs={6} sm={8}>
+          <Col sm={8} xs={9}>
             <Flex
               className="right_flex"
               vertical={false}
@@ -144,16 +180,70 @@ const Layout = () => {
               align="center"
               style={fullSize}
             >
+              {mode === Mode.Default ? (
+                <>
+                  <Button className="right_button" icon={<PlusOutlined />}>
+                    建立新行程
+                  </Button>
+                  <Dropdown
+                    className="right_menu"
+                    menu={{ items: defaultMenu }}
+                    placement="bottomRight"
+                  >
+                    <Button icon={<PlusOutlined />} type="text" size="large" />
+                  </Dropdown>
+                </>
+              ) : null}
+              {mode === Mode.Edit ? (
+                <>
+                  <Button className="right_button" icon={<SaveOutlined />}>
+                    建立副本
+                  </Button>
+                  <Button className="right_button" icon={<HeartOutlined />}>
+                    收藏
+                  </Button>
+                  <Dropdown
+                    className="right_menu"
+                    menu={{ items: editMenu }}
+                    placement="bottomRight"
+                  >
+                    <Button icon={<PlusOutlined />} type="text" size="large" />
+                  </Dropdown>
+                </>
+              ) : null}
+              {mode === Mode.Share ? (
+                <>
+                  <Button
+                    className="right_button"
+                    icon={<InfoCircleOutlined />}
+                  >
+                    設定
+                  </Button>
+                  <Button className="right_button" icon={<LockOutlined />}>
+                    共用
+                  </Button>
+                  <Button
+                    className="right_button"
+                    icon={<UsergroupAddOutlined />}
+                  >
+                    6
+                  </Button>
+                  <Dropdown
+                    className="right_menu"
+                    menu={{ items: shareMenu }}
+                    placement="bottomRight"
+                  >
+                    <Button icon={<PlusOutlined />} type="text" size="large" />
+                  </Dropdown>
+                </>
+              ) : null}
               <Dropdown
-                className="button_menu"
-                menu={{ items: buttonMenu }}
+                className="right_menu"
+                menu={{ items: rightMenu }}
                 placement="bottomLeft"
               >
                 <Button icon={<MenuOutlined />} type="text" size="large" />
               </Dropdown>
-              <Button className="add_trip" icon={<PlusOutlined />}>
-                建立新行程
-              </Button>
               <Dropdown menu={{ items: avatarMenu }} placement="bottomRight">
                 {user.avatar ? (
                   <Avatar

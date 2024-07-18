@@ -25,7 +25,8 @@ import { CommonRules } from "../data/form";
 import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
 import { updateUser } from "../store/user/userSlice";
-import { setPage } from "../store/page/pageSlice";
+import { setMode, setPage } from "../store/page/pageSlice";
+import { Mode } from "../types/modeInterface";
 
 import "../assets/scss/profile.scss";
 
@@ -42,7 +43,8 @@ const Profile: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/", { replace: true });
     }
-    dispatch(setPage("個人資料編輯"));
+    dispatch(setPage("個人資料"));
+    dispatch(setMode(Mode.Default));
   }, [navigate]);
 
   const uploadProps: UploadProps = {
