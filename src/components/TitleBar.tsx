@@ -46,7 +46,7 @@ export const TitleBar = () => {
           <Button icon={<CalendarOutlined />} type="text">行程規劃</Button>
         </Space>
       </Col>
-      <Col span={8} style={{ display: 'flex', justifyContent: 'center'}}>
+      <Col span={8} style={{ display: 'flex', justifyContent: 'center' }}>
         <h2>景點探索</h2>
       </Col>
       <Col span={8} style={{ display: 'flex', justifyContent: 'flex-end' }}>

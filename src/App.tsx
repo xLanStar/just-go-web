@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NoMatch from "./pages/NoMatch";
 import Signin from "./pages/auth/Signin";
+import { ViewpointExplore } from "./pages/ViewpointExplore"
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 
@@ -19,6 +20,7 @@ const App: React.FunctionComponent = () => (
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoMatch />} />
+          <Route path="ViewpointExplore" element={<ViewpointExplore />} />
         </Route>
         <Route path="/signin" element={<Signin />} />
         <Route path="*" element={<NoMatch />} />
