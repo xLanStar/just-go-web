@@ -6,10 +6,10 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NoMatch from "./pages/NoMatch";
 import Signin from "./pages/auth/Signin";
-import { ViewpointExplore } from "./pages/ViewpointExplore"
+import { ViewpointExplore } from "./pages/ViewpointExplore";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import Explore from "./pages/Explore";
+import Explore from "./pages/temp";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
 
