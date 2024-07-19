@@ -6,7 +6,7 @@ import "./ViewpointExplore.css";
 import { store } from "../store/store";
 import { ViewpointSearchBox } from "../components/ViewpointSearchBox";
 import { PlaceDetailWindow } from "../components/PlaceDetailWindow";
-import { Collection } from "../components/temp2";
+import { Collection } from "../components/Collection";
 
 // const { Header, Content } = Layout;
 

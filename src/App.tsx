@@ -9,7 +9,7 @@ import Signin from "./pages/auth/Signin";
 import { ViewpointExplore } from "./pages/ViewpointExplore";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import Explore from "./pages/temp";
+import Explore from "./pages/Explore";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
 
