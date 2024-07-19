@@ -24,9 +24,11 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
 import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
+import { updateUser } from "../store/user/userSlice";
+import { setMode, setPage } from "../store/page/pageSlice";
+import { Mode } from "../types/modeInterface";
 
 import "../assets/scss/profile.scss";
-import { updateUser } from "../store/user/userSlice";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -41,6 +43,8 @@ const Profile: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/", { replace: true });
     }
+    dispatch(setPage("個人資料"));
+    dispatch(setMode(Mode.Default));
   }, [navigate]);
 
   const uploadProps: UploadProps = {
@@ -136,10 +140,7 @@ const Profile: React.FunctionComponent = () => {
                       size={80}
                     />
                   ) : (
-                    <Avatar
-                      src={<img src="src/assets/avatar.jpg" alt="avatar" />}
-                      size={80}
-                    />
+                    <Avatar icon={<UserOutlined />} size={80} />
                   )}
                   <h2>你的照片</h2>
                 </Flex>

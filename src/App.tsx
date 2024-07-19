@@ -9,14 +9,28 @@ import Signin from "./pages/auth/Signin";
 import { ViewpointExplore } from "./pages/ViewpointExplore"
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import Explore from "./pages/Explore";
+import TripEdit from "./pages/TripEdit";
+import TripShare from "./pages/TripShare";
 
 const App: React.FunctionComponent = () => (
-  <ConfigProvider locale={zhTW}>
+  <ConfigProvider
+    locale={zhTW}
+    theme={{
+      components: {
+        Layout: {
+          headerBg: "#ffffff",
+        },
+      },
+    }}
+  >
     <AntdApp>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          {/* <Route path="about" element={<About />} />*/}
+          <Route path="explore" element={<Explore />} />
+          <Route path="edit" element={<TripEdit />} />
+          <Route path="share" element={<TripShare />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
           <Route path="*" element={<NoMatch />} />

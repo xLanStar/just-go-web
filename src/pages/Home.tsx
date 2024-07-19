@@ -8,6 +8,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../apis/auth";
+import { setMode, setPage } from "../store/page/pageSlice";
+import { Mode } from "../types/modeInterface";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ const Home: React.FunctionComponent = () => {
     if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
+    dispatch(setPage("首頁"));
+    dispatch(setMode(Mode.Default));
   }, [navigate]);
 
   return (
