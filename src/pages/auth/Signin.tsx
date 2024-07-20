@@ -8,7 +8,7 @@ import { App, Button, Divider, Flex, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
-import { getJwtToken } from "../../apis/auth";
+import { useCustomGoogleLogin, getJwtToken } from "../../apis/auth";
 import { useAppDispatch } from "../../hooks";
 import { SigninForm } from "../../types/formInterface";
 import { registerUser, signinUser } from "../../store/user/userSlice";
@@ -50,6 +50,8 @@ const Signin: React.FunctionComponent = () => {
       }
     }
   };
+
+  const customGoogleLogin = useCustomGoogleLogin()
 
   return (
     <Flex
@@ -143,6 +145,7 @@ const Signin: React.FunctionComponent = () => {
               icon={<GoogleCircleFilled />}
               size="large"
               style={{ width: "100%" }}
+              onClick={customGoogleLogin}
             >
               Google
             </Button>
