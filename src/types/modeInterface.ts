@@ -3,3 +3,8 @@ export enum Mode {
   Edit,
   Share
 }
+
+export enum TripInfoMode {
+  Private,
+  Public
+}

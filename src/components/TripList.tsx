@@ -6,6 +6,7 @@ import { TripInfo } from "../types/tripInterface";
 import { deleteTrip, favorTrip, loadTripsByMe } from "../apis/trip";
 
 import "../assets/scss/tripList.scss";
+import { TripInfoMode } from "../types/modeInterface";
 
 interface Props {
   title: string;
@@ -28,19 +29,19 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
       });
   }, []);
 
-  const toggleFavor = async (id: number) => {
+  const toggleFavor = async (id: string) => {
     try {
-      const likeByMe = await favorTrip(id);
+      const isLike = await favorTrip(id);
       const newTripList = [...tripList];
       const trip = newTripList.find((trip) => trip.id === id);
 
-      if (likeByMe) {
+      if (isLike) {
         (trip as TripInfo).like++;
       } else {
         (trip as TripInfo).like--;
       }
 
-      (trip as TripInfo).likeByMe = likeByMe;
+      (trip as TripInfo).isLike = isLike;
       setTripList(newTripList);
     } catch (error: any) {
       if (error.name === "ResponseError") {
@@ -51,7 +52,7 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
     }
   };
 
-  const removeTrip = async (id: number) => {
+  const removeTrip = async (id: string) => {
     try {
       await deleteTrip(id);
       const newTripList = tripList.filter((trip) => trip.id !== id);
@@ -89,6 +90,9 @@ const TripList: React.FunctionComponent<Props> = ({ title, category }) => {
             >
               <TripCard
                 trip={trip}
+                mode={TripInfoMode.Private}
+                isShare={true}
+                isDelete={true}
                 toggleFavor={toggleFavor}
                 removeTrip={removeTrip}
               />

@@ -6,7 +6,7 @@ interface TripResponse {
 }
 
 interface LikeResponse {
-  likeByMe: boolean;
+  isLike: boolean;
 }
 
 interface DeleteResponse {
@@ -18,19 +18,19 @@ export const loadTrips = async () => {
   return response.data;
 }
 
-export const loadTripsByMe = async (type: string) => {
-  const response: TripResponse = await request.get(`/api/trip/${type}`);
+export const loadTripsByMe = async(type: string) => {
+  const response: TripResponse = await request.get(`/api/trips/${type}`);
   const trips: TripInfo[] = response.data;
   return trips;
 }
 
-export const favorTrip = async (id: number) => {
-  const response: LikeResponse = await request.put(`/api/trip/${id}/favor`);
-  const likeByMe: boolean = response.likeByMe
-  return likeByMe;
+export const favorTrip = async(id: string) => {
+  const response: LikeResponse = await request.put(`/api/trips/${id}/favor`);
+  const isLike: boolean = response.isLike
+  return isLike;
 }
 
-export const deleteTrip = async (id: number) => {
-  const response: DeleteResponse = await request.delete(`/api/trip/${id}`)
+export const deleteTrip = async(id: string) => {
+  const response: DeleteResponse = await request.delete(`/api/trips/${id}`)
   return response.message;
 }

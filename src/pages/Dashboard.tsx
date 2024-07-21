@@ -121,9 +121,9 @@ const Dashboard: React.FunctionComponent = () => {
       </Flex>
       {listMode === Tag.Own ? (
         <>
-          <TripList title="已發布行程" category="Publish" />
-          <TripList title="我的行程" category="Own" />
-          <TripList title="與我共編" category="CoEdit" />
+          <TripList title="已發布行程" category="publish" />
+          <TripList title="我的行程" category="own" />
+          <TripList title="與我共編" category="co-edit" />
         </>
       ) : (
         <TripList title="我的收藏" category="Favor" />
