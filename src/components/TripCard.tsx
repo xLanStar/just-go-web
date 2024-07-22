@@ -10,7 +10,7 @@ import "../assets/scss/tripCard.scss";
 interface Props {
   trip: TripInfo;
   mode: TripInfoMode;
-  isShare: boolean;
+  isPublic: boolean;
   isDelete: boolean;
   toggleFavor: (uuid: string) => void;
   removeTrip: (uuid: string) => void;
@@ -19,7 +19,7 @@ interface Props {
 const TripCard: React.FunctionComponent<Props> = ({
   trip,
   mode,
-  isShare,
+  isPublic,
   isDelete,
   toggleFavor,
   removeTrip,
@@ -155,7 +155,7 @@ const TripCard: React.FunctionComponent<Props> = ({
       ) : null}
       <Row>
         <Col
-          span={isShare ? 16 : 20}
+          span={isPublic ? 16 : 20}
           style={{
             paddingRight: "12px",
           }}
@@ -191,7 +191,7 @@ const TripCard: React.FunctionComponent<Props> = ({
             )}
           </Flex>
         </Col>
-        <Col span={isShare ? 8 : 4}>
+        <Col span={isPublic ? 8 : 4}>
           <Flex
             vertical={false}
             justify="flex-end"
@@ -199,7 +199,7 @@ const TripCard: React.FunctionComponent<Props> = ({
             gap="small"
             style={{ width: "100%", height: "41px" }}
           >
-            {isShare && (
+            {isPublic && (
               <Flex
                 vertical={false}
                 justify="flex-end"

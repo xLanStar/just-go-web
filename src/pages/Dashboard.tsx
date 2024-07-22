@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../apis/auth";
-import { Avatar, Button, Flex } from "antd";
+import { App, Avatar, Button, Flex } from "antd";
 import {
   AppstoreOutlined,
   StarOutlined,
@@ -11,30 +11,33 @@ import { Color } from "../data/color";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode } from "../types/modeInterface";
+import { Mode, TripInfoMode } from "../types/modeInterface";
+import { TripInfo } from "../types/tripInterface";
 
 import "../assets/scss/dashboard.scss";
+import { loadTripsByMe } from "../apis/trip";
 
 enum Tag {
   Own,
   Keep,
 }
 
+interface OwnTripList {
+  own: TripInfo[];
+  coEdit: TripInfo[];
+}
+
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+  const { message } = App.useApp();
 
+  const [publishTrips, setPublishTrips] = useState<TripInfo[]>([]);
+  const [ownTrips, setOwnTrips] = useState<TripInfo[]>([]);
+  const [coEditTrips, setCoEditTrips] = useState<TripInfo[]>([]);
+  const [favorTrips, setFavorTrips] = useState<TripInfo[]>([]);
   const [listMode, setListMode] = useState<Tag>(Tag.Own);
-
-  const buttonStyle = {
-    borderEndStartRadius: "0px",
-    borderEndEndRadius: "0px",
-  };
-
-  const buttonActive = {
-    borderBottom: "1px solid black",
-  };
 
   useEffect(() => {
     if (!getJwtToken()) {
@@ -44,8 +47,43 @@ const Dashboard: React.FunctionComponent = () => {
     dispatch(setMode(Mode.Default));
   }, [navigate]);
 
+  useEffect(() => {
+    if (listMode === Tag.Own) {
+      loadTripsByMe(user.uuid, "own")
+        .then((response: OwnTripList | TripInfo[]) => {
+          setPublishTrips(
+            (response as OwnTripList).own.filter((trip) => trip.isPublic)
+          );
+          setOwnTrips(
+            (response as OwnTripList).own.filter((trip) => !trip.isPublic)
+          );
+          setCoEditTrips((response as OwnTripList).coEdit);
+        })
+        .catch((error: any) => {
+          if (error.name === "ResponseError") {
+            message.error("載入行程失敗");
+          } else {
+            console.error(error.message);
+          }
+        });
+    } else {
+      loadTripsByMe(user.uuid, "keep")
+        .then((response: OwnTripList | TripInfo[]) => {
+          setFavorTrips(response as TripInfo[]);
+        })
+        .catch((error: any) => {
+          if (error.name === "ResponseError") {
+            message.error("載入行程失敗");
+          } else {
+            message.error(error.message);
+          }
+        });
+    }
+  }, [listMode]);
+
   return (
     <Flex
+      className="dashboard"
       vertical
       justify="flex-start"
       align="center"
@@ -89,10 +127,14 @@ const Dashboard: React.FunctionComponent = () => {
           style={
             listMode === Tag.Own
               ? {
-                  ...buttonStyle,
-                  ...buttonActive,
+                  borderEndStartRadius: "0px",
+                  borderEndEndRadius: "0px",
+                  borderBottom: "1px solid black",
                 }
-              : buttonStyle
+              : {
+                  borderEndStartRadius: "0px",
+                  borderEndEndRadius: "0px",
+                }
           }
           onClick={() => {
             setListMode(Tag.Own);
@@ -107,10 +149,14 @@ const Dashboard: React.FunctionComponent = () => {
           style={
             listMode === Tag.Keep
               ? {
-                  ...buttonStyle,
-                  ...buttonActive,
+                  borderEndStartRadius: "0px",
+                  borderEndEndRadius: "0px",
+                  borderBottom: "1px solid black",
                 }
-              : buttonStyle
+              : {
+                  borderEndStartRadius: "0px",
+                  borderEndEndRadius: "0px",
+                }
           }
           onClick={() => {
             setListMode(Tag.Keep);
@@ -121,12 +167,66 @@ const Dashboard: React.FunctionComponent = () => {
       </Flex>
       {listMode === Tag.Own ? (
         <>
-          <TripList title="已發布行程" category="publish" />
-          <TripList title="我的行程" category="own" />
-          <TripList title="與我共編" category="co-edit" />
+          <Flex
+            className="trip_title"
+            vertical={false}
+            justify="flex-start"
+            align="center"
+          >
+            <h1>已發布行程</h1>
+          </Flex>
+          <TripList
+            trips={publishTrips}
+            mode={TripInfoMode.Private}
+            isPublic={true}
+            isDelete={true}
+          />
+          <Flex
+            className="trip_title"
+            vertical={false}
+            justify="flex-start"
+            align="center"
+          >
+            <h1>我的行程</h1>
+          </Flex>
+          <TripList
+            trips={ownTrips}
+            mode={TripInfoMode.Private}
+            isPublic={false}
+            isDelete={true}
+          />
+          <Flex
+            className="trip_title"
+            vertical={false}
+            justify="flex-start"
+            align="center"
+          >
+            <h1>與我共編</h1>
+          </Flex>
+          <TripList
+            trips={coEditTrips}
+            mode={TripInfoMode.Private}
+            isPublic={false}
+            isDelete={false}
+          />
         </>
       ) : (
-        <TripList title="我的收藏" category="Favor" />
+        <>
+          <Flex
+            className="trip_title"
+            vertical={false}
+            justify="flex-start"
+            align="center"
+          >
+            <h1>我的收藏</h1>
+          </Flex>
+          <TripList
+            trips={favorTrips}
+            mode={TripInfoMode.Private}
+            isPublic={true}
+            isDelete={false}
+          />
+        </>
       )}
     </Flex>
   );

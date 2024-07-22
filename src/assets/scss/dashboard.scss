@@ -1,22 +1,41 @@
-.user_info {
-  padding: 24px 0px 24px 128px;
-  width: 100%;
-}
-
-@media screen and (min-width: 1600px){
+.dashboard {
   .user_info {
-    padding: 24px 0px 24px 64px;
+    padding: 24px 0px 24px 128px;
+    width: 100%;
   }
-}
 
-@media screen and (min-width: 1200px) and (max-width: 1600px) {
-  .user_info {
-    padding: 24px 0px 24px 48px;
+  .trip_title {
+    padding: 12px 0px 12px 128px;
+    width: 100%;
   }
-}
+  
+  @media screen and (min-width: 1600px){
+    .user_info {
+      padding: 24px 0px 24px 64px;
+    }
 
-@media screen and (max-width: 1199px) {
-  .user_info {
-    padding: 24px 0px 24px 32px;
+    .trip_title {
+      padding: 12px 0px 12px 64px;
+    }
+  }
+  
+  @media screen and (min-width: 1200px) and (max-width: 1600px) {
+    .user_info {
+      padding: 24px 0px 24px 48px;
+    }
+
+    .trip_title {
+      padding: 12px 0px 12px 48px;
+    }
+  }
+  
+  @media screen and (max-width: 1199px) {
+    .user_info {
+      padding: 24px 0px 24px 32px;
+    }
+
+    .trip_title {
+      padding: 12px 0px 12px 32px;
+    }
   }
 }

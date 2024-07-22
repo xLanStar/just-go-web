@@ -9,4 +9,5 @@ export interface TripInfo {
   labels: string[];
   like: number;
   isLike: boolean;
+  isPublic: boolean;
 }

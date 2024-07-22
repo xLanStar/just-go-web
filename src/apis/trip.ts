@@ -1,8 +1,13 @@
 import request from "../utils/request";
 import { TripInfo } from "../types/tripInterface";
 
-interface TripResponse {
-  data: TripInfo[];
+interface OwnTrips {
+  own: TripInfo[];
+  coEdit: TripInfo[];
+}
+
+interface TripsResponse {
+  data: OwnTrips | TripInfo[]
 }
 
 interface LikeResponse {
@@ -14,14 +19,13 @@ interface DeleteResponse {
 }
 
 export const loadTrips = async () => {
-  const response: TripResponse = await request.get("/api/trip");
+  const response: TripsResponse = await request.get("/api/trip");
   return response.data;
 }
 
-export const loadTripsByMe = async(type: string) => {
-  const response: TripResponse = await request.get(`/api/trips/${type}`);
-  const trips: TripInfo[] = response.data;
-  return trips;
+export const loadTripsByMe = async(id: string, type: string) => {
+  const response: TripsResponse = await request.get(`/api/trips/${id}/${type}`);
+  return response.data;
 }
 
 export const favorTrip = async(id: string) => {
