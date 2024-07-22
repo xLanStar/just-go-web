@@ -19,4 +19,4 @@ const currentViewpointSlice = createSlice({
 })
 
 export const { setCurrentViewpoint } = currentViewpointSlice.actions
-export default currentViewpointSlice.reducer;
+export default currentViewpointSlice;
