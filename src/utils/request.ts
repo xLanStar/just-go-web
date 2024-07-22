@@ -8,14 +8,6 @@ const request = axios.create({
   }
 })
 
-export const authRequest = axios.create({
-  baseURL: "http://localhost:80/api/auth",
-  timeout: 3000,
-  headers: {
-    "Content-Type": "application/json",
-  }
-})
-
 const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const controller = new AbortController();
   const token = getJwtToken();

@@ -51,7 +51,7 @@ const Signin: React.FunctionComponent = () => {
     }
   };
 
-  const customGoogleLogin = useCustomGoogleLogin()
+  const customGoogleLogin = useCustomGoogleLogin(true)
 
   return (
     <Flex
