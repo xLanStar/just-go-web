@@ -79,7 +79,7 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async ({ name, email, password}: RegisterPayload, { rejectWithValue }) => {
     try {
-      const user = await register(name, email, password);
+      const user = await register(name, email, password, false);
       return user;
     } catch (error: any) {
       return rejectWithValue(error);
