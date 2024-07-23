@@ -120,7 +120,7 @@ const Layout = () => {
   ];
 
   return (
-    <AntdLayout style={{ height: "100%" }}>
+    <AntdLayout className="layout" style={{ height: "100%" }}>
       <Header>
         <Row
           style={{
@@ -137,7 +137,7 @@ const Layout = () => {
               style={fullSize}
             >
               <img
-                className="logo"
+                className="logo_image"
                 src="/src/assets/logo.png"
                 alt="logo"
                 onClick={() => navigate("/")}

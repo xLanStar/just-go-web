@@ -95,6 +95,7 @@ const Profile: React.FunctionComponent = () => {
       }}
     >
       <Flex
+        className="profile"
         vertical
         justify="center"
         align="center"

@@ -55,6 +55,7 @@ const Signin: React.FunctionComponent = () => {
 
   return (
     <Flex
+      className="signin"
       vertical
       justify="center"
       align="center"
