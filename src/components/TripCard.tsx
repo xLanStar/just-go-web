@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Card, Row, Col, Flex, Avatar } from "antd";
 import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
@@ -12,8 +13,8 @@ interface Props {
   mode: TripInfoMode;
   isPublic: boolean;
   isDelete: boolean;
-  toggleFavor: (uuid: string) => void;
-  removeTrip: (uuid: string) => void;
+  toggleFavor: (id: string) => void;
+  removeTrip: (id: string) => void;
 }
 
 const TripCard: React.FunctionComponent<Props> = ({
@@ -24,6 +25,8 @@ const TripCard: React.FunctionComponent<Props> = ({
   toggleFavor,
   removeTrip,
 }) => {
+  const navigate = useNavigate();
+
   const clickLike = () => {
     toggleFavor(trip.id);
   };
@@ -53,8 +56,12 @@ const TripCard: React.FunctionComponent<Props> = ({
         vertical
         justify="center"
         align="center"
+        onClick={() => {
+          navigate("/edit");
+        }}
         style={{
           width: "100%",
+          cursor: "pointer",
         }}
       >
         <img
@@ -97,7 +104,16 @@ const TripCard: React.FunctionComponent<Props> = ({
       </Row>
       {mode === TripInfoMode.Public ? (
         <Row>
-          <Col span={14}>
+          <Col
+            span={14}
+            className="user_info"
+            onClick={() => {
+              navigate(`/user/${trip.userId}`);
+            }}
+            style={{
+              cursor: "pointer",
+            }}
+          >
             <Flex
               vertical={false}
               justify="flex-start"

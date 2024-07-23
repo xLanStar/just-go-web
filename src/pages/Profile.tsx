@@ -26,7 +26,7 @@ import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
 import { updateUser } from "../store/user/userSlice";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode } from "../types/modeInterface";
+import { PageMode } from "../types/modeInterface";
 
 import "../assets/scss/profile.scss";
 
@@ -44,7 +44,7 @@ const Profile: React.FunctionComponent = () => {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setMode(PageMode.Default));
   }, [navigate]);
 
   const uploadProps: UploadProps = {
@@ -70,7 +70,7 @@ const Profile: React.FunctionComponent = () => {
     try {
       await dispatch(
         updateUser({
-          uuid: user.uuid,
+          id: user.id,
           name: form.name,
           email: form.email,
           avatar: avatar,

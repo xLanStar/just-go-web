@@ -3,7 +3,7 @@ import { useAppDispatch } from "../hooks";
 import { useEffect } from "react";
 import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode } from "../types/modeInterface";
+import { PageMode } from "../types/modeInterface";
 
 const TripEdit: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const TripEdit: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程安排"));
-    dispatch(setMode(Mode.Edit));
+    dispatch(setMode(PageMode.Edit));
   }, [navigate]);
 
   return <div>行程安排</div>;

@@ -7,6 +7,10 @@ interface OwnTrips {
 }
 
 interface TripsResponse {
+  data: TripInfo[];
+}
+
+interface MyTripsResponse {
   data: OwnTrips | TripInfo[]
 }
 
@@ -18,13 +22,18 @@ interface DeleteResponse {
   message: string;
 }
 
-export const loadTrips = async () => {
-  const response: TripsResponse = await request.get("/api/trip");
+export const loadTrips = async() => {
+  const response: TripsResponse = await request.get("/api/trips");
+  return response.data;
+}
+
+export const loadTripsById = async(id: string) => {
+  const response: TripsResponse = await request.get(`/api/trips/${id}`);
   return response.data;
 }
 
 export const loadTripsByMe = async(id: string, type: string) => {
-  const response: TripsResponse = await request.get(`/api/trips/${id}/${type}`);
+  const response: MyTripsResponse = await request.get(`/api/trips/${id}/${type}`);
   return response.data;
 }
 

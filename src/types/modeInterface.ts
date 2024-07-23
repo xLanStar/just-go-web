@@ -1,4 +1,4 @@
-export enum Mode {
+export enum PageMode {
   Default,
   Edit,
   Share

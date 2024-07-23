@@ -1,0 +1,23 @@
+.home {
+  .search_bar {
+    width: 650px;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 991px)  {
+    .search_bar {
+      width: 500px;
+    }
+  }
+
+  @media screen and (min-width: 576px) and (max-width: 767px){
+    .search_bar {
+      width: 350px;
+    }
+  }
+
+  @media screen and (max-width: 575px) {
+    .search_bar {
+      width: 250px;
+    }
+  }
+}

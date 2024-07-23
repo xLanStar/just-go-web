@@ -11,7 +11,7 @@ import { Color } from "../data/color";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode, TripInfoMode } from "../types/modeInterface";
+import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { TripInfo } from "../types/tripInterface";
 
 import "../assets/scss/dashboard.scss";
@@ -44,12 +44,12 @@ const Dashboard: React.FunctionComponent = () => {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setMode(PageMode.Default));
   }, [navigate]);
 
   useEffect(() => {
     if (listMode === Tag.Own) {
-      loadTripsByMe(user.uuid, "own")
+      loadTripsByMe(user.id, "own")
         .then((response: OwnTripList | TripInfo[]) => {
           setPublishTrips(
             (response as OwnTripList).own.filter((trip) => trip.isPublic)
@@ -67,7 +67,7 @@ const Dashboard: React.FunctionComponent = () => {
           }
         });
     } else {
-      loadTripsByMe(user.uuid, "keep")
+      loadTripsByMe(user.id, "keep")
         .then((response: OwnTripList | TripInfo[]) => {
           setFavorTrips(response as TripInfo[]);
         })
@@ -105,7 +105,11 @@ const Dashboard: React.FunctionComponent = () => {
           borderBottom: `1px solid ${Color.greyHeavy}`,
         }}
       >
-        <Avatar size={80} icon={<UserOutlined />} />
+        {user.avatar ? (
+          <Avatar src={<img src={user.avatar} alt="avatar" />} size={80} />
+        ) : (
+          <Avatar size={80} icon={<UserOutlined />} />
+        )}
         <Flex vertical justify="center" align="flex-start">
           <h2>{user.name}</h2>
           <p>{user.email}</p>

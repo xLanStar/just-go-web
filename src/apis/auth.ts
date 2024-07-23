@@ -1,7 +1,6 @@
-import { AxiosResponse } from "axios";
-import { User } from "../types/userInterface";
 import request, { responseErrorHandler } from "../utils/request";
-
+import axios, { AxiosResponse } from "axios";
+import { User } from "../types/userInterface";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +18,7 @@ export const getUser = (): User => {
     return JSON.parse(user);
   }
   return {
-    uuid: "",
+    id: "",
     name: "",
     email: "",
     avatar: "",
@@ -32,7 +31,7 @@ export const saveUser = (user: User): void => {
 
 export const signin = async (email: string, password: string) => {
   try {
-    const response: AxiosResponse = await request.post("/api/auth/login", {
+    const response: AxiosResponse = await axios.post("/api/auth/login", {
       email, password
     });
 
@@ -50,7 +49,7 @@ export const signin = async (email: string, password: string) => {
 
 export const register = async (name: string, email: string, password: string, isGoogle: boolean) => {
   try {
-    const response: AxiosResponse = await request.post("/api/auth/register", {
+    const response: AxiosResponse = await axios.post("/api/auth/register", {
       name, email, password, isGoogle
     });
 

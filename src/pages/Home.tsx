@@ -1,40 +1,85 @@
-import { Button } from "antd";
-import React, { useEffect } from "react";
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-} from "../store/counter/counterSlice";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode } from "../types/modeInterface";
+import { PageMode, TripInfoMode } from "../types/modeInterface";
+import { App, Flex, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { TripInfo } from "../types/tripInterface";
+import TripList from "../components/TripList";
+import { loadTrips } from "../apis/trip";
+
+import "../assets/scss/home.scss";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const count = useAppSelector((state) => state.counter.value);
+  const { message } = App.useApp();
+
+  const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
     if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
-    dispatch(setPage("首頁"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setPage("行程探索"));
+    dispatch(setMode(PageMode.Default));
+
+    loadTrips()
+      .then((tripList) => setTrips(tripList))
+      .catch((error: any) => {
+        if (error.name === "ResponseError") {
+          message.error("載入行程失敗");
+        } else {
+          message.error(error.message);
+        }
+      });
   }, [navigate]);
 
   return (
-    <div>
-      <h1>Home</h1>
-      <p>Welcome to the Home page!</p>
-      {/* ++debug */}
-      {count}
-      <Button onClick={() => dispatch(increment())}>increment</Button>
-      <Button onClick={() => dispatch(incrementByAmount(5))}>add</Button>
-      <Button onClick={() => dispatch(decrement())}>decrement</Button>
-      {/* --debug */}
-    </div>
+    <Flex
+      className="home"
+      vertical
+      justify="flex-start"
+      align="center"
+      style={{
+        width: "100%",
+        height: "100%",
+        overflowY: "auto",
+      }}
+    >
+      <Flex
+        vertical={false}
+        justify="center"
+        align="center"
+        style={{
+          width: "100%",
+          height: "80px",
+        }}
+      >
+        <Input
+          className="search_bar"
+          prefix={<SearchOutlined />}
+          size="large"
+          placeholder="請輸入地點、關鍵字"
+        />
+      </Flex>
+      <h1
+        style={{
+          padding: "12px 0px 12px 128px",
+          width: "100%",
+        }}
+      >
+        熱門行程
+      </h1>
+      <TripList
+        trips={trips}
+        mode={TripInfoMode.Public}
+        isPublic={true}
+        isDelete={false}
+      />
+    </Flex>
   );
 };
 
