@@ -1,36 +1,49 @@
 import request from "../utils/request";
 import { TripInfo } from "../types/tripInterface";
 
-interface TripResponse {
+interface OwnTrips {
+  own: TripInfo[];
+  coEdit: TripInfo[];
+}
+
+interface TripsResponse {
   data: TripInfo[];
 }
 
+interface MyTripsResponse {
+  data: OwnTrips | TripInfo[]
+}
+
 interface LikeResponse {
-  likeByMe: boolean;
+  isLike: boolean;
 }
 
 interface DeleteResponse {
   message: string;
 }
 
-export const loadTrips = async () => {
-  const response: TripResponse = await request.get("/api/trip");
+export const loadTrips = async() => {
+  const response: TripsResponse = await request.get("/api/trips");
   return response.data;
 }
 
-export const loadTripsByMe = async (type: string) => {
-  const response: TripResponse = await request.get(`/api/trip/${type}`);
-  const trips: TripInfo[] = response.data;
-  return trips;
+export const loadTripsById = async(id: string) => {
+  const response: TripsResponse = await request.get(`/api/trips/${id}`);
+  return response.data;
 }
 
-export const favorTrip = async (id: number) => {
-  const response: LikeResponse = await request.put(`/api/trip/${id}/favor`);
-  const likeByMe: boolean = response.likeByMe
-  return likeByMe;
+export const loadTripsByMe = async(id: string, type: string) => {
+  const response: MyTripsResponse = await request.get(`/api/trips/${id}/${type}`);
+  return response.data;
 }
 
-export const deleteTrip = async (id: number) => {
-  const response: DeleteResponse = await request.delete(`/api/trip/${id}`)
+export const favorTrip = async(id: string) => {
+  const response: LikeResponse = await request.put(`/api/trips/${id}/favor`);
+  const isLike: boolean = response.isLike
+  return isLike;
+}
+
+export const deleteTrip = async(id: string) => {
+  const response: DeleteResponse = await request.delete(`/api/trips/${id}`)
   return response.message;
 }

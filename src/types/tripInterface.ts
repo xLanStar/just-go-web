@@ -1,11 +1,13 @@
 export interface TripInfo {
-  id: number;
+  id: string;
+  user: string;
+  userId: string;
   title: string;
   image: string;
-  update: number;
+  day: number;
+  publishDay: string;
   labels: string[];
   like: number;
-  likeByMe: boolean;
-  isShare: boolean;
-  deletable: boolean;
+  isLike: boolean;
+  isPublic: boolean;
 }

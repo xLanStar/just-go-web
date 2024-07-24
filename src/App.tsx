@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
+import PublisherInfo from "./pages/PublisherInfo";
 
 const App: React.FunctionComponent = () => (
   <ConfigProvider
@@ -33,8 +34,9 @@ const App: React.FunctionComponent = () => (
           <Route path="share" element={<TripShare />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="*" element={<NoMatch />} />
           <Route path="ViewpointExplore" element={<ViewpointExplore />} />
+          <Route path="user/:id" element={<PublisherInfo />} />
+          <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />
         <Route path="*" element={<NoMatch />} />

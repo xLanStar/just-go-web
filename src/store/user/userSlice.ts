@@ -5,7 +5,7 @@ import { changeUser } from "../../apis/user";
 import { handleError } from "../../utils/handleError";
 
 interface UpdatePayload {
-  uuid: string,
+  id: string,
   name: string,
   email: string,
   avatar: File | null
@@ -53,9 +53,9 @@ const userSlice = createSlice({
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async ({ uuid, name, email, avatar }: UpdatePayload, { rejectWithValue }) => {
+  async ({ id, name, email, avatar }: UpdatePayload, { rejectWithValue }) => {
     try {
-      const user = await changeUser(uuid, name, email, avatar);
+      const user = await changeUser(id, name, email, avatar);
       return user;
     } catch (error: any) {
       return rejectWithValue(error);

@@ -1,28 +1,26 @@
-h1, h2, h3{
-  margin: 0px !important
-}
-
-.ant-card-body {
-  padding: 12px !important;
-}
-
-.labels {
-  overflow-x: hidden;
-  overflow-y: hidden;
-
-  &:hover {
-    overflow-x: auto;
+.trip_card {
+  .ant-card-body {
+    padding: 12px !important;
   }
-
-  &::-webkit-scrollbar{
-    height: 2px;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #D9D9D9;
-    border-radius: 12px;
-  }
-  &::-webkit-scrollbar-thumb{
-    border-radius: 12px;
-    background-color: #9C9C9C;
+  
+  .labels {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  
+    &:hover {
+      overflow-x: auto;
+    }
+  
+    &::-webkit-scrollbar{
+      height: 2px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #D9D9D9;
+      border-radius: 12px;
+    }
+    &::-webkit-scrollbar-thumb{
+      border-radius: 12px;
+      background-color: #9C9C9C;
+    }
   }
 }

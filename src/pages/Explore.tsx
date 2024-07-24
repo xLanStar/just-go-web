@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
 import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Mode } from "../types/modeInterface";
+import { PageMode } from "../types/modeInterface";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Explore: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));
-    dispatch(setMode(Mode.Default));
+    dispatch(setMode(PageMode.Default));
   }, [navigate]);
 
   return <div>景點探索</div>;

@@ -26,7 +26,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../apis/auth";
 import { useAppSelector } from "../hooks";
 import { cursor, fullSize } from "../data/reference";
-import { Mode } from "../types/modeInterface";
+import { PageMode } from "../types/modeInterface";
 
 import "../assets/scss/layout.scss";
 
@@ -120,7 +120,7 @@ const Layout = () => {
   ];
 
   return (
-    <AntdLayout style={{ height: "100%" }}>
+    <AntdLayout className="layout" style={{ height: "100%" }}>
       <Header>
         <Row
           style={{
@@ -137,8 +137,8 @@ const Layout = () => {
               style={fullSize}
             >
               <img
-                className="logo"
-                src="src/assets/logo.png"
+                className="logo_image"
+                src="/src/assets/logo.png"
                 alt="logo"
                 onClick={() => navigate("/")}
                 style={cursor}
@@ -180,7 +180,7 @@ const Layout = () => {
               align="center"
               style={fullSize}
             >
-              {mode === Mode.Default ? (
+              {mode === PageMode.Default ? (
                 <>
                   <Button className="right_button" icon={<PlusOutlined />}>
                     建立新行程
@@ -194,7 +194,7 @@ const Layout = () => {
                   </Dropdown>
                 </>
               ) : null}
-              {mode === Mode.Edit ? (
+              {mode === PageMode.Edit ? (
                 <>
                   <Button className="right_button" icon={<SaveOutlined />}>
                     建立副本
@@ -211,7 +211,7 @@ const Layout = () => {
                   </Dropdown>
                 </>
               ) : null}
-              {mode === Mode.Share ? (
+              {mode === PageMode.Share ? (
                 <>
                   <Button
                     className="right_button"
