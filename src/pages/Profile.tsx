@@ -101,141 +101,133 @@ const Profile: React.FunctionComponent = () => {
         align="center"
         style={{
           width: "100%",
-          height: "100%",
+          minHeight: "calc(100vh - 128px)",
         }}
       >
         <Flex
+          className="profile_form"
           vertical
+          justify="center"
           align="center"
-          style={{
-            width: "100%",
-            overflowY: "auto",
-          }}
+          gap="middle"
         >
-          <Flex
-            className="profile_form"
-            vertical
-            justify="center"
-            align="center"
-            gap="middle"
+          <Row
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
           >
-            <Row
-              style={{
-                width: "100%",
-              }}
-            >
-              <Col span={16}>
-                <Flex
-                  vertical={false}
-                  justify="flex-start"
-                  align="center"
-                  gap="middle"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  {avatarUrl ? (
-                    <Avatar
-                      src={<img src={avatarUrl} alt="avatar" />}
-                      size={80}
-                    />
-                  ) : (
-                    <Avatar icon={<UserOutlined />} size={80} />
-                  )}
-                  <h2>你的照片</h2>
-                </Flex>
-              </Col>
-              <Col span={8}>
-                <Flex
-                  vertical={false}
-                  justify="flex-end"
-                  align="center"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <Upload {...uploadProps}>
-                    <Button
-                      icon={<UploadOutlined />}
-                      size="large"
-                      style={{ width: "100%" }}
-                    >
-                      上傳頭像
-                    </Button>
-                  </Upload>
-                </Flex>
-              </Col>
-            </Row>
-            <Form
-              form={form}
-              layout="vertical"
-              scrollToFirstError
-              onFinish={onFinish}
-              noValidate
-              initialValues={{ name: user.name, email: user.email }}
-              requiredMark={false}
-              style={{
-                width: "100%",
-              }}
-            >
-              <Form.Item
-                name="name"
-                label="姓名"
-                validateTrigger="onBlur"
-                rules={[CommonRules.Required]}
+            <Col span={16}>
+              <Flex
+                vertical={false}
+                justify="flex-start"
+                align="center"
+                gap="middle"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
               >
-                <Input
-                  prefix={<UserOutlined />}
-                  size="large"
-                  placeholder="姓名"
-                  required
-                />
-              </Form.Item>
-              <Form.Item
-                name="email"
-                label="信箱"
-                validateTrigger="onBlur"
-                rules={[CommonRules.Email, CommonRules.Required]}
+                {avatarUrl ? (
+                  <Avatar
+                    src={<img src={avatarUrl} alt="avatar" />}
+                    size={80}
+                  />
+                ) : (
+                  <Avatar icon={<UserOutlined />} size={80} />
+                )}
+                <h2>你的照片</h2>
+              </Flex>
+            </Col>
+            <Col span={8}>
+              <Flex
+                vertical={false}
+                justify="flex-end"
+                align="center"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
               >
-                <Input
-                  prefix={<MailOutlined />}
+                <Upload {...uploadProps}>
+                  <Button
+                    icon={<UploadOutlined />}
+                    size="large"
+                    style={{ width: "100%" }}
+                  >
+                    上傳頭像
+                  </Button>
+                </Upload>
+              </Flex>
+            </Col>
+          </Row>
+          <Form
+            form={form}
+            layout="vertical"
+            scrollToFirstError
+            onFinish={onFinish}
+            noValidate
+            initialValues={{ name: user.name, email: user.email }}
+            requiredMark={false}
+            style={{
+              width: "100%",
+            }}
+          >
+            <Form.Item
+              name="name"
+              label="姓名"
+              validateTrigger="onBlur"
+              rules={[CommonRules.Required]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                size="large"
+                placeholder="姓名"
+                required
+              />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              label="信箱"
+              validateTrigger="onBlur"
+              rules={[CommonRules.Email, CommonRules.Required]}
+            >
+              <Input
+                prefix={<MailOutlined />}
+                size="large"
+                placeholder="信箱"
+                required
+              />
+            </Form.Item>
+            <Form.Item>
+              <Flex
+                vertical={false}
+                justify="flex-end"
+                align="center"
+                style={{
+                  width: "100%",
+                }}
+                gap="small"
+              >
+                <Button
+                  type="primary"
+                  icon={<SaveOutlined />}
                   size="large"
-                  placeholder="信箱"
-                  required
-                />
-              </Form.Item>
-              <Form.Item>
-                <Flex
-                  vertical={false}
-                  justify="flex-end"
-                  align="center"
-                  style={{
-                    width: "100%",
-                  }}
-                  gap="small"
+                  htmlType="submit"
                 >
-                  <Button
-                    type="primary"
-                    icon={<SaveOutlined />}
-                    size="large"
-                    htmlType="submit"
-                  >
-                    儲存
-                  </Button>
-                  <Button
-                    icon={<CloseCircleOutlined />}
-                    size="large"
-                    htmlType="button"
-                    onClick={() => navigate(-1)}
-                  >
-                    取消
-                  </Button>
-                </Flex>
-              </Form.Item>
-            </Form>
-          </Flex>
+                  儲存
+                </Button>
+                <Button
+                  icon={<CloseCircleOutlined />}
+                  size="large"
+                  htmlType="button"
+                  onClick={() => navigate(-1)}
+                >
+                  取消
+                </Button>
+              </Flex>
+            </Form.Item>
+          </Form>
         </Flex>
       </Flex>
     </ConfigProvider>

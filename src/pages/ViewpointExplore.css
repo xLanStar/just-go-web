@@ -112,11 +112,11 @@
    
 }*/
 
-.ViewpointExplore {
+/* .ViewpointExplore {
   position: absolute;
   height: calc(100% - 64px) ;
   width: 100%;
-}
+} */
 
 /* .ViewpointExplore-header{
   position: sticky;
@@ -135,7 +135,7 @@
   width: 100%;
 } */
 
-.ViewpointExplore-map{
+/* .ViewpointExplore-map{
   height: 100%;
   width: 100%;
 }
@@ -224,4 +224,4 @@
   justify-content: flex-end;
   gap: 10px;
   border-top:1.5px solid #949494;
-}
+} */

@@ -45,8 +45,7 @@ const Home: React.FunctionComponent = () => {
       align="center"
       style={{
         width: "100%",
-        height: "100%",
-        overflowY: "auto",
+        minHeight: "100%",
       }}
     >
       <Flex

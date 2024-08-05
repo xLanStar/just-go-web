@@ -126,7 +126,7 @@ const TripCard: React.FunctionComponent<Props> = ({
               }}
             >
               <Avatar
-                src={<img src="src/assets/avatar.jpg" alt="avatar" />}
+                src={<img src="src/assets/image/avatar.jpg" alt="avatar" />}
                 size={36}
               />
               <h2>{trip.user}</h2>

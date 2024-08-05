@@ -14,7 +14,7 @@ const Explore: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));
-    dispatch(setMode(PageMode.Default));
+    dispatch(setMode(PageMode.Explore));
   }, [navigate]);
 
   return <div>景點探索</div>;
