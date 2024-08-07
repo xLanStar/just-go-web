@@ -1,0 +1,43 @@
+.search_bar {
+  width: 650px;
+
+  .search {
+    width: 290px;
+  }
+
+  .place_type {
+    width: 350px;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 991px)  {
+    width: 500px;
+
+    .search {
+      width: 150px;
+    }
+  }
+  
+  @media screen and (min-width: 576px) and (max-width: 767px){
+    width: 450px;
+
+    .search {
+      width: 150px;
+    }
+
+    .place_type {
+      width: 300px;
+    }
+  }
+  
+  @media screen and (max-width: 575px) {
+    width: 300px;
+
+    .search {
+      width: 150px;
+    }
+
+    .place_type {
+      width: 150px;
+    }
+  }
+}
