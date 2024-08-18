@@ -4,4 +4,5 @@ export const Color = {
   bodyGrey: "#F5F5F5",
   cyan: "#97CBFF",
   cyanHeavy: "#ACD6FF",
+  blue: "#2894FF",
 }

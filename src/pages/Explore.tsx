@@ -11,11 +11,13 @@ import {
   AutoComplete,
   LatLngLiteral,
   Mark,
+  PlaceDetail,
   PlaceSearchRequest,
   PlacesService,
 } from "../types/googleMapInterface";
 import SearchBar from "../components/SearchBar";
 import Map from "../components/Map";
+import PlaceInfo from "../components/PlaceInfo";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -28,6 +30,16 @@ const Explore: React.FunctionComponent = () => {
 
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [searchType, setSearchType] = useState<string>("tourist_attraction");
+  const [showPlaceInfo, setShowPlaceInfo] = useState<boolean>(false);
+  const [placeDetail, setPlaceDetail] = useState<PlaceDetail>({
+    name: "",
+    photo: "",
+    rating: undefined,
+    address: "",
+    phone: undefined,
+    website: undefined,
+    opening_hours: undefined,
+  });
 
   useEffect(() => {
     if (!getJwtToken()) {
@@ -59,6 +71,7 @@ const Explore: React.FunctionComponent = () => {
     };
 
     mapRef.current.panTo(position);
+    mapRef.current.setZoom(17);
     searchNearby(position);
   };
 
@@ -82,6 +95,47 @@ const Explore: React.FunctionComponent = () => {
     }
   };
 
+  // 搜尋地點資訊
+  const onMarkerClicked = (placeId: string) => {
+    if (!placesServiceRef.current) {
+      return;
+    }
+
+    const request: google.maps.places.PlaceDetailsRequest = {
+      placeId: placeId,
+      fields: [
+        "name",
+        "photo",
+        "rating",
+        "formatted_address",
+        "formatted_phone_number",
+        "website",
+        "opening_hours",
+      ],
+    };
+
+    placesServiceRef.current.getDetails(request, (place, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+        return;
+      }
+
+      setPlaceDetail({
+        name: place.name as string,
+        photo: place.photos?.[0].getUrl() as string,
+        rating: place.rating,
+        address: place.formatted_address as string,
+        phone: place.formatted_phone_number,
+        website: place.website,
+        opening_hours: place.opening_hours?.weekday_text,
+      });
+      setShowPlaceInfo(true);
+    });
+  };
+
+  const onPlaceInfoClose = () => {
+    setShowPlaceInfo(false);
+  };
+
   const searchNearby = (position: LatLngLiteral) => {
     if (!mapRef.current || !placesServiceRef.current) {
       return;
@@ -93,21 +147,22 @@ const Explore: React.FunctionComponent = () => {
       type: searchType,
     };
 
-    console.log(request);
-
     placesServiceRef.current.nearbySearch(request, (results, status) => {
       if (status !== google.maps.places.PlacesServiceStatus.OK || !results) {
         return;
       }
 
-      const newMarkList: Mark[] = results.map((place) => ({
-        name: place.name as string,
-        location: {
-          lat: place.geometry?.location?.lat() as number,
-          lng: place.geometry?.location?.lng() as number,
-        } as LatLngLiteral,
-        placeID: place.place_id as string,
-      }));
+      // 過濾掉暫停營業的景點
+      const newMarkList: Mark[] = results
+        .filter((place) => place.business_status === "OPERATIONAL")
+        .map((place) => ({
+          name: place.name as string,
+          location: {
+            lat: place.geometry?.location?.lat() as number,
+            lng: place.geometry?.location?.lng() as number,
+          } as LatLngLiteral,
+          placeId: place.place_id as string,
+        }));
 
       setMarkList(newMarkList);
     });
@@ -162,7 +217,11 @@ const Explore: React.FunctionComponent = () => {
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={markList}
+        onMarkerClicked={onMarkerClicked}
       />
+      {showPlaceInfo ? (
+        <PlaceInfo place={placeDetail} onPlaceInfoClose={onPlaceInfoClose} />
+      ) : null}
     </Flex>
   );
 };

@@ -1,0 +1,15 @@
+.place_info {
+  width: 400px;
+
+  .title, .bottom {
+    width: 400px;
+  }
+
+  @media screen and (max-width: 575px) {
+    width: 100%;
+
+    .title, .bottom {
+      width: 100%;
+    }
+  }
+}

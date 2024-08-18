@@ -132,7 +132,7 @@ const Layout = () => {
           width: "100%",
           height: "64px",
           position: "fixed",
-          zIndex: "1",
+          zIndex: "10",
         }}
       >
         <Row

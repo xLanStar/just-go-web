@@ -50,12 +50,14 @@ interface Props {
   mapRef: MutableRefObject<google.maps.Map | undefined>;
   placesServiceRef: MutableRefObject<PlacesService | undefined>;
   markList: Mark[];
+  onMarkerClicked: (placeId: string) => void;
 }
 
 const Map: React.FunctionComponent<Props> = ({
   mapRef,
   placesServiceRef,
   markList,
+  onMarkerClicked,
 }) => {
   return (
     <div
@@ -91,7 +93,7 @@ const Map: React.FunctionComponent<Props> = ({
             <>
               {markList.map((mark) => (
                 <MarkerF
-                  key={mark.placeID}
+                  key={mark.placeId}
                   position={mark.location}
                   clusterer={clusterer}
                   icon={{
@@ -103,6 +105,10 @@ const Map: React.FunctionComponent<Props> = ({
                     fontSize: "14px",
                     fontWeight: "bold",
                     className: "marker_label",
+                  }}
+                  onClick={() => {
+                    mapRef.current?.panTo(mark.location);
+                    onMarkerClicked(mark.placeId);
                   }}
                 />
               ))}
