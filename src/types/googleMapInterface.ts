@@ -20,3 +20,9 @@ export interface PlaceDetail {
   website: string | undefined;
   opening_hours: string[] | undefined;
 }
+
+export interface Place {
+  name: string;
+  photo: string | undefined;
+  rating: number | undefined;
+}

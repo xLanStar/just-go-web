@@ -17,11 +17,13 @@ import "../assets/scss/placeInfo.scss";
 interface Props {
   place: PlaceDetail;
   onPlaceInfoClose: () => void;
+  savePlace: (place: PlaceDetail) => void;
 }
 
 const PlaceInfo: React.FunctionComponent<Props> = ({
   place,
   onPlaceInfoClose,
+  savePlace,
 }) => {
   return (
     <Flex
@@ -92,7 +94,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
             height: "300px",
           }}
         >
-          <img src={place.photo} alt="image" width="100%" height={300} />
+          <img src={place.photo} alt="image" width={400} height={300} />
         </Flex>
         <Flex
           vertical={false}
@@ -239,7 +241,13 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
           zIndex: 2,
         }}
       >
-        <Button icon={<PlusOutlined />} size="large">
+        <Button
+          icon={<PlusOutlined />}
+          size="large"
+          onClick={() => {
+            savePlace(place);
+          }}
+        >
           收藏景點
         </Button>
       </Flex>

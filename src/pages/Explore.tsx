@@ -4,20 +4,24 @@ import { useAppDispatch } from "../hooks";
 import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode } from "../types/modeInterface";
-import { Flex, Spin } from "antd";
+import { Flex, FloatButton, Spin } from "antd";
 import { useGoogleMap } from "../components/GoogleMapProvider";
 import { Color } from "../data/color";
 import {
   AutoComplete,
   LatLngLiteral,
   Mark,
+  Place,
   PlaceDetail,
+  PlaceDetailsRequest,
   PlaceSearchRequest,
   PlacesService,
 } from "../types/googleMapInterface";
 import SearchBar from "../components/SearchBar";
 import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
+import { BookOutlined } from "@ant-design/icons";
+import Collection from "../components/Collection";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -31,6 +35,7 @@ const Explore: React.FunctionComponent = () => {
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [searchType, setSearchType] = useState<string>("tourist_attraction");
   const [showPlaceInfo, setShowPlaceInfo] = useState<boolean>(false);
+  const [showCollection, setShowCollection] = useState<boolean>(false);
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail>({
     name: "",
     photo: "",
@@ -40,6 +45,7 @@ const Explore: React.FunctionComponent = () => {
     website: undefined,
     opening_hours: undefined,
   });
+  const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
     if (!getJwtToken()) {
@@ -101,7 +107,7 @@ const Explore: React.FunctionComponent = () => {
       return;
     }
 
-    const request: google.maps.places.PlaceDetailsRequest = {
+    const request: PlaceDetailsRequest = {
       placeId: placeId,
       fields: [
         "name",
@@ -130,10 +136,6 @@ const Explore: React.FunctionComponent = () => {
       });
       setShowPlaceInfo(true);
     });
-  };
-
-  const onPlaceInfoClose = () => {
-    setShowPlaceInfo(false);
   };
 
   const searchNearby = (position: LatLngLiteral) => {
@@ -166,6 +168,25 @@ const Explore: React.FunctionComponent = () => {
 
       setMarkList(newMarkList);
     });
+  };
+
+  const savePlace = (place: PlaceDetail) => {
+    setCollection([
+      ...collection,
+      {
+        name: place.name,
+        photo: place.photo,
+        rating: place.rating,
+      },
+    ]);
+  };
+
+  const onPlaceInfoClose = () => {
+    setShowPlaceInfo(false);
+  };
+
+  const closeCollection = () => {
+    setShowCollection(false);
   };
 
   if (!isLoaded) {
@@ -219,8 +240,21 @@ const Explore: React.FunctionComponent = () => {
         markList={markList}
         onMarkerClicked={onMarkerClicked}
       />
+      <FloatButton
+        type="primary"
+        icon={<BookOutlined />}
+        style={{ width: 50, height: 50, zIndex: 1 }}
+        onClick={() => setShowCollection(true)}
+      />
       {showPlaceInfo ? (
-        <PlaceInfo place={placeDetail} onPlaceInfoClose={onPlaceInfoClose} />
+        <PlaceInfo
+          place={placeDetail}
+          onPlaceInfoClose={onPlaceInfoClose}
+          savePlace={savePlace}
+        />
+      ) : null}
+      {showCollection ? (
+        <Collection places={collection} closeCollection={closeCollection} />
       ) : null}
     </Flex>
   );

@@ -1,13 +1,45 @@
-// import { BookOutlined } from '@ant-design/icons';
-// import { FloatButton } from 'antd';
+import { Flex } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import { Color } from "../data/color";
+import PlaceCard from "./PlaceCard";
+import { Place } from "../types/googleMapInterface";
+import { CollectionMode } from "../types/modeInterface";
 
-// export const Collection = () => {
-//     return (
-//         <FloatButton
-//             shape="circle"
-//             type="primary"
-//             style={{ width: 50, height: 50, right: 100 }}
-//             icon={<BookOutlined />}
-//         />
-//     )
-// }
+import "../assets/scss/collection.scss";
+
+interface Props {
+  places: Place[];
+  closeCollection: () => void;
+}
+
+const Collection: React.FunctionComponent<Props> = ({
+  places,
+  closeCollection,
+}) => {
+  return (
+    <Flex className="collection" vertical justify="flex-start" align="center">
+      <Flex
+        className="header"
+        vertical={false}
+        justify="flex-start"
+        align="center"
+        style={{
+          backgroundColor: Color.blue,
+        }}
+      >
+        <h1 className="title">我的收藏</h1>
+        <CloseOutlined
+          className="close_btn"
+          onClick={() => closeCollection()}
+        />
+      </Flex>
+      <Flex className="content" vertical justify="flex-start" align="center">
+        {places.map((place) => (
+          <PlaceCard place={place} mode={CollectionMode.Explore} />
+        ))}
+      </Flex>
+    </Flex>
+  );
+};
+
+export default Collection;
