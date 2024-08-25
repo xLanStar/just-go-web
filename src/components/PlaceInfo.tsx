@@ -81,6 +81,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
       <div
         className="content"
         style={{
+          width: "100%",
           overflowY: "auto",
           margin: "64px 0px",
         }}
@@ -94,7 +95,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
             height: "300px",
           }}
         >
-          <img src={place.photo} alt="image" width={400} height={300} />
+          <img src={place.photo} alt="image" width="100%" height={300} />
         </Flex>
         <Flex
           vertical={false}

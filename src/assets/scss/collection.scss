@@ -35,4 +35,12 @@
     margin-top: 64px;
     padding-bottom: 24px;
   }
+
+  @media screen and (max-width: 575px) {
+    width: 100%;
+
+    .header {
+      width: 100%;
+    }
+  }
 }
