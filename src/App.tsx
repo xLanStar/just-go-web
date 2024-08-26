@@ -6,7 +6,6 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NoMatch from "./pages/NoMatch";
 import Signin from "./pages/auth/Signin";
-import { ViewpointExplore } from "./pages/ViewpointExplore";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
@@ -34,7 +33,6 @@ const App: React.FunctionComponent = () => (
           <Route path="share" element={<TripShare />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="ViewpointExplore" element={<ViewpointExplore />} />
           <Route path="user/:id" element={<PublisherInfo />} />
           <Route path="*" element={<NoMatch />} />
         </Route>

@@ -120,11 +120,24 @@ const Layout = () => {
   ];
 
   return (
-    <AntdLayout className="layout" style={{ height: "100%" }}>
-      <Header>
+    <AntdLayout
+      className="layout"
+      style={{
+        width: "100%",
+        minHeight: "100%",
+      }}
+    >
+      <Header
+        style={{
+          width: "100%",
+          height: "64px",
+          position: "fixed",
+          zIndex: "10",
+        }}
+      >
         <Row
           style={{
-            height: 64,
+            height: "100%",
             lineHeight: "64px",
           }}
         >
@@ -138,7 +151,7 @@ const Layout = () => {
             >
               <img
                 className="logo_image"
-                src="/src/assets/logo.png"
+                src="/src/assets/image/logo.png"
                 alt="logo"
                 onClick={() => navigate("/")}
                 style={cursor}
@@ -180,7 +193,7 @@ const Layout = () => {
               align="center"
               style={fullSize}
             >
-              {mode === PageMode.Default ? (
+              {mode === PageMode.Default || PageMode.Explore ? (
                 <>
                   <Button className="right_button" icon={<PlusOutlined />}>
                     建立新行程
@@ -259,10 +272,18 @@ const Layout = () => {
           </Col>
         </Row>
       </Header>
-      <Content>
+      <Content
+        style={{
+          marginTop: "64px",
+        }}
+      >
         <Outlet />
       </Content>
-      <Footer style={{ textAlign: "center" }}>Copyright©2024 JustGo</Footer>
+      {mode === PageMode.Default ? (
+        <Footer style={{ width: "100%", height: "64px", textAlign: "center" }}>
+          Copyright©2024 JustGo
+        </Footer>
+      ) : null}
     </AntdLayout>
   );
 };

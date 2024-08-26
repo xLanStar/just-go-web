@@ -1,0 +1,46 @@
+.collection {
+  width: 400px;
+  height: calc(100vh - 64px);
+  position: absolute;
+  top: 64px;
+  right: 0px;
+  background-color: white;
+  z-index: 1;
+
+  .header {
+    width: 400px;
+    height: 64px;
+    padding-left: 24px;
+    padding-right: 36px;
+    position: fixed;
+    z-index: 2;
+  }
+
+  .title {
+    color: white;
+    font-weight: bold;
+  }
+
+  .close_btn {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+  }
+
+  .content {
+    width: 100%;
+    overflow-y: auto;
+    margin-top: 64px;
+    padding-bottom: 24px;
+  }
+
+  @media screen and (max-width: 575px) {
+    width: 100%;
+
+    .header {
+      width: 100%;
+    }
+  }
+}

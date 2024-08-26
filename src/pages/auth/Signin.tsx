@@ -51,7 +51,7 @@ const Signin: React.FunctionComponent = () => {
     }
   };
 
-  const customGoogleLogin = useCustomGoogleLogin(true)
+  const customGoogleLogin = useCustomGoogleLogin(true);
 
   return (
     <Flex
@@ -65,7 +65,11 @@ const Signin: React.FunctionComponent = () => {
       }}
     >
       <Flex className="signin_page" vertical align="center">
-        <img className="logo_image" src="/src/assets/logo.png" alt="logo.png" />
+        <img
+          className="logo_image"
+          src="/src/assets/image/logo.png"
+          alt="logo.png"
+        />
         <h2>{isSignin ? "登入" : "註冊"}</h2>
         <Form
           className="signin_form"

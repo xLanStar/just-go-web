@@ -1,0 +1,13 @@
+.map {
+  .marker_label {
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    text-shadow: 
+    -1px -1px 0 #fff,  
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+    transform: translateY(-28px);
+  }
+}
