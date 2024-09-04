@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   GoogleCircleFilled,
   LockOutlined,
@@ -8,65 +9,78 @@ import { App, Button, Divider, Flex, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
-import { useCustomGoogleLogin, getJwtToken } from "../../apis/auth";
+import { register, signin, googleSignin } from "../../apis/auth";
 import { useAppDispatch } from "../../hooks";
 import { SigninForm } from "../../types/formInterface";
-import { registerUser, signinUser } from "../../store/user/userSlice";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { setAuthToken } from "../../utils/request";
+import { setUser } from "../../store/user/userSlice";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import "../../assets/scss/signin.scss";
 
 const Signin: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const [form] = Form.useForm();
   const { message } = App.useApp();
   const [isSignin, setIsSignin] = useState<boolean>(true);
 
   useEffect(() => {
-    if (getJwtToken()) {
+    if (localStorage.getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
-  }, [navigate]);
+  }, []);
 
-  const onFinish = async (form: SigninForm) => {
+  const submitForm = async (form: SigninForm) => {
     try {
       if (isSignin) {
-        await dispatch(
-          signinUser({ email: form.email, password: form.password })
-        );
+        const { user, token } = await signin(form.email, form.password);
+        localStorage.setItem("user", user);
+        localStorage.setItem("jwtToken", token);
+        dispatch(setUser(user));
+        setAuthToken(token);
+        navigate("/", { replace: true });
       } else {
-        await dispatch(
-          registerUser({
-            name: form.name as string,
-            email: form.email,
-            password: form.password,
-          })
-        );
+        await register(form.name as string, form.email, form.password);
+        navigate("/verify-notice");
       }
-      navigate("/", { replace: true });
     } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message);
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          message.error("帳號或密碼錯誤");
+        } else if (error.status === 409) {
+          message.error("帳號已存在");
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
       }
+      console.error(error);
     }
   };
 
-  const customGoogleLogin = useCustomGoogleLogin(true);
+  const google = useGoogleLogin({
+    onSuccess: async (response) => {
+      const accessToken = response.access_token;
+      const { user, token } = await googleSignin(accessToken);
+
+      localStorage.setItem("user", user);
+      localStorage.setItem("jwtToken", token);
+      dispatch(setUser(user));
+      setAuthToken(token);
+      navigate("/", { replace: true });
+    },
+    onError: () => {
+      message.error("Google登入失敗");
+    },
+  });
 
   return (
-    <Flex
-      className="signin"
-      vertical
-      justify="center"
-      align="center"
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <Flex className="signin_page" vertical align="center">
+    <Flex className="signin" vertical justify="center" align="center">
+      <Flex className="signin_content" vertical align="center">
         <img
-          className="logo_image"
+          className="signin_logo"
           src="/src/assets/image/logo.png"
           alt="logo.png"
         />
@@ -76,7 +90,7 @@ const Signin: React.FunctionComponent = () => {
           form={form}
           layout="vertical"
           scrollToFirstError
-          onFinish={onFinish}
+          onFinish={submitForm}
           noValidate
         >
           {!isSignin && (
@@ -138,19 +152,19 @@ const Signin: React.FunctionComponent = () => {
           )}
           <Form.Item>
             <Button
+              className="signin_button"
               type="primary"
               size="large"
               htmlType="submit"
-              style={{ width: "100%" }}
             >
               {isSignin ? "登入" : "註冊"}
             </Button>
             <Divider>或</Divider>
             <Button
+              className="signin_button"
               icon={<GoogleCircleFilled />}
               size="large"
-              style={{ width: "100%" }}
-              onClick={customGoogleLogin}
+              onClick={() => google()}
             >
               Google
             </Button>

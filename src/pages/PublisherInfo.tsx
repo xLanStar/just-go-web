@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { User } from "../types/userInterface";
@@ -10,14 +9,16 @@ import { Avatar, Button, Flex } from "antd";
 import { Color } from "../data/color";
 import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
-
-import "../assets/scss/publisherInfo.scss";
 import TripList from "../components/TripList";
 import { loadTripsById } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+
+import "../assets/scss/publisherInfo.scss";
 
 const PublisherInfo: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
 
   const { id } = useParams();
   const [user, setUser] = useState<User>({
@@ -29,7 +30,7 @@ const PublisherInfo: React.FunctionComponent = () => {
   const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
 

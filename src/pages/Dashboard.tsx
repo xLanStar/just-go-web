@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getJwtToken } from "../apis/auth";
 import { App, Avatar, Button, Flex } from "antd";
 import {
   AppstoreOutlined,
@@ -13,9 +12,10 @@ import TripList from "../components/TripList";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { TripInfo } from "../types/tripInterface";
+import { loadTripsByMe } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/dashboard.scss";
-import { loadTripsByMe } from "../apis/trip";
 
 enum Tag {
   Own,
@@ -30,6 +30,7 @@ interface OwnTripList {
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const { message } = App.useApp();
 
@@ -40,12 +41,12 @@ const Dashboard: React.FunctionComponent = () => {
   const [listMode, setListMode] = useState<Tag>(Tag.Own);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));
     dispatch(setMode(PageMode.Default));
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     if (listMode === Tag.Own) {

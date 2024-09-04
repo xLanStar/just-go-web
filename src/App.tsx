@@ -12,6 +12,8 @@ import Explore from "./pages/Explore";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
 import PublisherInfo from "./pages/PublisherInfo";
+import VerifyNotice from "./pages/auth/VerifyNotice";
+import Verify from "./pages/auth/Verify";
 
 const App: React.FunctionComponent = () => (
   <ConfigProvider
@@ -37,6 +39,8 @@ const App: React.FunctionComponent = () => (
           <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />
+        <Route path="/verify-notice" element={<VerifyNotice />} />
+        <Route path="/verify/:token" element={<Verify />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </AntdApp>

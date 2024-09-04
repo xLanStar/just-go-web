@@ -22,17 +22,17 @@ import {
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
-import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
-import { updateUser } from "../store/user/userSlice";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode } from "../types/modeInterface";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/profile.scss";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -40,7 +40,7 @@ const Profile: React.FunctionComponent = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
@@ -66,22 +66,22 @@ const Profile: React.FunctionComponent = () => {
     showUploadList: false,
   };
 
-  const onFinish = async (form: ProfileForm) => {
-    try {
-      await dispatch(
-        updateUser({
-          id: user.id,
-          name: form.name,
-          email: form.email,
-          avatar: avatar,
-        })
-      );
-      navigate(-1);
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message);
-      }
-    }
+  const submitForm = async (form: ProfileForm) => {
+    // try {
+    //   await dispatch(
+    //     updateUser({
+    //       id: user.id,
+    //       name: form.name,
+    //       email: form.email,
+    //       avatar: avatar,
+    //     })
+    //   );
+    //   navigate(-1);
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     message.error(error.message);
+    //   }
+    // }
   };
 
   return (
@@ -165,7 +165,7 @@ const Profile: React.FunctionComponent = () => {
             form={form}
             layout="vertical"
             scrollToFirstError
-            onFinish={onFinish}
+            onFinish={submitForm}
             noValidate
             initialValues={{ name: user.name, email: user.email }}
             requiredMark={false}

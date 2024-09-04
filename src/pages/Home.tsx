@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { App, Flex, Input } from "antd";
@@ -9,18 +8,20 @@ import { SearchOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
 import TripList from "../components/TripList";
 import { loadTrips } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/home.scss";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const { message } = App.useApp();
 
   const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程探索"));

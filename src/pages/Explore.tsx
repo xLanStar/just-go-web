@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode } from "../types/modeInterface";
 import { Flex, FloatButton, Spin } from "antd";
@@ -22,10 +21,12 @@ import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
 import { BookOutlined } from "@ant-design/icons";
 import Collection from "../components/Collection";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const { isLoaded, loadError } = useGoogleMap();
 
   const mapRef = useRef<google.maps.Map>();
@@ -48,7 +49,7 @@ const Explore: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));

@@ -23,10 +23,10 @@ import {
   Row,
 } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../apis/auth";
 import { useAppSelector } from "../hooks";
 import { cursor, fullSize } from "../data/reference";
 import { PageMode } from "../types/modeInterface";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/layout.scss";
 
@@ -34,6 +34,7 @@ const { Header, Footer, Content } = AntdLayout;
 
 const Layout = () => {
   const navigate = useNavigate();
+  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const page = useAppSelector((state) => state.page.name);
   const mode = useAppSelector((state) => state.page.mode);
@@ -113,7 +114,8 @@ const Layout = () => {
       icon: <LogoutOutlined />,
       label: "登出",
       onClick: () => {
-        logout();
+        localStorage.removeItem("user");
+        localStorage.removeItem("jwtToken");
         navigate("/signin");
       },
     },
