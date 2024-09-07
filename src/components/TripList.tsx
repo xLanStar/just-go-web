@@ -69,13 +69,10 @@ const TripList: React.FunctionComponent<Props> = ({
       {tripList.map((trip) => (
         <Col key={trip.id} sm={24} md={12} lg={8} xl={6}>
           <Flex
+            className="trip_list_card_box"
             vertical
             justify="center"
             align="center"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
           >
             <TripCard
               trip={trip}

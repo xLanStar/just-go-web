@@ -1,41 +1,44 @@
 .dashboard {
-  .user_info {
-    padding: 24px 0px 24px 128px;
-    width: 100%;
+  width: 100%;
+}
+
+.dashboard_user_info {
+  width: 100%;
+  padding: 24px 0px 24px 64px;
+  background-color: #ACD6FF;
+}
+
+.dashboard_tag_box {
+  width: 100%;
+  padding: 12px 0px;
+}
+
+.dashboard_tag_button {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.dashboard_trip_title {
+  width: 100%;
+  padding: 12px 0px 12px 64px;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+  .dashboard_user_info {
+    padding: 24px 0px 24px 48px;
   }
 
-  .trip_title {
-    padding: 12px 0px 12px 128px;
-    width: 100%;
+  .dashboard_trip_title {
+    padding: 12px 0px 12px 48px;
   }
-  
-  @media screen and (min-width: 1600px){
-    .user_info {
-      padding: 24px 0px 24px 64px;
-    }
+}
 
-    .trip_title {
-      padding: 12px 0px 12px 64px;
-    }
+@media screen and (max-width: 1199px) {
+  .dashboard_user_info {
+    padding: 24px 0px 24px 32px;
   }
-  
-  @media screen and (min-width: 1200px) and (max-width: 1600px) {
-    .user_info {
-      padding: 24px 0px 24px 48px;
-    }
 
-    .trip_title {
-      padding: 12px 0px 12px 48px;
-    }
-  }
-  
-  @media screen and (max-width: 1199px) {
-    .user_info {
-      padding: 24px 0px 24px 32px;
-    }
-
-    .trip_title {
-      padding: 12px 0px 12px 32px;
-    }
+  .dashboard_trip_title {
+    padding: 12px 0px 12px 32px;
   }
 }
