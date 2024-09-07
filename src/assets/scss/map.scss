@@ -1,13 +1,17 @@
 .map {
-  .marker_label {
-    position: relative;
-    z-index: 2;
-    white-space: nowrap;
-    text-shadow: 
-    -1px -1px 0 #fff,  
-     1px -1px 0 #fff,
-    -1px  1px 0 #fff,
-     1px  1px 0 #fff;
-    transform: translateY(-28px);
-  }
+  width: 100%;
+  height: calc(100vh - 64px);
+  position: absolute;
+}
+
+.map_marker {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+  text-shadow: 
+  -1px -1px 0 #fff,  
+   1px -1px 0 #fff,
+  -1px  1px 0 #fff,
+   1px  1px 0 #fff;
+  transform: translateY(-28px);
 }

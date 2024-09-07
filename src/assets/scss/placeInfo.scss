@@ -1,15 +1,99 @@
 .place_info {
   width: 400px;
+  height: calc(100vh - 64px);
+  position: absolute;
+  top: 64px;
+  left: 0px;
+  background-color: white;
+  z-index: 1;
+}
 
-  .title, .bottom {
-    width: 400px;
+.place_info_header {
+  width: 400px;
+  height: 64px;
+  padding-left: 24px;
+  padding-right: 36px;
+  position: fixed;
+  z-index: 2;
+  background-color: #2894FF;
+}
+
+.place_info_title {
+  color: white;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.place_info_close_button {
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+}
+
+.place_info_content {
+  width: 100%;
+  overflow-y: auto;
+  margin: 64px 0px;
+}
+
+.place_info_image_box {
+  width: 100%;
+  height: 300px;
+}
+
+
+.place_info_image {
+  width: 100%;
+  height: 300px;
+}
+
+.place_info_rating_box,
+.place_info_address_box,
+.place_info_phone_box,
+.place_info_website_box {
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 16px;
+  border-bottom: 1px solid #9C9C9C;
+}
+
+.place_info_icon {
+  font-size: 20px;
+}
+
+.place_info_rating_rate {
+  z-index: 0;
+}
+
+.place_info_opening_hours_box {
+  width: 100%;
+  min-height: 48px;
+  padding: 4px 16px;
+}
+
+.place_info_footer {
+  width: 400px;
+  height: 64px;
+  padding: 0px 16px;
+  border-top: 1px solid #9C9C9C;
+  position: fixed;
+  background-color: white;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+@media screen and (max-width: 575px) {
+  .place_info {
+    width: 100%;
   }
 
-  @media screen and (max-width: 575px) {
+  .place_info_header,
+  .place_info_footer {
     width: 100%;
-
-    .title, .bottom {
-      width: 100%;
-    }
   }
 }

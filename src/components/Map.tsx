@@ -60,14 +60,7 @@ const Map: React.FunctionComponent<Props> = ({
   onMarkerClicked,
 }) => {
   return (
-    <div
-      className="map"
-      style={{
-        width: "100%",
-        height: "calc(100vh - 64px)",
-        position: "absolute",
-      }}
-    >
+    <div className="map">
       <GoogleMap
         center={center}
         zoom={15}
@@ -104,7 +97,7 @@ const Map: React.FunctionComponent<Props> = ({
                     color: "blue",
                     fontSize: "14px",
                     fontWeight: "bold",
-                    className: "marker_label",
+                    className: "map_marker",
                   }}
                   onClick={() => {
                     mapRef.current?.panTo(mark.location);
