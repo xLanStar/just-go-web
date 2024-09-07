@@ -19,7 +19,7 @@ const Collection: React.FunctionComponent<Props> = ({
   return (
     <Flex className="collection" vertical justify="flex-start" align="center">
       <Flex
-        className="header"
+        className="collection_header"
         vertical={false}
         justify="flex-start"
         align="center"
@@ -27,13 +27,18 @@ const Collection: React.FunctionComponent<Props> = ({
           backgroundColor: Color.blue,
         }}
       >
-        <h1 className="title">我的收藏</h1>
+        <h1 className="collection_title">我的收藏</h1>
         <CloseOutlined
-          className="close_btn"
+          className="collection_close_button"
           onClick={() => closeCollection()}
         />
       </Flex>
-      <Flex className="content" vertical justify="flex-start" align="center">
+      <Flex
+        className="collection_content"
+        vertical
+        justify="flex-start"
+        align="center"
+      >
         {places.map((place) => (
           <PlaceCard place={place} mode={CollectionMode.Explore} />
         ))}
