@@ -70,13 +70,6 @@ const SearchBar: React.FunctionComponent<Props> = ({
         justify="flex-start"
         align="center"
         gap="small"
-        style={{
-          height: "40px",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          marginTop: "24px",
-          zIndex: "1",
-        }}
       >
         <Autocomplete
           onLoad={(autocompleteRef) => {
@@ -85,27 +78,17 @@ const SearchBar: React.FunctionComponent<Props> = ({
           onPlaceChanged={onPlaceChanged}
         >
           <Input
-            className="search"
+            className="search_bar_input"
             prefix={<SearchOutlined />}
             size="large"
             placeholder="請輸入地點、關鍵字"
-            style={{
-              height: "100%",
-              border: "none",
-              borderRight: "1px solid #D9D9D9",
-              borderStartEndRadius: "0px",
-              borderEndEndRadius: "0px",
-            }}
           />
         </Autocomplete>
         <Tabs
-          className="place_type"
+          className="search_bar_place_type"
           defaultActiveKey="1"
           items={items}
           onTabClick={(key: string) => onSearchTypeChanged(key)}
-          style={{
-            height: "100%",
-          }}
         />
       </Flex>
     </ConfigProvider>
