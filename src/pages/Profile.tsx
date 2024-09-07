@@ -94,16 +94,7 @@ const Profile: React.FunctionComponent = () => {
         },
       }}
     >
-      <Flex
-        className="profile"
-        vertical
-        justify="center"
-        align="center"
-        style={{
-          width: "100%",
-          minHeight: "calc(100vh - 128px)",
-        }}
-      >
+      <Flex className="profile" vertical justify="center" align="center">
         <Flex
           className="profile_form"
           vertical
@@ -111,22 +102,14 @@ const Profile: React.FunctionComponent = () => {
           align="center"
           gap="middle"
         >
-          <Row
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
+          <Row className="profile_avatar_box">
             <Col span={16}>
               <Flex
+                className="profile_avatar"
                 vertical={false}
                 justify="flex-start"
                 align="center"
                 gap="middle"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
               >
                 {avatarUrl ? (
                   <Avatar
@@ -141,19 +124,16 @@ const Profile: React.FunctionComponent = () => {
             </Col>
             <Col span={8}>
               <Flex
+                className="profile_avatar_upload"
                 vertical={false}
                 justify="flex-end"
                 align="center"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
               >
                 <Upload {...uploadProps}>
                   <Button
+                    className="profile_avatar_upload_button"
                     icon={<UploadOutlined />}
                     size="large"
-                    style={{ width: "100%" }}
                   >
                     上傳頭像
                   </Button>
@@ -162,6 +142,7 @@ const Profile: React.FunctionComponent = () => {
             </Col>
           </Row>
           <Form
+            className="profile_form_item_box"
             form={form}
             layout="vertical"
             scrollToFirstError
@@ -169,9 +150,6 @@ const Profile: React.FunctionComponent = () => {
             noValidate
             initialValues={{ name: user.name, email: user.email }}
             requiredMark={false}
-            style={{
-              width: "100%",
-            }}
           >
             <Form.Item
               name="name"
@@ -201,12 +179,10 @@ const Profile: React.FunctionComponent = () => {
             </Form.Item>
             <Form.Item>
               <Flex
+                className="profile_form_action_box"
                 vertical={false}
                 justify="flex-end"
                 align="center"
-                style={{
-                  width: "100%",
-                }}
                 gap="small"
               >
                 <Button
