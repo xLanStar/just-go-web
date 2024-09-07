@@ -24,7 +24,6 @@ import {
 } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks";
-import { cursor, fullSize } from "../data/reference";
 import { PageMode } from "../types/modeInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
@@ -129,37 +128,23 @@ const Layout = () => {
         minHeight: "100%",
       }}
     >
-      <Header
-        style={{
-          width: "100%",
-          height: "64px",
-          position: "fixed",
-          zIndex: "10",
-        }}
-      >
-        <Row
-          style={{
-            height: "100%",
-            lineHeight: "64px",
-          }}
-        >
+      <Header className="layout_header">
+        <Row className="layout_content">
           <Col sm={8} xs={15}>
             <Flex
-              className="left_flex"
+              className="layout_content_left"
               vertical={false}
               justify="flex-start"
               align="center"
-              style={fullSize}
             >
               <img
-                className="logo_image"
+                className="layout_logo"
                 src="/src/assets/image/logo.png"
                 alt="logo"
                 onClick={() => navigate("/")}
-                style={cursor}
               />
               <Button
-                className="navigate_bar"
+                className="layout_nav_button"
                 icon={<CompassOutlined />}
                 type="text"
                 onClick={() => navigate("/explore")}
@@ -167,41 +152,43 @@ const Layout = () => {
                 景點探索
               </Button>
               <Button
-                className="navigate_bar"
+                className="layout_nav_button"
                 icon={<CalendarOutlined />}
                 type="text"
                 onClick={() => navigate("/dashboard")}
               >
                 行程規劃
               </Button>
-              <h2 className="left_title">{page}</h2>
+              <h2 className="layout_content_left_title">{page}</h2>
             </Flex>
           </Col>
           <Col sm={8} xs={0}>
             <Flex
+              className="layout_content_center"
               vertical={false}
               justify="center"
               align="center"
-              style={fullSize}
             >
-              <h2 className="center_title">{page}</h2>
+              <h2 className="layout_content_center_title">{page}</h2>
             </Flex>
           </Col>
           <Col sm={8} xs={9}>
             <Flex
-              className="right_flex"
+              className="layout_content_right"
               vertical={false}
               justify="flex-end"
               align="center"
-              style={fullSize}
             >
-              {mode === PageMode.Default || PageMode.Explore ? (
+              {mode === PageMode.Default || mode === PageMode.Explore ? (
                 <>
-                  <Button className="right_button" icon={<PlusOutlined />}>
+                  <Button
+                    className="layout_action_button"
+                    icon={<PlusOutlined />}
+                  >
                     建立新行程
                   </Button>
                   <Dropdown
-                    className="right_menu"
+                    className="layout_action_menu"
                     menu={{ items: defaultMenu }}
                     placement="bottomRight"
                   >
@@ -211,15 +198,27 @@ const Layout = () => {
               ) : null}
               {mode === PageMode.Edit ? (
                 <>
-                  <Button className="right_button" icon={<SaveOutlined />}>
-                    建立副本
+                  <Button
+                    className="layout_action_button"
+                    icon={<InfoCircleOutlined />}
+                  >
+                    設定
                   </Button>
-                  <Button className="right_button" icon={<HeartOutlined />}>
-                    收藏
+                  <Button
+                    className="layout_action_button"
+                    icon={<LockOutlined />}
+                  >
+                    共用
+                  </Button>
+                  <Button
+                    className="layout_action_buttom"
+                    icon={<UsergroupAddOutlined />}
+                  >
+                    6
                   </Button>
                   <Dropdown
-                    className="right_menu"
-                    menu={{ items: editMenu }}
+                    className="layout_action_menu"
+                    menu={{ items: shareMenu }}
                     placement="bottomRight"
                   >
                     <Button icon={<PlusOutlined />} type="text" size="large" />
@@ -229,23 +228,20 @@ const Layout = () => {
               {mode === PageMode.Share ? (
                 <>
                   <Button
-                    className="right_button"
-                    icon={<InfoCircleOutlined />}
+                    className="layout_action_button"
+                    icon={<SaveOutlined />}
                   >
-                    設定
-                  </Button>
-                  <Button className="right_button" icon={<LockOutlined />}>
-                    共用
+                    建立副本
                   </Button>
                   <Button
-                    className="right_button"
-                    icon={<UsergroupAddOutlined />}
+                    className="layout_action_button"
+                    icon={<HeartOutlined />}
                   >
-                    6
+                    收藏
                   </Button>
                   <Dropdown
-                    className="right_menu"
-                    menu={{ items: shareMenu }}
+                    className="layout_action_menu"
+                    menu={{ items: editMenu }}
                     placement="bottomRight"
                   >
                     <Button icon={<PlusOutlined />} type="text" size="large" />
@@ -253,7 +249,7 @@ const Layout = () => {
                 </>
               ) : null}
               <Dropdown
-                className="right_menu"
+                className="layout_action_menu"
                 menu={{ items: rightMenu }}
                 placement="bottomLeft"
               >
@@ -262,29 +258,27 @@ const Layout = () => {
               <Dropdown menu={{ items: avatarMenu }} placement="bottomRight">
                 {user.avatar ? (
                   <Avatar
+                    className="layout_user_avatar"
                     src={<img src={user.avatar} alt="avatar" />}
                     size="large"
-                    style={cursor}
                   />
                 ) : (
-                  <Avatar icon={<UserOutlined />} size="large" style={cursor} />
+                  <Avatar
+                    className="layout_user_avatar"
+                    icon={<UserOutlined />}
+                    size="large"
+                  />
                 )}
               </Dropdown>
             </Flex>
           </Col>
         </Row>
       </Header>
-      <Content
-        style={{
-          marginTop: "64px",
-        }}
-      >
+      <Content className="layout_outlet">
         <Outlet />
       </Content>
       {mode === PageMode.Default ? (
-        <Footer style={{ width: "100%", height: "64px", textAlign: "center" }}>
-          Copyright©2024 JustGo
-        </Footer>
+        <Footer className="layout_footer">Copyright©2024 JustGo</Footer>
       ) : null}
     </AntdLayout>
   );
