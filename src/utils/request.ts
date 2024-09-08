@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { getJwtToken } from "../apis/auth";
 
 const request = axios.create({
   timeout: 3000,
@@ -8,19 +7,22 @@ const request = axios.create({
   }
 })
 
+export const setAuthToken = (token: string) => {
+  request.defaults.headers.Authorization = token;
+}
+
+export const removeAuthToken = () => {
+  delete request.defaults.headers.Authorization;
+}
+
 const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const controller = new AbortController();
-  const token = getJwtToken();
-
-  if (token) {
-    config.headers.Authorization = token;
-  }
-
   config.signal = controller.signal;
 
   if (!config.headers?.["Authorization"]) {
     controller.abort();
   }
+
   return config;
 }
 
@@ -35,29 +37,7 @@ const responseHandler = (response: AxiosResponse) => {
 
 export const responseErrorHandler = (error: AxiosError) => {
   console.error("Response Error : ", error);
-
-  if (error.response) {
-    if (error.response.status === 500) {
-      return Promise.reject({
-        name: "ServerError",
-        message: "系統內部發生錯誤"
-      })
-    }
-    return Promise.reject({
-      name: "ResponseError",
-      message: "ResponseError"
-    })
-  } else if (error.request) {
-    return Promise.reject({
-      name: "NoResponseError",
-      message: "系統無回應"
-    })
-  } else {
-    return Promise.reject({
-      name: "RequestError",
-      message: "系統發生錯誤"
-    });
-  }
+  return Promise.reject(error);
 };
 
 request.interceptors.request.use(requestInterceptor, requestErrorHandler);

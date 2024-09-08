@@ -1,73 +1,111 @@
+.ant-layout-header {
+  padding: 0px 64px;
+}
+
 .layout {
+  width: 100%;
+  min-height: 100%;
+}
+
+.layout_header {
+  width: 100%;
+  height: 64px;
+  position: fixed;
+  z-index: 10;
+}
+
+.layout_content {
+  height: 100%;
+  line-height: 64px;
+}
+
+.layout_content_left {
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+}
+
+.layout_logo {
+  cursor: pointer;
+  height: 48px;
+}
+
+.layout_content_left_title {
+  display: none;
+}
+
+.layout_content_center {
+  width: 100%;
+  height: 100%;
+}
+
+.layout_content_right {
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+}
+
+.layout_user_avatar {
+  cursor: pointer;
+}
+
+.layout_outlet {
+  margin-top: 64px;
+}
+
+.layout_footer {
+  width: 100%;
+  height: 64px;
+  text-align: center;
+}
+
+.layout_action_menu {
+  display: none;
+}
+
+@media screen and (max-width: 991px) {
+  .layout_nav_button {
+    display: none;
+  }
+
+  .layout_action_button {
+    display: none;
+  }
+
+  .layout_action_menu {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
   .ant-layout-header {
-    padding: 0px 64px;
+    padding: 0px 36px;
   }
-  
-  .left_flex {
-    gap: 8px;
+}
+
+@media screen and (max-width: 575px) {
+  .ant-layout-header {
+    padding: 0px 12px;
   }
-  
-  .logo_image {
-    height: 48px;
+
+  .layout_content_left {
+    gap: 16px;
   }
-  
-  .left_title {
+
+  .layout_logo {
+    height: 36px;
+  }
+
+  .layout_content_left_title {
+    display: block;
+    font-size: 20px;
+  }
+
+  .layout_content_center {
     display: none;
   }
-  
-  .right_flex {
-    gap: 8px;
+
+  .layout_content_right {
+    gap: 0px;
   }
-  
-  .right_menu {
-    display: none;
-  }
-  
-  @media screen and (max-width: 991px) {
-    .navigate_bar {
-      display: none;
-    }
-  
-    .right_button {
-      display: none;
-    }
-  
-    .right_menu {
-      display: block;
-    }
-  }
-  
-  @media screen and (min-width: 576px) and (max-width: 767px) {
-    .ant-layout-header {
-      padding: 0px 36px;
-    }
-  }
-  
-  @media screen and (max-width: 575px) {
-    .ant-layout-header {
-      padding: 0px 12px;
-    }
-  
-    .left_flex {
-      gap: 16px;
-    }
-  
-    .logo_image {
-      height: 36px;
-    }
-  
-    .left_title {
-      display: block;
-      font-size: 20px;
-    }
-  
-    .center_title {
-      display: none;
-    }
-  
-    .right_flex {
-      gap: 0px;
-    }
-  }
-  
 }

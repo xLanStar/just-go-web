@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { Card, Row, Col, Flex, Avatar } from "antd";
 import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
-import { Color } from "../data/color";
 import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
 
@@ -41,62 +40,43 @@ const TripCard: React.FunctionComponent<Props> = ({
       style={
         mode === TripInfoMode.Private
           ? {
-              width: "280px",
               height: "300px",
-              borderRadius: "12px",
             }
           : {
-              width: "280px",
               height: "340px",
-              borderRadius: "12px",
             }
       }
     >
       <Flex
+        className="trip_card_image_box"
         vertical
         justify="center"
         align="center"
         onClick={() => {
           navigate("/edit");
         }}
-        style={{
-          width: "100%",
-          cursor: "pointer",
-        }}
       >
-        <img
-          src={trip.image}
-          alt="image"
-          width={240}
-          height={180}
-          style={{
-            borderRadius: "8px",
-          }}
-        />
+        <img className="trip_card_image" src={trip.image} alt="image" />
       </Flex>
       <Row>
         <Col span={16}>
           <Flex
+            className="trip_card_title_box"
             vertical={false}
             justify="flex-start"
             align="center"
-            style={{ padding: "4px 0px", width: "100%", height: "52px" }}
           >
             <h1>{trip.title}</h1>
           </Flex>
         </Col>
         <Col span={8}>
           <Flex
+            className="trip_card_day_box"
             vertical={false}
             justify="flex-end"
             align="center"
-            style={{ padding: "4px 0px", width: "100%", height: "52px" }}
           >
-            <h3
-              style={{
-                color: Color.greyHeavy,
-              }}
-            >
+            <h3 className="trip_card_day">
               {trip.day > 30 ? 30 : trip.day} 天的行程
             </h3>
           </Flex>
@@ -106,24 +86,17 @@ const TripCard: React.FunctionComponent<Props> = ({
         <Row>
           <Col
             span={14}
-            className="user_info"
+            className="trip_card_user_box"
             onClick={() => {
               navigate(`/user/${trip.userId}`);
             }}
-            style={{
-              cursor: "pointer",
-            }}
           >
             <Flex
+              className="trip_card_avatar"
               vertical={false}
               justify="flex-start"
               align="center"
               gap="small"
-              style={{
-                padding: "4px 0px",
-                width: "100%",
-                height: "41px",
-              }}
             >
               <Avatar
                 src={<img src="src/assets/image/avatar.jpg" alt="avatar" />}
@@ -132,36 +105,16 @@ const TripCard: React.FunctionComponent<Props> = ({
               <h2>{trip.user}</h2>
             </Flex>
           </Col>
-          <Col
-            span={10}
-            style={{
-              paddingRight: "4px",
-            }}
-          >
+          <Col className="trip_card_label_box" span={10}>
             <Flex
-              className="labels"
+              className="trip_card_label"
               vertical={false}
               justify="flex-start"
               align="center"
               gap="small"
-              style={{
-                padding: "4px 0px",
-                width: "100%",
-                height: "41px",
-              }}
             >
               {trip.labels.map((label, index) => (
-                <h3
-                  key={index}
-                  style={{
-                    whiteSpace: "nowrap",
-                    textAlign: "center",
-                    color: "white",
-                    padding: "4px 8px",
-                    backgroundColor: Color.cyan,
-                    borderRadius: "20px",
-                  }}
-                >
+                <h3 className="trip_card_label_name" key={index}>
                   {label}
                 </h3>
               ))}
@@ -170,34 +123,18 @@ const TripCard: React.FunctionComponent<Props> = ({
         </Row>
       ) : null}
       <Row>
-        <Col
-          span={isPublic ? 16 : 20}
-          style={{
-            paddingRight: "12px",
-          }}
-        >
+        <Col className="trip_card_day_or_label_box" span={isPublic ? 16 : 20}>
           <Flex
-            className="labels"
+            className="trip_card_day_or_label"
             vertical={false}
             justify="flex-start"
             align="center"
             gap="small"
-            style={{ width: "100%", height: "41px" }}
           >
             {mode === TripInfoMode.Private ? (
               <>
                 {trip.labels.map((label, index) => (
-                  <h3
-                    key={index}
-                    style={{
-                      whiteSpace: "nowrap",
-                      textAlign: "center",
-                      color: "white",
-                      padding: "4px 8px",
-                      backgroundColor: Color.cyan,
-                      borderRadius: "20px",
-                    }}
-                  >
+                  <h3 className="trip_card_label_name" key={index}>
                     {label}
                   </h3>
                 ))}
@@ -209,29 +146,29 @@ const TripCard: React.FunctionComponent<Props> = ({
         </Col>
         <Col span={isPublic ? 8 : 4}>
           <Flex
+            className="trip_card_action_box"
             vertical={false}
             justify="flex-end"
             align="center"
             gap="small"
-            style={{ width: "100%", height: "41px" }}
           >
             {isPublic && (
               <Flex
+                className="trip_card_action"
                 vertical={false}
                 justify="flex-end"
                 align="center"
                 gap="small"
-                style={{ width: "100%", height: "100%" }}
               >
                 {trip.isLike ? (
                   <LikeTwoTone
+                    className="trip_card_action_icon"
                     onClick={clickLike}
-                    style={{ fontSize: "24px" }}
                   />
                 ) : (
                   <LikeOutlined
+                    className="trip_card_action_icon"
                     onClick={clickLike}
-                    style={{ fontSize: "24px" }}
                   />
                 )}
 
@@ -240,10 +177,8 @@ const TripCard: React.FunctionComponent<Props> = ({
             )}
             {isDelete && (
               <DeleteOutlined
+                className="trip_card_action_icon"
                 onClick={clickDelete}
-                style={{
-                  fontSize: "24px",
-                }}
               />
             )}
           </Flex>

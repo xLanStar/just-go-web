@@ -1,26 +1,91 @@
+.ant-card-body {
+  padding: 12px !important;
+}
+
 .trip_card {
-  .ant-card-body {
-    padding: 12px !important;
+  width: 280px;
+  border-radius: 12px;
+}
+
+.trip_card_image_box {
+  width: 100%;
+  cursor: pointer;
+}
+
+.trip_card_image {
+  width: 240px;
+  height: 180px;
+  border-radius: 8px;
+}
+
+.trip_card_title_box,
+.trip_card_day_box {
+  width: 100%;
+  height: 52px;
+  padding: 4px 0px;
+}
+
+.trip_card_day {
+  color: #9C9C9C;
+}
+
+.trip_card_user_box {
+  cursor: pointer;
+}
+
+.trip_card_avatar,
+.trip_card_label {
+  width: 100%;
+  height: 41px;
+  padding: 4px 0px;
+}
+
+.trip_card_label_box {
+  padding-right: 4px;
+}
+
+.trip_card_label_name {
+  color: white;
+  background-color: #97CBFF;
+  padding: 4px 8px;
+  border-radius: 20px;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  &:hover {
+    overflow-x: auto;
   }
-  
-  .labels {
-    overflow-x: hidden;
-    overflow-y: hidden;
-  
-    &:hover {
-      overflow-x: auto;
-    }
-  
-    &::-webkit-scrollbar{
-      height: 2px;
-    }
-    &::-webkit-scrollbar-track {
-      background-color: #D9D9D9;
-      border-radius: 12px;
-    }
-    &::-webkit-scrollbar-thumb{
-      border-radius: 12px;
-      background-color: #9C9C9C;
-    }
+
+  &::-webkit-scrollbar{
+    height: 2px;
   }
+  &::-webkit-scrollbar-track {
+    background-color: #D9D9D9;
+    border-radius: 12px;
+  }
+  &::-webkit-scrollbar-thumb{
+    border-radius: 12px;
+    background-color: #9C9C9C;
+  }
+}
+
+.trip_card_day_or_label_box {
+  padding-right: 12px;
+}
+
+.trip_card_day_or_label,
+.trip_card_action_box {
+  width: 100%;
+  height: 41px;
+}
+
+.trip_card_action {
+  width: 100%;
+  height: 100%;
+}
+
+.trip_card_action_icon {
+  font-size: 24px;
 }

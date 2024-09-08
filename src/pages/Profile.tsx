@@ -22,17 +22,17 @@ import {
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
-import { getJwtToken } from "../apis/auth";
 import { ProfileForm } from "../types/formInterface";
-import { updateUser } from "../store/user/userSlice";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode } from "../types/modeInterface";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/profile.scss";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -40,7 +40,7 @@ const Profile: React.FunctionComponent = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
@@ -66,22 +66,22 @@ const Profile: React.FunctionComponent = () => {
     showUploadList: false,
   };
 
-  const onFinish = async (form: ProfileForm) => {
-    try {
-      await dispatch(
-        updateUser({
-          id: user.id,
-          name: form.name,
-          email: form.email,
-          avatar: avatar,
-        })
-      );
-      navigate(-1);
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message);
-      }
-    }
+  const submitForm = async (form: ProfileForm) => {
+    // try {
+    //   await dispatch(
+    //     updateUser({
+    //       id: user.id,
+    //       name: form.name,
+    //       email: form.email,
+    //       avatar: avatar,
+    //     })
+    //   );
+    //   navigate(-1);
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     message.error(error.message);
+    //   }
+    // }
   };
 
   return (
@@ -94,16 +94,7 @@ const Profile: React.FunctionComponent = () => {
         },
       }}
     >
-      <Flex
-        className="profile"
-        vertical
-        justify="center"
-        align="center"
-        style={{
-          width: "100%",
-          minHeight: "calc(100vh - 128px)",
-        }}
-      >
+      <Flex className="profile" vertical justify="center" align="center">
         <Flex
           className="profile_form"
           vertical
@@ -111,22 +102,14 @@ const Profile: React.FunctionComponent = () => {
           align="center"
           gap="middle"
         >
-          <Row
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          >
+          <Row className="profile_avatar_box">
             <Col span={16}>
               <Flex
+                className="profile_avatar"
                 vertical={false}
                 justify="flex-start"
                 align="center"
                 gap="middle"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
               >
                 {avatarUrl ? (
                   <Avatar
@@ -141,19 +124,16 @@ const Profile: React.FunctionComponent = () => {
             </Col>
             <Col span={8}>
               <Flex
+                className="profile_avatar_upload"
                 vertical={false}
                 justify="flex-end"
                 align="center"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
               >
                 <Upload {...uploadProps}>
                   <Button
+                    className="profile_avatar_upload_button"
                     icon={<UploadOutlined />}
                     size="large"
-                    style={{ width: "100%" }}
                   >
                     上傳頭像
                   </Button>
@@ -162,16 +142,14 @@ const Profile: React.FunctionComponent = () => {
             </Col>
           </Row>
           <Form
+            className="profile_form_item_box"
             form={form}
             layout="vertical"
             scrollToFirstError
-            onFinish={onFinish}
+            onFinish={submitForm}
             noValidate
             initialValues={{ name: user.name, email: user.email }}
             requiredMark={false}
-            style={{
-              width: "100%",
-            }}
           >
             <Form.Item
               name="name"
@@ -201,12 +179,10 @@ const Profile: React.FunctionComponent = () => {
             </Form.Item>
             <Form.Item>
               <Flex
+                className="profile_form_action_box"
                 vertical={false}
                 justify="flex-end"
                 align="center"
-                style={{
-                  width: "100%",
-                }}
                 gap="small"
               >
                 <Button

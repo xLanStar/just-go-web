@@ -1,23 +1,39 @@
 .profile {
+  width: 100%;
+  min-height: calc(100vh - 128px);
+}
+
+.profile_form {
+  width: 640px;
+}
+
+.profile_avatar_box,
+.profile_avatar,
+.profile_avatar_upload {
+  width: 100%;
+  height: 100%;
+}
+
+.profile_avatar_upload_button,
+.profile_form_item_box,
+.profile_form_action_box {
+  width: 100%;
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
   .profile_form {
-    width: 640px;
+    width: 480px;
   }
-  
-  @media screen and (min-width: 576px) and (max-width: 767px) {
-    .profile_form {
-      width: 480px;
-    }
+}
+
+@media screen and (max-width: 575px) {
+  .profile_form {
+    width: 320px;
   }
-  
-  @media screen and (max-width: 575px) {
-    .profile_form {
-      width: 320px;
-    }
-  }
-  
-  @media screen and (max-height: 767px) {
-    .profile_form {
-      padding-top: 30px;
-    }
+}
+
+@media screen and (max-height: 767px) {
+  .profile_form {
+    padding-top: 30px;
   }
 }
