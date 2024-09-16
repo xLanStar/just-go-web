@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Flex, Input } from "antd";
-import { RobotOutlined, SendOutlined } from "@ant-design/icons";
+import { CloseOutlined, RobotOutlined, SendOutlined } from "@ant-design/icons";
 import { Chat } from "../types/chatInterface";
+import { askAI } from "../utils/gemini";
 
 const { TextArea } = Input;
 
@@ -16,7 +17,10 @@ const ChatBox: React.FunctionComponent = () => {
   ]);
   const [messages, setMessages] = useState<string>("");
 
-  const sendMessage = (message: string) => {};
+  const sendMessage = async (message: string) => {
+    const response = await askAI(message);
+    setChatHistory((pre) => [...pre, { role: "bot", message: response }]);
+  };
 
   return (
     <Flex className="chatbox" vertical justify="flex-start" align="center">
@@ -27,6 +31,7 @@ const ChatBox: React.FunctionComponent = () => {
         align="center"
       >
         <h1 className="chatbox_title">行程規劃機器人</h1>
+        <CloseOutlined className="chatbox_close_button" onClick={() => {}} />
       </Flex>
       <Flex
         className="chatbox_content"
@@ -97,11 +102,11 @@ const ChatBox: React.FunctionComponent = () => {
         <SendOutlined
           className="chatbox_icon"
           onClick={() => {
-            sendMessage(messages);
-            setChatHistory([
-              ...chatHistory,
+            setChatHistory((pre) => [
+              ...pre,
               { role: "user", message: messages },
             ]);
+            sendMessage(messages);
             setMessages("");
           }}
         />

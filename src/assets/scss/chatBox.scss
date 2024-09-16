@@ -22,6 +22,14 @@
   font-weight: bold;
 }
 
+.chatbox_close_button {
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+}
+
 .chatbox_content {
   width: 100%;
   flex: 1;
