@@ -12,6 +12,8 @@ import Explore from "./pages/Explore";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
 import PublisherInfo from "./pages/PublisherInfo";
+import Result from "./pages/Result";
+import Planning from "./pages/Planning";
 
 const App: React.FunctionComponent = () => (
   <ConfigProvider
@@ -34,6 +36,8 @@ const App: React.FunctionComponent = () => (
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
           <Route path="user/:id" element={<PublisherInfo />} />
+          <Route path="Result" element={<Result />} />
+          <Route path="/Planning" element={<Planning />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />

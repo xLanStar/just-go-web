@@ -2,7 +2,8 @@ export enum PageMode {
   Default,
   Edit,
   Share,
-  Explore
+  Explore,
+  Planning
 }
 
 export enum TripInfoMode {
