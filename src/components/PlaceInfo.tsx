@@ -8,7 +8,6 @@ import {
   PlusOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Color } from "../data/color";
 import { convertToTraditional } from "../utils/textConverter";
 import { PlaceDetail } from "../types/googleMapInterface";
 
@@ -26,159 +25,74 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
   savePlace,
 }) => {
   return (
-    <Flex
-      className="place_info"
-      vertical
-      justify="flex-start"
-      align="center"
-      style={{
-        height: "calc(100vh - 64px)",
-        position: "absolute",
-        top: "64px",
-        left: "0px",
-        backgroundColor: "white",
-        zIndex: 1,
-      }}
-    >
+    <Flex className="place_info" vertical justify="flex-start" align="center">
       <Flex
-        className="title"
+        className="place_info_header"
         vertical={false}
         justify="flex-start"
         align="center"
-        style={{
-          height: "64px",
-          backgroundColor: Color.blue,
-          paddingLeft: "24px",
-          paddingRight: "36px",
-          position: "fixed",
-          zIndex: 2,
-        }}
       >
-        <h1
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {place.name}
-        </h1>
+        <h1 className="place_info_title">{place.name}</h1>
         <CloseOutlined
-          style={{
-            fontSize: "20px",
-            color: "white",
-            position: "absolute",
-            right: "16px",
-            cursor: "pointer",
-          }}
+          className="place_info_close_button"
           onClick={() => {
             onPlaceInfoClose();
           }}
         />
       </Flex>
-      <div
-        className="content"
-        style={{
-          width: "100%",
-          overflowY: "auto",
-          margin: "64px 0px",
-        }}
-      >
+      <div className="place_info_content">
         <Flex
+          className="place_info_image_box"
           vertical
           justify="center"
           align="center"
-          style={{
-            width: "100%",
-            height: "300px",
-          }}
         >
-          <img src={place.photo} alt="image" width="100%" height={300} />
+          <img className="place_info_image" src={place.photo} alt="image" />
         </Flex>
         <Flex
+          className="place_info_rating_box"
           vertical={false}
           justify="flex-start"
           align="center"
           gap="small"
-          style={{
-            width: "100%",
-            height: "48px",
-            padding: "4px 16px",
-            borderBottom: `1px solid ${Color.greyHeavy}`,
-          }}
         >
-          <StarOutlined
-            style={{
-              fontSize: "20px",
-            }}
-          />
+          <StarOutlined className="place_info_icon" />
           <h2>{place.rating ? place.rating : 0}</h2>
           <Rate
+            className="place_info_rating_rate"
             disabled
             allowHalf
             value={place.rating}
-            style={{
-              zIndex: 0,
-            }}
           />
         </Flex>
         <Flex
+          className="place_info_address_box"
           vertical={false}
           justify="flex-start"
           align="center"
           gap="small"
-          style={{
-            width: "100%",
-            minHeight: "48px",
-            padding: "4px 16px",
-            borderBottom: `1px solid ${Color.greyHeavy}`,
-          }}
         >
-          <EnvironmentOutlined
-            style={{
-              fontSize: "20px",
-            }}
-          />
+          <EnvironmentOutlined className="place_info_icon" />
           <h2>{convertToTraditional(place.address)}</h2>
         </Flex>
         <Flex
+          className="place_info_phone_box"
           vertical={false}
           justify="flex-start"
           align="center"
           gap="small"
-          style={{
-            width: "100%",
-            height: "48px",
-            padding: "4px 16px",
-            borderBottom: `1px solid ${Color.greyHeavy}`,
-          }}
         >
-          <PhoneOutlined
-            style={{
-              fontSize: "20px",
-            }}
-          />
+          <PhoneOutlined className="place_info_icon" />
           <h2>{place.phone ? place.phone : "沒有資料"}</h2>
         </Flex>
         <Flex
+          className="place_info_website_box"
           vertical={false}
           justify="flex-start"
           align="center"
           gap="small"
-          style={{
-            width: "100%",
-            minHeight: "48px",
-            padding: "4px 16px",
-            borderBottom: `1px solid ${Color.greyHeavy}`,
-          }}
         >
-          <GlobalOutlined
-            style={{
-              fontSize: "20px",
-            }}
-          />
+          <GlobalOutlined className="place_info_icon" />
           <h2>
             {place.website ? (
               <a
@@ -197,21 +111,13 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
           </h2>
         </Flex>
         <Flex
+          className="place_info_opening_hours_box"
           vertical={false}
           justify="flex-start"
           align="center"
           gap="small"
-          style={{
-            width: "100%",
-            minHeight: "48px",
-            padding: "4px 16px",
-          }}
         >
-          <ClockCircleOutlined
-            style={{
-              fontSize: "20px",
-            }}
-          />
+          <ClockCircleOutlined className="place_info_icon" />
           <Flex vertical justify="center" align="flex-start">
             {place.opening_hours ? (
               <>
@@ -226,21 +132,11 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
         </Flex>
       </div>
       <Flex
-        className="bottom"
+        className="place_info_footer"
         vertical={false}
         justify="flex-end"
         align="center"
         gap="small"
-        style={{
-          height: "64px",
-          padding: "0px 16px",
-          borderTop: `1px solid ${Color.greyHeavy}`,
-          position: "fixed",
-          backgroundColor: "white",
-          left: 0,
-          bottom: 0,
-          zIndex: 2,
-        }}
       >
         <Button
           icon={<PlusOutlined />}

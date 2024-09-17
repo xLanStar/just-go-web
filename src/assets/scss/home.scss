@@ -1,23 +1,36 @@
 .home {
-  .search_bar {
-    width: 650px;
-  }
+  width: 100%;
+  min-height: 100%;
+}
 
-  @media screen and (min-width: 768px) and (max-width: 991px)  {
-    .search_bar {
-      width: 500px;
-    }
-  }
+.home_search_box {
+  width: 100%;
+  height: 80px;
+}
 
-  @media screen and (min-width: 576px) and (max-width: 767px){
-    .search_bar {
-      width: 350px;
-    }
-  }
+.home_search {
+  width: 650px;
+}
 
-  @media screen and (max-width: 575px) {
-    .search_bar {
-      width: 250px;
-    }
+.home_title {
+  width: 100%;
+  padding: 12px 0px 12px 128px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px)  {
+  .home_search {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px){
+  .home_search {
+    width: 350px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .home_search {
+    width: 250px;
   }
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getJwtToken } from "../apis/auth";
 import { App, Avatar, Button, Flex } from "antd";
 import {
   AppstoreOutlined,
@@ -13,9 +12,10 @@ import TripList from "../components/TripList";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { TripInfo } from "../types/tripInterface";
+import { loadTripsByMe } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/dashboard.scss";
-import { loadTripsByMe } from "../apis/trip";
 
 enum Tag {
   Own,
@@ -30,6 +30,7 @@ interface OwnTripList {
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const { message } = App.useApp();
 
@@ -40,12 +41,12 @@ const Dashboard: React.FunctionComponent = () => {
   const [listMode, setListMode] = useState<Tag>(Tag.Own);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));
     dispatch(setMode(PageMode.Default));
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     if (listMode === Tag.Own) {
@@ -82,26 +83,13 @@ const Dashboard: React.FunctionComponent = () => {
   }, [listMode]);
 
   return (
-    <Flex
-      className="dashboard"
-      vertical
-      justify="flex-start"
-      align="center"
-      style={{
-        width: "100%",
-      }}
-    >
+    <Flex className="dashboard" vertical justify="flex-start" align="center">
       <Flex
-        className="user_info"
+        className="dashboard_user_info"
         vertical={false}
         justify="flex-start"
         align="center"
         gap="middle"
-        style={{
-          width: "100%",
-          backgroundColor: Color.cyanHeavy,
-          borderBottom: `1px solid ${Color.greyHeavy}`,
-        }}
       >
         {user.avatar ? (
           <Avatar src={<img src={user.avatar} alt="avatar" />} size={80} />
@@ -114,29 +102,22 @@ const Dashboard: React.FunctionComponent = () => {
         </Flex>
       </Flex>
       <Flex
+        className="dashboard_tag_box"
         vertical={false}
         justify="center"
         align="center"
-        style={{
-          padding: "12px 0px",
-          width: "100%",
-        }}
       >
         <Button
+          className="dashboard_tag_button"
           icon={<AppstoreOutlined />}
           type="text"
           size="large"
           style={
             listMode === Tag.Own
               ? {
-                  borderEndStartRadius: "0px",
-                  borderEndEndRadius: "0px",
                   borderBottom: "1px solid black",
                 }
-              : {
-                  borderEndStartRadius: "0px",
-                  borderEndEndRadius: "0px",
-                }
+              : {}
           }
           onClick={() => {
             setListMode(Tag.Own);
@@ -145,20 +126,16 @@ const Dashboard: React.FunctionComponent = () => {
           我的行程
         </Button>
         <Button
+          className="dashboard_tag_button"
           icon={<StarOutlined />}
           type="text"
           size="large"
           style={
             listMode === Tag.Keep
               ? {
-                  borderEndStartRadius: "0px",
-                  borderEndEndRadius: "0px",
                   borderBottom: "1px solid black",
                 }
-              : {
-                  borderEndStartRadius: "0px",
-                  borderEndEndRadius: "0px",
-                }
+              : {}
           }
           onClick={() => {
             setListMode(Tag.Keep);
@@ -170,7 +147,7 @@ const Dashboard: React.FunctionComponent = () => {
       {listMode === Tag.Own ? (
         <>
           <Flex
-            className="trip_title"
+            className="dashboard_trip_title"
             vertical={false}
             justify="flex-start"
             align="center"
@@ -184,7 +161,7 @@ const Dashboard: React.FunctionComponent = () => {
             isDelete={true}
           />
           <Flex
-            className="trip_title"
+            className="dashboard_trip_title"
             vertical={false}
             justify="flex-start"
             align="center"
@@ -198,7 +175,7 @@ const Dashboard: React.FunctionComponent = () => {
             isDelete={true}
           />
           <Flex
-            className="trip_title"
+            className="dashboard_trip_title"
             vertical={false}
             justify="flex-start"
             align="center"
@@ -215,7 +192,7 @@ const Dashboard: React.FunctionComponent = () => {
       ) : (
         <>
           <Flex
-            className="trip_title"
+            className="dashboard_trip_title"
             vertical={false}
             justify="flex-start"
             align="center"

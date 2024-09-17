@@ -6,41 +6,43 @@
   right: 0px;
   background-color: white;
   z-index: 1;
+}
 
-  .header {
-    width: 400px;
-    height: 64px;
-    padding-left: 24px;
-    padding-right: 36px;
-    position: fixed;
-    z-index: 2;
-  }
+.collection_header {
+  width: 400px;
+  height: 64px;
+  padding-left: 24px;
+  padding-right: 36px;
+  position: fixed;
+  z-index: 2;
+}
 
-  .title {
-    color: white;
-    font-weight: bold;
-  }
+.collection_title {
+  color: white;
+  font-weight: bold;
+}
 
-  .close_btn {
-    font-size: 20px;
-    color: white;
-    position: absolute;
-    right: 16px;
-    cursor: pointer;
-  }
+.collection_close_button {
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+}
 
-  .content {
+.collection_content {
+  width: 100%;
+  overflow-y: auto;
+  margin-top: 64px;
+  padding-bottom: 24px;
+}
+
+@media screen and (max-width: 575px) {
+  .collection {
     width: 100%;
-    overflow-y: auto;
-    margin-top: 64px;
-    padding-bottom: 24px;
   }
 
-  @media screen and (max-width: 575px) {
+  .collection_header {
     width: 100%;
-
-    .header {
-      width: 100%;
-    }
   }
 }

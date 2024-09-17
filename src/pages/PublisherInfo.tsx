@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { User } from "../types/userInterface";
@@ -10,14 +9,16 @@ import { Avatar, Button, Flex } from "antd";
 import { Color } from "../data/color";
 import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
-
-import "../assets/scss/publisherInfo.scss";
 import TripList from "../components/TripList";
 import { loadTripsById } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+
+import "../assets/scss/publisherInfo.scss";
 
 const PublisherInfo: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
 
   const { id } = useParams();
   const [user, setUser] = useState<User>({
@@ -29,7 +30,7 @@ const PublisherInfo: React.FunctionComponent = () => {
   const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
 
@@ -51,23 +52,13 @@ const PublisherInfo: React.FunctionComponent = () => {
       vertical
       justify="flex-start"
       align="center"
-      style={{
-        width: "100%",
-        height: "100%",
-        overflowY: "auto",
-      }}
     >
       <Flex
-        className="user_info"
+        className="publisher_info_user_box"
         vertical={false}
         justify="flex-start"
         align="center"
         gap="middle"
-        style={{
-          width: "100%",
-          backgroundColor: Color.cyanHeavy,
-          borderBottom: `1px solid ${Color.greyHeavy}`,
-        }}
       >
         {user.avatar ? (
           <Avatar src={<img src={user.avatar} alt="avatar" />} size={80} />
@@ -80,23 +71,16 @@ const PublisherInfo: React.FunctionComponent = () => {
         </Flex>
       </Flex>
       <Flex
+        className="publisher_info_tag_box"
         vertical={false}
         justify="center"
         align="center"
-        style={{
-          padding: "12px 0px 24px 0px",
-          width: "100%",
-        }}
       >
         <Button
+          className="publisher_info_tag"
           icon={<AppstoreOutlined />}
           type="text"
           size="large"
-          style={{
-            borderEndStartRadius: "0px",
-            borderEndEndRadius: "0px",
-            borderBottom: "1px solid black",
-          }}
         >
           發布的行程
         </Button>

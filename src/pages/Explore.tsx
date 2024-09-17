@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { PageMode } from "../types/modeInterface";
 import { Flex, FloatButton, Spin } from "antd";
 import { useGoogleMap } from "../components/GoogleMapProvider";
-import { Color } from "../data/color";
 import {
   AutoComplete,
   LatLngLiteral,
@@ -22,10 +20,14 @@ import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
 import { BookOutlined } from "@ant-design/icons";
 import Collection from "../components/Collection";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+
+import "../assets/scss/explore.scss";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const { isLoaded, loadError } = useGoogleMap();
 
   const mapRef = useRef<google.maps.Map>();
@@ -48,7 +50,7 @@ const Explore: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!localStorage.getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));
@@ -191,44 +193,16 @@ const Explore: React.FunctionComponent = () => {
 
   if (!isLoaded) {
     return (
-      <Flex
-        className="explore"
-        vertical
-        justify="center"
-        align="center"
-        style={{
-          width: "100%",
-          height: "calc(100vh - 64px)",
-        }}
-      >
-        <Spin
-          tip="Loading..."
-          style={{
-            backgroundColor: Color.bodyGrey,
-          }}
-        >
-          <div
-            style={{
-              width: "100px",
-              height: "100px",
-            }}
-          ></div>
+      <Flex className="explore" vertical justify="center" align="center">
+        <Spin className="explore_loading" tip="Loading...">
+          <div className="explore_loading_box"></div>
         </Spin>
       </Flex>
     );
   }
 
   return (
-    <Flex
-      className="explore"
-      vertical
-      justify="flex-start"
-      align="center"
-      style={{
-        width: "100%",
-        height: "calc(100vh - 64px)",
-      }}
-    >
+    <Flex className="explore" vertical justify="flex-start" align="center">
       <SearchBar
         autoCompleteRef={autoCompleteRef}
         onPlaceChanged={onPlaceChanged}
@@ -241,9 +215,9 @@ const Explore: React.FunctionComponent = () => {
         onMarkerClicked={onMarkerClicked}
       />
       <FloatButton
+        className="explore_collection_button"
         type="primary"
         icon={<BookOutlined />}
-        style={{ width: 50, height: 50, zIndex: 1 }}
         onClick={() => setShowCollection(true)}
       />
       {showPlaceInfo ? (
