@@ -4,7 +4,7 @@ export type AutoComplete = google.maps.places.Autocomplete;
 export type PlacesService = google.maps.places.PlacesService;
 export type PlaceSearchRequest = google.maps.places.PlaceSearchRequest;
 export type PlaceDetailsRequest = google.maps.places.PlaceDetailsRequest;
-
+export type FindPlaceFromQueryRequest = google.maps.places.FindPlaceFromQueryRequest;
 export interface Mark {
   name: string;
   location: LatLngLiteral;
