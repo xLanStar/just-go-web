@@ -14,6 +14,6 @@ export interface ProfileForm {
 
 export interface TripFrom {
   name: string;
-  upload: any;
+  image: File | undefined;
   date: [dayjs.Dayjs, dayjs.Dayjs];
 }

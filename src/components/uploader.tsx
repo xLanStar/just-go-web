@@ -29,7 +29,7 @@ const Uploader: React.FunctionComponent<Props> = ({ value = [], onChange }) => {
 
     // 通知 Form 組件更新
     if (onChange) {
-      onChange(image);
+      onChange([file]);
     }
 
     return false;

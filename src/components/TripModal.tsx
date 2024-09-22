@@ -23,17 +23,16 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
   const { message } = App.useApp();
   const [form] = Form.useForm();
 
-  const handleSubmit = async (form: any) => {
+  const handleSubmit = async (form: TripFrom) => {
     try {
-      console.log(form);
-      // 目前沒辦法得到 Image 檔案
-      // await createTrip(
-      //   user.id,
-      //   form.name,
-      //   form.upload?.image[0],
-      //   form.date[0].format("YYYY-MM-DD"),
-      //   form.date[1].format("YYYY-MM-DD")
-      // );
+      await createTrip(
+        user.id,
+        form.name,
+        form.image,
+        form.date[0].format("YYYY-MM-DD"),
+        form.date[1].format("YYYY-MM-DD")
+      );
+      navigate("/edit");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
@@ -90,10 +89,8 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
         <Form.Item
           name="image"
           label="行程封面"
-          valuePropName="fileList"
-          getValueFromEvent={(e) => {
-            return e;
-          }}
+          valuePropName="value"
+          getValueFromEvent={(e) => e?.[0]}
         >
           <Uploader />
         </Form.Item>

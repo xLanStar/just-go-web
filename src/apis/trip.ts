@@ -1,6 +1,5 @@
 import request from "../utils/request";
 import { TripInfo } from "../types/tripInterface";
-import { AxiosResponse } from "axios";
 
 interface OwnTrips {
   own: TripInfo[];
@@ -54,16 +53,24 @@ export const deleteTrip = async (id: string) => {
 export const createTrip = async (
   userId: string,
   name: string,
-  image: File,
+  image: File | undefined,
   startTime: string,
   endTime: string
 ) => {
-  await request.post("/api/trips", {
-    userId,
-    name,
-    image,
-    startTime,
-    endTime,
-  });
+  const formData = new FormData();
+
+  formData.append("userId", userId);
+  formData.append("name", name);
+
+  if (image) {
+    formData.append("image", image);
+  } else {
+    formData.append("image", "");
+  }
+
+  formData.append("startTime", startTime);
+  formData.append("endTime", endTime);
+
+  await request.post("/api/trips", formData);
   return;
 };
