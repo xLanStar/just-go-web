@@ -6,7 +6,6 @@ import {
   StarOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Color } from "../data/color";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import TripList from "../components/TripList";
 import { setMode, setPage } from "../store/page/pageSlice";

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export interface SigninForm {
   name?: string;
   email: string;
@@ -8,4 +10,10 @@ export interface SigninForm {
 export interface ProfileForm {
   name: string;
   email: string;
+}
+
+export interface TripFrom {
+  name: string;
+  upload: any;
+  date: [dayjs.Dayjs, dayjs.Dayjs];
 }

@@ -1,10 +1,12 @@
-import {
-  CloseCircleOutlined,
-  PlusOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
-import { Form, Input, Modal, DatePicker, Upload, ConfigProvider } from "antd";
-import { useState } from "react";
+import { CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
+import { Form, Input, Modal, DatePicker, ConfigProvider, App } from "antd";
+import Uploader from "./uploader";
+import { TripFrom } from "../types/formInterface";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAppSelector } from "../hooks";
+import { createTrip } from "../apis/trip";
+import { CommonRules } from "../data/form";
 
 import "../assets/scss/tripModal.scss";
 
@@ -16,7 +18,33 @@ interface Props {
 }
 
 const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user.user);
+  const { message } = App.useApp();
+  const [form] = Form.useForm();
+
+  const handleSubmit = async (form: any) => {
+    try {
+      console.log(form);
+      // 目前沒辦法得到 Image 檔案
+      // await createTrip(
+      //   user.id,
+      //   form.name,
+      //   form.upload?.image[0],
+      //   form.date[0].format("YYYY-MM-DD"),
+      //   form.date[1].format("YYYY-MM-DD")
+      // );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          navigate("/", { replace: true });
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
+      }
+      console.error(error);
+    }
+  };
 
   return (
     <ConfigProvider
@@ -41,37 +69,48 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
         destroyOnClose
         okButtonProps={{
           icon: <SaveOutlined />,
+          htmlType: "submit",
         }}
         cancelButtonProps={{
           icon: <CloseCircleOutlined />,
         }}
         modalRender={(dom) => (
-          <Form layout="vertical" scrollToFirstError noValidate>
+          <Form
+            form={form}
+            layout="vertical"
+            scrollToFirstError
+            noValidate
+            requiredMark={false}
+            onFinish={handleSubmit}
+          >
             {dom}
           </Form>
         )}
       >
-        <Form.Item name="image" label="行程封面">
-          <Upload
-            name="image"
-            listType="picture-card"
-            className="trip_modal_image_uploader"
-            showUploadList={false}
-          >
-            {imageUrl ? (
-              <img className="trip_modal_image" src={imageUrl} alt="image" />
-            ) : (
-              <button className="trip_modal_upload_button" type="button">
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </button>
-            )}
-          </Upload>
+        <Form.Item
+          name="image"
+          label="行程封面"
+          valuePropName="fileList"
+          getValueFromEvent={(e) => {
+            return e;
+          }}
+        >
+          <Uploader />
         </Form.Item>
-        <Form.Item name="name" label="行程名稱">
+        <Form.Item
+          name="name"
+          label="行程名稱"
+          validateTrigger="onBlur"
+          rules={[CommonRules.Required]}
+        >
           <Input size="large" placeholder="行程名稱" required />
         </Form.Item>
-        <Form.Item name="date" label="行程日期">
+        <Form.Item
+          name="date"
+          label="行程日期"
+          validateTrigger="onBlur"
+          rules={[CommonRules.Required]}
+        >
           <RangePicker className="trip_modal_form_item" size="large" />
         </Form.Item>
       </Modal>
