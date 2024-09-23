@@ -26,6 +26,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks";
 import { PageMode } from "../types/modeInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useState } from "react";
+import TripModal from "./TripModal";
 
 import "../assets/scss/layout.scss";
 
@@ -37,6 +39,8 @@ const Layout = () => {
   const user = useAppSelector((state) => state.user.user);
   const page = useAppSelector((state) => state.page.name);
   const mode = useAppSelector((state) => state.page.mode);
+
+  const [showTripModal, setShowTripModal] = useState<boolean>(true);
 
   const defaultMenu: MenuProps["items"] = [
     {
@@ -184,6 +188,7 @@ const Layout = () => {
                   <Button
                     className="layout_action_button"
                     icon={<PlusOutlined />}
+                    onClick={() => setShowTripModal(true)}
                   >
                     建立新行程
                   </Button>
@@ -276,6 +281,12 @@ const Layout = () => {
       </Header>
       <Content className="layout_outlet">
         <Outlet />
+        {showTripModal ? (
+          <TripModal
+            open={showTripModal}
+            handleClose={() => setShowTripModal(false)}
+          />
+        ) : null}
       </Content>
       {mode === PageMode.Default ? (
         <Footer className="layout_footer">Copyright©2024 JustGo</Footer>
