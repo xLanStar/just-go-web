@@ -40,7 +40,7 @@ const Layout = () => {
   const page = useAppSelector((state) => state.page.name);
   const mode = useAppSelector((state) => state.page.mode);
 
-  const [showTripModal, setShowTripModal] = useState<boolean>(true);
+  const [showTripModal, setShowTripModal] = useState<boolean>(false);
 
   const defaultMenu: MenuProps["items"] = [
     {
