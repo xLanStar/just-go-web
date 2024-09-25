@@ -1,6 +1,6 @@
 import { CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
 import { Form, Input, Modal, DatePicker, ConfigProvider, App } from "antd";
-import Uploader from "./uploader";
+import Uploader from "./Uploader";
 import { TripFrom } from "../types/formInterface";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
