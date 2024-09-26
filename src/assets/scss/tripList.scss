@@ -7,6 +7,23 @@
   height: 100%;
 }
 
+.trip_list_title {
+  width: 100%;
+  padding: 12px 0px 12px 64px;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+  .trip_list_title {
+    padding: 12px 0px 12px 48px;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .trip_list_title {
+    padding: 12px 0px 12px 32px;
+  }
+}
+
 @media screen and (min-width: 992px) and (max-width: 1200px) {
   .trip_list {
     width: 888px;

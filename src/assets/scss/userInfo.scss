@@ -1,0 +1,17 @@
+.user_info {
+  width: 100%;
+  padding: 24px 0px 24px 64px;
+  background-color: #ACD6FF;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+  .user_info {
+    padding: 24px 0px 24px 48px;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .user_info {
+    padding: 24px 0px 24px 32px;
+  }
+}
