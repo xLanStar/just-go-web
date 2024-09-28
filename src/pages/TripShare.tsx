@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const TripShare: React.FunctionComponent = () => {
@@ -15,7 +14,7 @@ const TripShare: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("別人的行程"));
-    dispatch(setMode(PageMode.Share));
+    dispatch(setMode("share"));
   }, [navigate]);
 
   return <div>別人的行程</div>;

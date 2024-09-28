@@ -4,7 +4,6 @@ import { Flex } from "antd";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import UserInfo from "../components/UserInfo";
 import TripTabList from "../components/TripTabList";
 import TripList from "../components/TripList";
@@ -24,7 +23,7 @@ const Dashboard: React.FunctionComponent = () => {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));
-    dispatch(setMode(PageMode.Default));
+    dispatch(setMode("default"));
   }, []);
 
   return (

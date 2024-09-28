@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode, TripInfoMode } from "../types/modeInterface";
 import { User } from "../types/userInterface";
 import { getUserInfo } from "../apis/user";
 import { Avatar, Button, Flex } from "antd";
-import { Color } from "../data/color";
 import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
-import TripList from "../components/TripList";
 import { loadTripsById } from "../apis/trip";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
@@ -37,7 +34,7 @@ const PublisherInfo: React.FunctionComponent = () => {
     getUserInfo(id as string)
       .then((user) => {
         dispatch(setPage(user.name));
-        dispatch(setMode(PageMode.Default));
+        dispatch(setMode("default"));
         setUser(user);
         return loadTripsById(user.id);
       })
@@ -85,12 +82,13 @@ const PublisherInfo: React.FunctionComponent = () => {
           發布的行程
         </Button>
       </Flex>
-      <TripList
+      {/* 之後修改 */}
+      {/* <TripList
         trips={trips}
         mode={TripInfoMode.Private}
         isPublic={true}
         isDelete={false}
-      />
+      /> */}
     </Flex>
   );
 };
