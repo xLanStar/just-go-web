@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import { Flex, FloatButton, Spin } from "antd";
 import { useGoogleMap } from "../components/GoogleMapProvider";
 import {
@@ -54,7 +53,7 @@ const Explore: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));
-    dispatch(setMode(PageMode.Explore));
+    dispatch(setMode("default"));
   }, [navigate]);
 
   if (loadError) {

@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PageMode } from "../../types/modeInterface";
 
 interface PageState {
   name: string;
-  mode: PageMode;
+  mode: string;
 }
 
 const initialState: PageState = {
   name: "",
-  mode: PageMode.Default,
+  mode: "default",
 }
 
 const pageSlice = createSlice({
@@ -18,7 +17,7 @@ const pageSlice = createSlice({
     setPage: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
     },
-    setMode: (state, action: PayloadAction<PageMode>) => {
+    setMode: (state, action: PayloadAction<string>) => {
       state.mode = action.payload;
     }
   }
