@@ -1,12 +1,12 @@
 import { LeftOutlined } from "@ant-design/icons";
-import { Tabs } from "antd";
+import { ConfigProvider, Tabs } from "antd";
 import { useState } from "react";
 import { attraction, Day, transportationInfo } from "../types/PlanInterface";
 import { AttracionCard } from "./AttractionCard";
 import "../assets/scss/planDetail.scss";
 import { TransportationCard } from "./TransportationCard";
 
-const testAttraction:attraction = {
+const testAttraction: attraction = {
     id: "1",
     day_id: "1",
     start_at: new Date(),
@@ -16,7 +16,7 @@ const testAttraction:attraction = {
     next_attraction_id: "1"
 }
 
-const testTransportation:transportationInfo = {
+const testTransportation: transportationInfo = {
     id: "id",
     day_id: "day_id",
     place_id_from: "place_id_from",
@@ -30,6 +30,7 @@ const testTransportation:transportationInfo = {
 export const PlanDetail = () => {
     const [days, setDays] = useState<Day[]>(TestDays)
     return (
+
         <div className="planDetail" id="planDetail">
             <div className="planDetail-header">
                 <h3 className="planDetail-header-displayName">方案一</h3>
@@ -61,25 +62,39 @@ export const PlanDetail = () => {
                 </Col>
             </Row> */}
             <div className="planDetail-content">
-                <Tabs className="planDetail-tabs"
-                    defaultActiveKey="1"
-                    color="#12D198"
-                    items={
-                        days.map((_, i) => {
-                        const id = String(i + 1);
-                        return {
-                            label: `第${id}天`,
-                            key: id,
-                            children:
-                            <div>
-                                <AttracionCard ThisAttraction = {testAttraction} colorStyle={"#12D198"}/>
-                                <TransportationCard ThisTransportation = {testTransportation} colorStyle={"#12D198"}/>
-                            </div>,
-                        };
-                    })}
-                />
+                <ConfigProvider
+                    theme={{
+                        components: {
+                            Tabs: {
+                                inkBarColor: "#12d198",
+                                itemSelectedColor: "#12d198",
+                                itemHoverColor: "#12d198"
+                            },
+                        },
+                    }}
+                >
+                    <Tabs className="planDetail-tabs"
+                        tabBarStyle={{ color: "#12d198" }}
+                        defaultActiveKey="1"
+                        // type="editable-card"
+                        items={
+                            days.map((_, i) => {
+                                const id = String(i + 1);
+                                return {
+                                    label: `第${id}天`,
+                                    key: id,
+                                    children:
+                                        <div>
+                                            <AttracionCard ThisAttraction={testAttraction} colorStyle={"#12d198"} />
+                                            <TransportationCard ThisTransportation={testTransportation} colorStyle={"#12d198"} />
+                                        </div>,
+                                };
+                            })}
+                    />
+                </ConfigProvider>
             </div>
         </div>
+
     )
 }
 function TestDays(): Day[] {

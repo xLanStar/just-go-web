@@ -54,7 +54,7 @@ export const TripSettingDialog = ({ isOpen, onClose }: Props) => {
               backgroundColor: "#97CBFF",
               borderRadius: "50px"
             }}>Tapei</Button>
-            <PlusCircleOutlined width={"100px"} height={"100px"} style={{color: "#97CBFF"}}/>
+            <PlusCircleOutlined width={"100px"} height={"100px"} style={{ color: "#97CBFF" }} />
           </div>
         </Content>
         <Footer className='tripSettingDialog-footer'>

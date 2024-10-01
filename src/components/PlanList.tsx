@@ -3,7 +3,7 @@ import { Button, Layout, List } from "antd"
 import { useState } from "react"
 import "../assets/scss/planList.scss";
 
-const colorList = ["#EA0000", "#00E3E3", "#FFD306", "#7373B9", "#FF8000", "#8CEA00", "#B766AD", "#AD5A5A", "#8600FF"]
+const colorList = ["#12d198","#EA0000", "#7373B9", "#FF8000", "#272727", "#AD5A5A", "#8600FF", "#FFD306", "#8CEA00"]
 const data = [
     {
         planName: '方案一',
@@ -24,7 +24,7 @@ const data = [
     },
     {
         planName: '建立新方案',
-        colorStyle: colorList[3],
+        colorStyle: colorList[4],
         icon: <PlusOutlined/>
     },
 ];
@@ -40,7 +40,12 @@ export const PlanList = () => {
                     <List.Item>
                         <Button
                             icon = {item.icon}
-                            className="planList-item"
+                            style = {{
+                                width: "100%",
+                                padding: "20px",
+                                textAlign: "center",
+                                color:item.colorStyle
+                            }}
                             onClick={() => {
                                 document.getElementById("planDetail")!.style.display = 'flex';
                                 document.getElementById("planList")!.style.display = 'none';
