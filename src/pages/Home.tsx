@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { getJwtToken } from "../apis/auth";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode, TripInfoMode } from "../types/modeInterface";
-import { App, Button, Flex, Input, Space } from "antd";
+import { App, Flex, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
 import TripList from "../components/TripList";
@@ -25,7 +23,7 @@ const Home: React.FunctionComponent = () => {
     //   navigate("/signin", { replace: true });
     // }
     dispatch(setPage("行程探索"));
-    dispatch(setMode(PageMode.Default));
+    dispatch(setMode("default"));
 
     loadTrips()
       .then((tripList) => setTrips(tripList))
@@ -73,12 +71,9 @@ const Home: React.FunctionComponent = () => {
       >
         熱門行程
       </h1>
-      
+
       <TripList
-        trips={trips}
-        mode={TripInfoMode.Public}
-        isPublic={true}
-        isDelete={false}
+        type="public"
       />
     </Flex>
   );

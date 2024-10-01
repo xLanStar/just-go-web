@@ -3,7 +3,6 @@ import { Provider } from "react-redux";
 import store from "../store";
 import { useAppDispatch } from "../hooks";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import { PlanList } from "../components/PlanList";
 import { PlanDetail } from "../components/PlanDetail";
 import Sider from "antd/es/layout/Sider";
@@ -15,7 +14,7 @@ import { MemberList } from "../components/MemberList";
 const Planning: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
   dispatch(setPage(""));
-  dispatch(setMode(PageMode.Planning));
+  dispatch(setMode("edit"));
   return (
     <Layout className="planning">
       <Provider store={store}>

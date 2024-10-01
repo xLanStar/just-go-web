@@ -3,7 +3,6 @@ import { Flex, FloatButton } from "antd";
 import { useAppDispatch } from "../hooks";
 import { useEffect, useRef, useState } from "react";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { BookOutlined, RobotOutlined } from "@ant-design/icons";
 import ChatBox from "../components/ChatBox";
@@ -28,7 +27,7 @@ const TripEdit: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程安排"));
-    dispatch(setMode(PageMode.Edit));
+    dispatch(setMode("edit"));
   }, [navigate]);
 
   if (loadError) {
@@ -46,7 +45,7 @@ const TripEdit: React.FunctionComponent = () => {
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={[]}
-        onMarkerClicked={() => {}}
+        onMarkerClicked={() => { }}
       />
       <FloatButton
         className="trip_edit_chatbox_button"

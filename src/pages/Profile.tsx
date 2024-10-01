@@ -24,7 +24,6 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
 import { ProfileForm } from "../types/formInterface";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { PageMode } from "../types/modeInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/profile.scss";
@@ -44,7 +43,7 @@ const Profile: React.FunctionComponent = () => {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
-    dispatch(setMode(PageMode.Default));
+    dispatch(setMode("default"));
   }, [navigate]);
 
   const uploadProps: UploadProps = {
