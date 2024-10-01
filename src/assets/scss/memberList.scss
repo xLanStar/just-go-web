@@ -1,0 +1,37 @@
+.memberList {
+    position: fixed;
+    display: none;
+    top: 64px;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    z-index: 3;
+    overflow: auto;
+    border-radius: 10px 0 0 10px;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.memberList::-webkit-scrollbar {
+    display: none;
+}
+
+.memberList-back {
+    color: #79addd;
+}
+
+.memberList-back:hover {
+    color: #003d79;
+}
+
+.memberList-item {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: #79addd;
+    border-radius: 10px;
+}
+
+.memberList-item:hover {
+    background-color: #D9D9D9;
+}

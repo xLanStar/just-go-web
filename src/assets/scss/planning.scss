@@ -1,0 +1,16 @@
+.planning {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 64px);
+    background-color: antiquewhite;
+}
+
+.planning-planCompare {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: large;
+    border-radius: 30px;
+    padding: 20px;
+    z-index: 2;
+}

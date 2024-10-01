@@ -1,0 +1,32 @@
+.planList {
+    position: fixed;
+    display: flex;
+    top: 64px;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    z-index: 2;
+    overflow: auto;
+    border-radius: 0 10px 10px 0;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.planList::-webkit-scrollbar {
+    display: none;
+}
+
+.planList-back {
+    font-size: large;
+    color: #000000;
+}
+
+.planList-back:hover {
+    color: #0080ff;
+}
+
+.planList-item {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}

@@ -1,8 +1,10 @@
-import { LeftOutlined, StarFilled } from "@ant-design/icons";
+import { LeftOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
 import { useState } from "react";
-import { attraction, Day } from "../types/PlanInterface";
+import { attraction, Day, transportationInfo } from "../types/PlanInterface";
 import { AttracionCard } from "./AttractionCard";
+import "../assets/scss/planDetail.scss";
+import { TransportationCard } from "./TransportationCard";
 
 const testAttraction:attraction = {
     id: "1",
@@ -14,16 +16,25 @@ const testAttraction:attraction = {
     next_attraction_id: "1"
 }
 
+const testTransportation:transportationInfo = {
+    id: "id",
+    day_id: "day_id",
+    place_id_from: "place_id_from",
+    place_id_to: "place_id_to",
+    way: "way",
+    spend_time: new Date()
+}
+
 
 
 export const PlanDetail = () => {
     const [days, setDays] = useState<Day[]>(TestDays)
     return (
-        <div className="planning-planDetail" id="planDetail">
-            <div className="planning-planDetail-header">
-                <h3 className="planning-planDetail-header-displayName">方案一</h3>
+        <div className="planDetail" id="planDetail">
+            <div className="planDetail-header">
+                <h3 className="planDetail-header-displayName">方案一</h3>
                 <LeftOutlined
-                    className="planning-planDetail-header-back"
+                    className="planDetail-header-back"
                     onClick={() => {
                         document.getElementById("planList")!.style.display = 'flex';
                         document.getElementById("planDetail")!.style.display = 'none';
@@ -32,7 +43,7 @@ export const PlanDetail = () => {
             </div>
             {/* <Row className="planning-planDetail-dayList">
                 <Col span={2}>
-                    <Button className="planning-planDetail-dayList-left" icon={<LeftOutlined />}></Button>
+                    <Button className="planning-planDetail-dayList-left" icon={<LeftOutlined />}/>
                 </Col>
                 <Col span={20}>
                     <List
@@ -49,8 +60,8 @@ export const PlanDetail = () => {
                     <Button className="planning-planDetail-dayList-right" icon={<RightOutlined />}></Button>
                 </Col>
             </Row> */}
-            <div className="planning-planDetail-content">
-                <Tabs className="planning-planDetail-tabs"
+            <div className="planDetail-content">
+                <Tabs className="planDetail-tabs"
                     defaultActiveKey="1"
                     color="#12D198"
                     items={
@@ -59,7 +70,11 @@ export const PlanDetail = () => {
                         return {
                             label: `第${id}天`,
                             key: id,
-                            children: <AttracionCard ThisAttraction = {testAttraction} colorStyle={"#12D198"}/>,
+                            children:
+                            <div>
+                                <AttracionCard ThisAttraction = {testAttraction} colorStyle={"#12D198"}/>
+                                <TransportationCard ThisTransportation = {testTransportation} colorStyle={"#12D198"}/>
+                            </div>,
                         };
                     })}
                 />
@@ -70,7 +85,6 @@ export const PlanDetail = () => {
 function TestDays(): Day[] {
     let result: Day[] = []
     const count: number = Math.floor(1 + Math.random() * 5)
-    console.log(count)
     for (let i = 0; i < count; i++) {
         result.push({
             id: String(i),

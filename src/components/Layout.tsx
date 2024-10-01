@@ -9,6 +9,7 @@ import {
   PlusOutlined,
   SaveOutlined,
   SettingOutlined,
+  TeamOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -30,10 +31,15 @@ import { useState } from "react";
 import TripModal from "./TripModal";
 
 import "../assets/scss/layout.scss";
+import { TripSettingDialog } from "./TripSettingDialog";
+import { ShareSettingDialog } from "./ShareSettingDialog";
 
 const { Header, Footer, Content } = AntdLayout;
 
 const Layout = () => {
+  const [isTripSettingDialogOpen, setTripSettingDialogOpen] = useState(false);
+  const [isShareSettingDialogOpen, setShareSettingDialogOpen] = useState(false);
+
   const navigate = useNavigate();
   const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
@@ -73,6 +79,24 @@ const Layout = () => {
       key: "co_edit",
       icon: <LockOutlined />,
       label: "共用",
+    },
+  ];
+
+  const planningMenu: MenuProps["items"] = [
+    {
+      key: "trip_setting",
+      icon: <SettingOutlined />,
+      label: "設定",
+    },
+    {
+      key: "share_setting",
+      icon: <LockOutlined />,
+      label: "共用設定",
+    },
+    {
+      key: "share_setting",
+      icon: <TeamOutlined />,
+      label: "共編人員清單",
     },
   ];
 
@@ -247,6 +271,40 @@ const Layout = () => {
                   <Dropdown
                     className="layout_action_menu"
                     menu={{ items: editMenu }}
+                    placement="bottomRight"
+                  >
+                    <Button icon={<PlusOutlined />} type="text" size="large" />
+                  </Dropdown>
+                </>
+              ) : null}
+              {mode === PageMode.Planning ? (
+                <>
+                  <TripSettingDialog isOpen={isTripSettingDialogOpen} onClose={() => { setTripSettingDialogOpen(false) }} />
+                  <ShareSettingDialog isOpen={isShareSettingDialogOpen} onClose={() => { setShareSettingDialogOpen(false) }} />
+                  <Button
+                    className="layout_action_button"
+                    icon={<SettingOutlined />}
+                    onClick={() => { setTripSettingDialogOpen(true) }}
+                  >
+                    設定
+                  </Button>
+                  <Button
+                    className="layout_action_button"
+                    icon={<LockOutlined />}
+                    onClick={() => { setShareSettingDialogOpen(true) }}
+                  >
+                    共用設定
+                  </Button>
+                  <Button
+                    className="layout_action_button"
+                    icon={<TeamOutlined />}
+                    onClick={() => { console.log("asdfa"); document.getElementById("memberList")!.style.display = 'flex' }}
+                  >
+                    人員清單
+                  </Button>
+                  <Dropdown
+                    className="layout_action_menu"
+                    menu={{ items: planningMenu }}
                     placement="bottomRight"
                   >
                     <Button icon={<PlusOutlined />} type="text" size="large" />

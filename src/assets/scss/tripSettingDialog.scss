@@ -1,0 +1,68 @@
+.tripSettingDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  width: 500px;
+  height: 500px;
+  z-index: 5;
+}
+
+.tripSettingDialog::-webkit-scrollbar {
+  display: none;
+}
+
+.tripSettingDialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.tripSettingDialog-title{
+  display: flex;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.tripSettingDialog-content{
+  position: absolute;
+  top: 50px;
+  line-height: 30px;
+  padding: 10px;
+  width: 100%;
+  gap: 5px;
+  background-color: #ffffff;
+}
+
+.tripSettingDialog-content-hashtagList{
+  display: flex;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  z-index: 3;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+}
+
+.tripSettingDialog-footer{
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  z-index: 3;
+  align-items: center;
+  justify-content: right;
+  gap: 5px;
+  background-color: #ffffff;
+}

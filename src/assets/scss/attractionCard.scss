@@ -1,0 +1,50 @@
+.attractionCard {
+    display: flex;
+    width: 100%;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #d6d6d6;
+    border-style: solid;
+}
+
+.attractionCard-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+}
+
+.attractionCard-header-close {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.attractionCard-content {
+    widows: 100%;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.attractionCard-content-content {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    background-color: #ffffff;
+}
+
+.attractionCard-content-content-info {
+    width: 100%;
+    height: 120px;
+    background-color: #ffffff;
+}
+
+.attractionCard-content-content-moreInfo {
+    display: none;
+    width: 100%;
+    background-color: #ffffff;
+}
