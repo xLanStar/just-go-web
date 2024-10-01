@@ -13,7 +13,6 @@ import { register, signin, googleSignin } from "../../apis/auth";
 import { useAppDispatch } from "../../hooks";
 import { SigninForm } from "../../types/formInterface";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { setAuthToken } from "../../utils/request";
 import { setUser } from "../../store/user/userSlice";
 import { useGoogleLogin } from "@react-oauth/google";
 
@@ -40,7 +39,6 @@ const Signin: React.FunctionComponent = () => {
         localStorage.setItem("user", user);
         localStorage.setItem("jwtToken", token);
         dispatch(setUser(user));
-        setAuthToken(token);
         navigate("/", { replace: true });
       } else {
         await register(form.name as string, form.email, form.password);
@@ -68,7 +66,6 @@ const Signin: React.FunctionComponent = () => {
       localStorage.setItem("user", user);
       localStorage.setItem("jwtToken", token);
       dispatch(setUser(user));
-      setAuthToken(token);
       navigate("/", { replace: true });
     },
     onError: () => {

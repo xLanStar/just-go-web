@@ -7,17 +7,14 @@ const request = axios.create({
   }
 })
 
-export const setAuthToken = (token: string) => {
-  request.defaults.headers.Authorization = token;
-}
-
-export const removeAuthToken = () => {
-  delete request.defaults.headers.Authorization;
-}
-
 const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const controller = new AbortController();
+  const token = localStorage.getItem("jwtToken");
   config.signal = controller.signal;
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
 
   if (!config.headers?.["Authorization"]) {
     controller.abort();
