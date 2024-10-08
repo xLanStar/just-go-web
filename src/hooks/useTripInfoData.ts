@@ -57,7 +57,7 @@ const useTripInfoData = (type: string) => {
     };
     console.log("fetchData");
     fetchData();
-  }, []);
+  }, [type]);
 
   const favorTrip = async (id: string) => {
     const trip = trips.find((trip) => trip.id === id);
