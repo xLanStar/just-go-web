@@ -36,6 +36,10 @@ const Signin: React.FunctionComponent = () => {
     try {
       if (isSignin) {
         const { user, token } = await signin(form.email, form.password);
+
+        console.log("user : ", user);
+        console.log("token : ", token);
+
         localStorage.setItem("user", user);
         localStorage.setItem("jwtToken", token);
         dispatch(setUser(user));
