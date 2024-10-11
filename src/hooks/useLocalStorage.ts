@@ -2,7 +2,11 @@ export const useLocalStorage = () => {
   const getItem = (key: string) => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : undefined;
+      if (key === "jwtToken") {
+        return item ? item : undefined;
+      } else {
+        return item ? JSON.parse(item) : undefined;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -10,7 +14,11 @@ export const useLocalStorage = () => {
 
   const setItem = (key: string, value: unknown) => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      if (key === "jwtToken") {
+        window.localStorage.setItem(key, value as string);
+      } else {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      }
     } catch (error) {
       console.error(error);
     }

@@ -7,33 +7,24 @@ import { SearchOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
 import TripList from "../components/TripList";
 import { loadTrips } from "../apis/trip";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 // import "../assets/scss/home.scss";
 import "./Home.css";
-import testImg from "../assets/image/taipei101.jpg"
+import testImg from "../assets/image/taipei101.jpg";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localStorage = useLocalStorage();
   const { message } = App.useApp();
 
-  // const [trips, setTrips] = useState<TripInfo[]>([]);
-  const [trips, setTrips] = useState<TripInfo[]>(randomCreate())
+  const [trips, setTrips] = useState<TripInfo[]>(randomCreate());
   useEffect(() => {
-    // if (!getJwtToken()) {
-    //   navigate("/signin", { replace: true });
-    // }
+    if (!localStorage.getItem("jwtToken")) {
+      navigate("/signin", { replace: true });
+    }
     dispatch(setPage("行程探索"));
     dispatch(setMode("default"));
-
-    loadTrips()
-      .then((tripList) => setTrips(tripList))
-      .catch((error: any) => {
-        if (error.name === "ResponseError") {
-          message.error("載入行程失敗");
-        } else {
-          message.error(error.message);
-        }
-      });
   }, [navigate]);
 
   return (
@@ -72,19 +63,29 @@ const Home: React.FunctionComponent = () => {
         熱門行程
       </h1>
 
-      <TripList
-        type="public"
-      />
+      <TripList type="public" />
     </Flex>
   );
 };
 
 export default Home;
 function randomCreate(): TripInfo[] {
-  let result: TripInfo[] = []
-  const count: number = Math.floor(10 + Math.random() * 10)
+  let result: TripInfo[] = [];
+  const count: number = Math.floor(10 + Math.random() * 10);
   for (let i = 0; i < count; i++) {
-    result.push({ id: "1", user: "user", userId: "userId", title: "title", image: testImg, day: Math.floor(1 + Math.random() * 7), publishDay: "publisDay", labels: ["labels"], like: Math.floor(1 + Math.random() * 100), isLike: true, isPublic: true })
+    result.push({
+      id: "1",
+      user: "user",
+      userId: "userId",
+      title: "title",
+      image: testImg,
+      day: Math.floor(1 + Math.random() * 7),
+      publishDay: "publisDay",
+      labels: ["labels"],
+      like: Math.floor(1 + Math.random() * 100),
+      isLike: true,
+      isPublic: true,
+    });
   }
-  return result
+  return result;
 }

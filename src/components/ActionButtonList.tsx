@@ -36,22 +36,50 @@ const ActionButtonList: React.FunctionComponent<Props> = ({
   const [isShareSettingDialogOpen, setShareSettingDialogOpen] = useState(false);
   return (
     <>
-      {mode === "default" && (
+      {(mode === "default" || mode === "explore") && (
         <Button className={className} icon={<PlusOutlined />} onClick={addTrip}>
           建立行程
         </Button>
       )}
       {mode === "edit" && (
         <>
-          <TripSettingDialog isOpen={isTripSettingDialogOpen} onClose={() => { setTripSettingDialogOpen(false) }} />
-          <ShareSettingDialog isOpen={isShareSettingDialogOpen} onClose={() => { setShareSettingDialogOpen(false) }} />
-          <Button className={className} icon={<InfoCircleOutlined />} onClick={() => { setTripSettingDialogOpen(true) }}>
+          <TripSettingDialog
+            isOpen={isTripSettingDialogOpen}
+            onClose={() => {
+              setTripSettingDialogOpen(false);
+            }}
+          />
+          <ShareSettingDialog
+            isOpen={isShareSettingDialogOpen}
+            onClose={() => {
+              setShareSettingDialogOpen(false);
+            }}
+          />
+          <Button
+            className={className}
+            icon={<InfoCircleOutlined />}
+            onClick={() => {
+              setTripSettingDialogOpen(true);
+            }}
+          >
             設定
           </Button>
-          <Button className={className} icon={<LockOutlined />} onClick={() => { setShareSettingDialogOpen(true) }}>
+          <Button
+            className={className}
+            icon={<LockOutlined />}
+            onClick={() => {
+              setShareSettingDialogOpen(true);
+            }}
+          >
             共用
           </Button>
-          <Button className={className} icon={<UsergroupAddOutlined />} onClick={() => { document.getElementById("memberList")!.style.display = 'flex' }}>
+          <Button
+            className={className}
+            icon={<UsergroupAddOutlined />}
+            onClick={() => {
+              document.getElementById("memberList")!.style.display = "flex";
+            }}
+          >
             6
           </Button>
         </>

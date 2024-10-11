@@ -5,29 +5,14 @@ import request from "../utils/request";
 import { App } from "antd";
 import axios from "axios";
 import { TripInfo } from "../types/tripInterface";
+import { useLocalStorage } from "./useLocalStorage";
 
-/**
- * Custom hook to manage trip information data.
- *
- * @param {string} type - The type of trips to fetch.
- * @returns {Object} - An object containing trips data and functions to favor and delete trips.
- * @returns {TripInfo[]} trips - The list of trips.
- * @returns {Function} favorTrip - Function to favor/unfavor a trip.
- * @returns {Function} deleteTrip - Function to delete a trip.
- *
- * @example
- * const { trips, favorTrip, deleteTrip } = useTripInfoData("own");
- *
- * @remarks
- * This hook fetches trip data based on the user ID and trip type. It also provides
- * functionality to favor/unfavor and delete trips. If the user is not authenticated,
- * it redirects to the sign-in page.
- */
 const useTripInfoData = (type: string) => {
   const [trips, setTrips] = useState<TripInfo[]>([]);
   const { message } = App.useApp();
   const user = useAppSelector((state) => state.user.user);
   const navigate = useNavigate();
+  const localStorage = useLocalStorage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,14 +33,15 @@ const useTripInfoData = (type: string) => {
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.status === 401) {
+            localStorage.removeItem("user");
+            localStorage.removeItem("jwtToken");
             navigate("/signin", { replace: true });
           } else if (error.status === 500) {
             message.error("系統發生錯誤");
           }
         }
       }
-    };
-    console.log("fetchData");
+    }; 
     fetchData();
   }, [type]);
 

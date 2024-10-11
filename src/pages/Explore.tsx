@@ -19,6 +19,7 @@ import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
 import { BookOutlined } from "@ant-design/icons";
 import Collection from "../components/Collection";
+
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/explore.scss";
@@ -53,7 +54,7 @@ const Explore: React.FunctionComponent = () => {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("景點探索"));
-    dispatch(setMode("default"));
+    dispatch(setMode("explore"));
   }, [navigate]);
 
   if (loadError) {
