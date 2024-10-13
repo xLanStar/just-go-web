@@ -51,7 +51,6 @@ export const deleteTrip = async (id: string) => {
 };
 
 export const createTrip = async (
-  userId: string,
   name: string,
   image: File | undefined,
   startTime: string,
@@ -59,8 +58,9 @@ export const createTrip = async (
 ) => {
   const formData = new FormData();
 
-  formData.append("userId", userId);
   formData.append("name", name);
+  formData.append("startTime", startTime);
+  formData.append("endTime", endTime);
 
   if (image) {
     formData.append("image", image);
@@ -68,9 +68,10 @@ export const createTrip = async (
     formData.append("image", "");
   }
 
-  formData.append("startTime", startTime);
-  formData.append("endTime", endTime);
-
-  await request.post("/api/trips", formData);
+  await request.post("/api/trips", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return;
 };

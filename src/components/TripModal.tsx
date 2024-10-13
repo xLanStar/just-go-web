@@ -4,9 +4,9 @@ import Uploader from "./Uploader";
 import { TripFrom } from "../types/formInterface";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAppSelector } from "../hooks";
 import { createTrip } from "../apis/trip";
 import { CommonRules } from "../data/form";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/tripModal.scss";
 
@@ -19,14 +19,13 @@ interface Props {
 
 const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
   const navigate = useNavigate();
-  const user = useAppSelector((state) => state.user.user);
+  const localStorage = useLocalStorage();
   const { message } = App.useApp();
   const [form] = Form.useForm();
 
   const handleSubmit = async (form: TripFrom) => {
     try {
       await createTrip(
-        user.id,
         form.name,
         form.image,
         form.date[0].format("YYYY-MM-DD"),
@@ -36,7 +35,9 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
-          navigate("/", { replace: true });
+          localStorage.removeItem("user");
+          localStorage.removeItem("jwtToken");
+          navigate("/signin", { replace: true });
         } else if (error.status === 500) {
           message.error("系統發生錯誤");
         }
