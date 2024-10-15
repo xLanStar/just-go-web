@@ -1,5 +1,5 @@
 import { Button, Flex, Result, Spin } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { verifyEmail } from "../../apis/auth";
 import { Color } from "../../data/color";
@@ -9,10 +9,6 @@ const Verify: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-
-  const backToSignin = () => {
-    navigate("/signin");
-  };
 
   if (!token) {
     return (
@@ -33,7 +29,7 @@ const Verify: React.FunctionComponent = () => {
               type="primary"
               key="signin"
               onClick={() => {
-                backToSignin();
+                navigate("/signin");
               }}
             >
               返回登入
@@ -44,15 +40,18 @@ const Verify: React.FunctionComponent = () => {
     );
   }
 
-  verifyEmail(token)
-    .then(() => {
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error(error);
-      setError(true);
-      setLoading(false);
-    });
+  useEffect(() => {
+    const verify = async () => {
+      const response = await verifyEmail(token);
+      if (response.status === "success") {
+        setLoading(false);
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    verify();
+  }, []);
 
   return (
     <>
@@ -101,7 +100,7 @@ const Verify: React.FunctionComponent = () => {
                     type="primary"
                     key="signin"
                     onClick={() => {
-                      backToSignin();
+                      navigate("/signin");
                     }}
                   >
                     返回登入
@@ -127,7 +126,7 @@ const Verify: React.FunctionComponent = () => {
                     type="primary"
                     key="signin"
                     onClick={() => {
-                      backToSignin();
+                      navigate("/signin");
                     }}
                   >
                     返回登入

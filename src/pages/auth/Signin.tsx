@@ -38,39 +38,47 @@ const Signin: React.FunctionComponent = () => {
   }, []);
 
   const submitForm = async (form: SigninForm) => {
-    try {
-      if (isSignin) {
-        const { user, token } = await signin(form.email, form.password);
+    if (isSignin) {
+      const response = await signin(form.email, form.password);
+
+      if (response.status === "success" && response.data) {
+        const { data: user, token } = response.data;
         setUser(user);
         setJwtToken(token);
         dispatch(saveUser(user));
         navigate("/", { replace: true });
       } else {
-        await register(form.name as string, form.email, form.password);
+        message.error(response.message);
+      }
+    } else {
+      const response = await register(
+        form.name as string,
+        form.email,
+        form.password
+      );
+
+      if (response.status === "success") {
         navigate("/verify-notice");
+      } else {
+        message.error(response.message);
       }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.status === 401) {
-          message.error("帳號或密碼錯誤");
-        } else if (error.status === 409) {
-          message.error("帳號已存在");
-        } else if (error.status === 500) {
-          message.error("系統發生錯誤");
-        }
-      }
-      console.error(error);
     }
   };
 
   const google = useGoogleLogin({
     onSuccess: async (response) => {
       const accessToken = response.access_token;
-      const { user, token } = await googleSignin(accessToken);
-      saveUser(user);
-      setJwtToken(token);
-      dispatch(saveUser(user));
-      navigate("/", { replace: true });
+      const result = await googleSignin(accessToken);
+
+      if (result.status === "success" && result.data) {
+        const { data: user, token } = result.data;
+        setUser(user);
+        setJwtToken(token);
+        dispatch(saveUser(user));
+        navigate("/", { replace: true });
+      } else {
+        message.error(result.message);
+      }
     },
     onError: () => {
       message.error("Google登入失敗");
