@@ -1,6 +1,6 @@
 import { Col, Flex, Row } from "antd";
 import TripCard from "./TripCard";
-import useTripInfoData from "../hooks/useTripInfoData";
+import useTripInfo from "../hooks/useTripInfo";
 import { TripInfoMode } from "../types/modeInterface";
 
 import "../assets/scss/tripList.scss";
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const TripList: React.FunctionComponent<Props> = ({ type }) => {
-  const { trips, favorTrip, deleteTrip } = useTripInfoData(type);
+  const { trips, favorTrip, deleteTrip } = useTripInfo(type);
 
   return (
     <>

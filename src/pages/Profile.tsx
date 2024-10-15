@@ -24,14 +24,16 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { CommonRules } from "../data/form";
 import { ProfileForm } from "../types/formInterface";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { updateUser } from "../apis/user";
+import { saveUser } from "../store/user/userSlice";
+import axios from "axios";
 
 import "../assets/scss/profile.scss";
+import { getJwtToken } from "../apis/auth";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -39,7 +41,7 @@ const Profile: React.FunctionComponent = () => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getJwtToken()) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
@@ -66,21 +68,23 @@ const Profile: React.FunctionComponent = () => {
   };
 
   const submitForm = async (form: ProfileForm) => {
-    // try {
-    //   await dispatch(
-    //     updateUser({
-    //       id: user.id,
-    //       name: form.name,
-    //       email: form.email,
-    //       avatar: avatar,
-    //     })
-    //   );
-    //   navigate(-1);
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     message.error(error.message);
-    //   }
-    // }
+    try {
+      const user = await updateUser(form.name, form.email, avatar);
+      dispatch(saveUser(user));
+      navigate(-1);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          localStorage.removeItem("user");
+          localStorage.removeItem("jwtToken");
+          navigate("/signin", { replace: true });
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
+      } else {
+        console.error(error);
+      }
+    }
   };
 
   return (
@@ -151,19 +155,6 @@ const Profile: React.FunctionComponent = () => {
             requiredMark={false}
           >
             <Form.Item
-              name="name"
-              label="姓名"
-              validateTrigger="onBlur"
-              rules={[CommonRules.Required]}
-            >
-              <Input
-                prefix={<UserOutlined />}
-                size="large"
-                placeholder="姓名"
-                required
-              />
-            </Form.Item>
-            <Form.Item
               name="email"
               label="信箱"
               validateTrigger="onBlur"
@@ -173,6 +164,20 @@ const Profile: React.FunctionComponent = () => {
                 prefix={<MailOutlined />}
                 size="large"
                 placeholder="信箱"
+                disabled
+                required
+              />
+            </Form.Item>
+            <Form.Item
+              name="name"
+              label="姓名"
+              validateTrigger="onBlur"
+              rules={[CommonRules.Required]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                size="large"
+                placeholder="姓名"
                 required
               />
             </Form.Item>

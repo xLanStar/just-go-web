@@ -7,20 +7,19 @@ import { SearchOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
 import TripList from "../components/TripList";
 import { loadTrips } from "../apis/trip";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 // import "../assets/scss/home.scss";
 import "./Home.css";
 import testImg from "../assets/image/taipei101.jpg";
+import { getJwtToken } from "../apis/auth";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const { message } = App.useApp();
 
   const [trips, setTrips] = useState<TripInfo[]>(randomCreate());
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程探索"));

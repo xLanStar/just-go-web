@@ -19,15 +19,13 @@ import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
 import { BookOutlined } from "@ant-design/icons";
 import Collection from "../components/Collection";
-
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { getJwtToken } from "../apis/auth";
 
 import "../assets/scss/explore.scss";
 
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const { isLoaded, loadError } = useGoogleMap();
 
   const mapRef = useRef<google.maps.Map>();
@@ -50,9 +48,10 @@ const Explore: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
-    // if (!localStorage.getItem("jwtToken")) {
-    //   navigate("/signin", { replace: true });
-    // }
+    if (!getJwtToken()) {
+      navigate("/signin", { replace: true });
+    }
+    
     dispatch(setPage("景點探索"));
     dispatch(setMode("explore"));
   }, [navigate]);

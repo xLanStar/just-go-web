@@ -14,14 +14,6 @@ interface MyTripsResponse {
   data: OwnTrips | TripInfo[];
 }
 
-interface LikeResponse {
-  isLike: boolean;
-}
-
-interface DeleteResponse {
-  message: string;
-}
-
 export const loadTrips = async () => {
   const response: TripsResponse = await request.get("/api/trips");
   return response.data;
@@ -37,41 +29,4 @@ export const loadTripsByMe = async (id: string, type: string) => {
     `/api/trips/${id}/${type}`
   );
   return response.data;
-};
-
-export const favorTrip = async (id: string) => {
-  const response: LikeResponse = await request.put(`/api/trips/${id}/favor`);
-  const isLike: boolean = response.isLike;
-  return isLike;
-};
-
-export const deleteTrip = async (id: string) => {
-  const response: DeleteResponse = await request.delete(`/api/trips/${id}`);
-  return response.message;
-};
-
-export const createTrip = async (
-  name: string,
-  image: File | undefined,
-  startTime: string,
-  endTime: string
-) => {
-  const formData = new FormData();
-
-  formData.append("name", name);
-  formData.append("startTime", startTime);
-  formData.append("endTime", endTime);
-
-  if (image) {
-    formData.append("image", image);
-  } else {
-    formData.append("image", "");
-  }
-
-  await request.post("/api/trips", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return;
 };
