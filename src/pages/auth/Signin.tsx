@@ -9,11 +9,17 @@ import { App, Button, Divider, Flex, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
-import { register, signin, googleSignin } from "../../apis/auth";
+import {
+  register,
+  signin,
+  googleSignin,
+  setJwtToken,
+  getJwtToken,
+  setUser,
+} from "../../apis/auth";
 import { useAppDispatch } from "../../hooks";
 import { SigninForm } from "../../types/formInterface";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { setUser } from "../../store/user/userSlice";
+import { saveUser } from "../../store/user/userSlice";
 import { useGoogleLogin } from "@react-oauth/google";
 
 import "../../assets/scss/signin.scss";
@@ -21,13 +27,12 @@ import "../../assets/scss/signin.scss";
 const Signin: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const [form] = Form.useForm();
   const { message } = App.useApp();
   const [isSignin, setIsSignin] = useState<boolean>(true);
 
   useEffect(() => {
-    if (localStorage.getItem("jwtToken")) {
+    if (getJwtToken()) {
       navigate("/", { replace: true });
     }
   }, []);
@@ -36,13 +41,9 @@ const Signin: React.FunctionComponent = () => {
     try {
       if (isSignin) {
         const { user, token } = await signin(form.email, form.password);
-
-        console.log("user : ", user);
-        console.log("token : ", token);
-
-        localStorage.setItem("user", user);
-        localStorage.setItem("jwtToken", token);
-        dispatch(setUser(user));
+        setUser(user);
+        setJwtToken(token);
+        dispatch(saveUser(user));
         navigate("/", { replace: true });
       } else {
         await register(form.name as string, form.email, form.password);
@@ -66,10 +67,9 @@ const Signin: React.FunctionComponent = () => {
     onSuccess: async (response) => {
       const accessToken = response.access_token;
       const { user, token } = await googleSignin(accessToken);
-
-      localStorage.setItem("user", user);
-      localStorage.setItem("jwtToken", token);
-      dispatch(setUser(user));
+      saveUser(user);
+      setJwtToken(token);
+      dispatch(saveUser(user));
       navigate("/", { replace: true });
     },
     onError: () => {

@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Flex } from "antd";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { setMode, setPage } from "../store/page/pageSlice";
 import UserInfo from "../components/UserInfo";
 import TripTabList from "../components/TripTabList";
 import TripList from "../components/TripList";
 
 import "../assets/scss/dashboard.scss";
+import { getJwtToken } from "../apis/auth";
 
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const user = useAppSelector((state) => state.user.user);
 
   const [tabMode, setTabMode] = useState<string>("own");
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getJwtToken()) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));

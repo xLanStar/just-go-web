@@ -8,14 +8,13 @@ import { Avatar, Button, Flex } from "antd";
 import { AppstoreOutlined, UserOutlined } from "@ant-design/icons";
 import { TripInfo } from "../types/tripInterface";
 import { loadTripsById } from "../apis/trip";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/publisherInfo.scss";
+import { getJwtToken } from "../apis/auth";
 
 const PublisherInfo: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
 
   const { id } = useParams();
   const [user, setUser] = useState<User>({
@@ -27,7 +26,7 @@ const PublisherInfo: React.FunctionComponent = () => {
   const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
 

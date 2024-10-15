@@ -3,7 +3,6 @@ import { Flex, FloatButton } from "antd";
 import { useAppDispatch } from "../hooks";
 import { useEffect, useRef, useState } from "react";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { BookOutlined, RobotOutlined } from "@ant-design/icons";
 import ChatBox from "../components/ChatBox";
 import { PlacesService } from "../types/googleMapInterface";
@@ -11,11 +10,11 @@ import { useGoogleMap } from "../components/GoogleMapProvider";
 import Map from "../components/Map";
 
 import "../assets/scss/tripEdit.scss";
+import { getJwtToken } from "../apis/auth";
 
 const TripEdit: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const [showChatBox, setShowChatBox] = useState<boolean>(false);
   const { isLoaded, loadError } = useGoogleMap();
 
@@ -23,7 +22,7 @@ const TripEdit: React.FunctionComponent = () => {
   const placesServiceRef = useRef<PlacesService>();
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getJwtToken()) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程安排"));
@@ -45,7 +44,7 @@ const TripEdit: React.FunctionComponent = () => {
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={[]}
-        onMarkerClicked={() => { }}
+        onMarkerClicked={() => {}}
       />
       <FloatButton
         className="trip_edit_chatbox_button"
