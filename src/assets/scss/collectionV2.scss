@@ -1,0 +1,54 @@
+.collection {
+  width: 400px;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: white;
+  z-index: 3;
+}
+
+
+.collection_header {
+  width: 400px;
+  height: 64px;
+  padding-left: 24px;
+  padding-right: 36px;
+  position: fixed;
+  z-index: 4;
+}
+
+.collection_title {
+  color: white;
+  font-weight: bold;
+}
+
+.collection_close_button {
+  font-size: 20px;
+  color: white;
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+}
+
+.collection_content {
+  width: 100%;
+  overflow-y: auto;
+  margin-top: 64px;
+  padding-bottom: 24px;
+}
+
+.collection_content::-webkit-scrollbar {
+  display: none;
+}
+
+
+@media screen and (max-width: 575px) {
+  .collection {
+    width: 100%;
+  }
+
+  .collection_header {
+    width: 100%;
+  }
+}

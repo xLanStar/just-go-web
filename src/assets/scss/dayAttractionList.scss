@@ -1,0 +1,10 @@
+
+.dayAttractionList {
+    height: 100%;
+    overflow: auto;
+}
+
+.dayAttractionList::-webkit-scrollbar {
+    display: none;
+}
+

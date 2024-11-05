@@ -13,5 +13,6 @@ export enum TripInfoMode {
 
 export enum CollectionMode {
   Explore,
-  Edit
+  Edit,
+  Planning
 }

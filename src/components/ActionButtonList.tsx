@@ -43,8 +43,8 @@ const ActionButtonList: React.FunctionComponent<Props> = ({
       )}
       {mode === "edit" && (
         <>
-          <TripSettingDialog isOpen={isTripSettingDialogOpen} onClose={() => { setTripSettingDialogOpen(false) }} />
-          <ShareSettingDialog isOpen={isShareSettingDialogOpen} onClose={() => { setShareSettingDialogOpen(false) }} />
+          <TripSettingDialog isOpen={isTripSettingDialogOpen} onCancel={() => { setTripSettingDialogOpen(false) }} />
+          <ShareSettingDialog isOpen={isShareSettingDialogOpen} onCancel={() => { setShareSettingDialogOpen(false) }} />
           <Button className={className} icon={<InfoCircleOutlined />} onClick={() => { setTripSettingDialogOpen(true) }}>
             設定
           </Button>

@@ -53,6 +53,8 @@ interface Props {
   onMarkerClicked: (placeId: string) => void;
 }
 
+
+
 const Map: React.FunctionComponent<Props> = ({
   mapRef,
   placesServiceRef,
@@ -70,8 +72,10 @@ const Map: React.FunctionComponent<Props> = ({
         }}
         onLoad={(map) => {
           console.log("Maps API has loaded.");
+          //paintRoute(map)
           mapRef.current = map;
           placesServiceRef.current = new google.maps.places.PlacesService(map);
+          
         }}
         options={options}
       >

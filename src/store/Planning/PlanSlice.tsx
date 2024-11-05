@@ -1,12 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Plan } from "../../types/PlanInterface";
+import { attraction, Plan } from "../../types/PlanInterface";
 
 interface currentPlan {
-    value: Plan | null;
+    value: {
+        plan: Plan | null;
+        colorStyle: string;
+        currentAttractions: attraction[]
+    }
 }
 
 const initialState: currentPlan = {
-    value: null,
+    value: {
+        plan:null,
+        colorStyle: "#000000",
+        currentAttractions: []
+    }
 };
 
 const currentPlanSlice = createSlice({
@@ -14,10 +22,16 @@ const currentPlanSlice = createSlice({
     initialState,
     reducers: {
         setCurrentPlan: (state, action: PayloadAction<Plan>) => {
-            state.value = action.payload;
+            state.value.plan = action.payload;
+        },
+        setColorStyle: (state, action: PayloadAction<string>) => {
+            state.value.colorStyle = action.payload;
+        },
+        addCurrentAttraction:(state, action: PayloadAction<attraction>) => {
+            state.value.currentAttractions.push(action.payload);
         }
     },
 })
 
-export const { setCurrentPlan } = currentPlanSlice.actions
+export const { setCurrentPlan, setColorStyle, addCurrentAttraction } = currentPlanSlice.actions
 export default currentPlanSlice;

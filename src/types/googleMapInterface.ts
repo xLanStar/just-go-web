@@ -25,4 +25,5 @@ export interface Place {
   name: string;
   photo: string | undefined;
   rating: number | undefined;
+  google_place_id: string;
 }

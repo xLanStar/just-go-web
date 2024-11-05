@@ -1,95 +1,106 @@
 import { LeftOutlined } from "@ant-design/icons";
 import { ConfigProvider, Tabs } from "antd";
 import { useState } from "react";
-import { attraction, Day, transportationInfo } from "../types/PlanInterface";
-import { AttracionCard } from "./AttractionCard";
 import "../assets/scss/planDetail.scss";
-import { TransportationCard } from "./TransportationCard";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { AttractionData, DayData } from "../types/PlanUIInterface";
+import DayAttracionList from "./DayAttractionList";
 
-const testAttraction: attraction = {
-    id: "1",
-    day_id: "1",
-    start_at: new Date(),
-    end_at: new Date(),
-    note: "note",
-    google_place_id: "1",
-    next_attraction_id: "1"
-}
-
-const testTransportation: transportationInfo = {
-    id: "id",
-    day_id: "day_id",
-    place_id_from: "place_id_from",
-    place_id_to: "place_id_to",
-    way: "way",
-    spend_time: new Date()
-}
-
-
+type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
 export const PlanDetail = () => {
-    const [days, setDays] = useState<Day[]>(TestDays)
-    return (
+    const colorStyle = useSelector((state: RootState) => state.currentPlan.value.colorStyle);
+    const [items, setItems] = useState(TestDays().map((day, i) => {
+        return {
+            label: "第"+ (i+1) +"天",
+            key: String(i+1),
+            children: <DayAttracionList attractions={day.attractions} />
+        };
+    }));
 
+    const [activeKey, setActiveKey] = useState(items[0].key);
+
+    const onChange = (newActiveKey: string) => {
+        setActiveKey(newActiveKey);
+    };
+
+    const add = () => {
+        const newActiveKey = String(items.length + 1);
+        const newPanes = [...items];
+        newPanes.push({ label: "第"+ newActiveKey +"天", children: <DayAttracionList attractions={[]} />, key: newActiveKey });
+        setItems(newPanes);
+        setActiveKey(newActiveKey);
+    };
+
+    const remove = (targetKey: TargetKey) => {
+        let newActiveKey = activeKey;
+        let lastIndex = -1;
+        items.forEach((item, i) => {
+            if (item.key === targetKey) {
+                lastIndex = i - 1;
+            }
+        });
+        const newPanes = items.filter((item) => item.key !== targetKey);
+        if (newPanes.length && newActiveKey === targetKey) {
+            if (lastIndex >= 0) {
+                newActiveKey = newPanes[lastIndex].key;
+            } else {
+                newActiveKey = newPanes[0].key;
+            }
+        }
+        setItems(newPanes.map((pane, i) => {
+            return {
+                label: "第"+ (i + 1) +"天",
+                key: String(i + 1),
+                children: pane.children
+            };
+        }));
+        setActiveKey(newActiveKey);
+    };
+
+    const onEdit = (
+        targetKey: React.MouseEvent | React.KeyboardEvent | string,
+        action: 'add' | 'remove',
+    ) => {
+        if (action === 'add') {
+            add();
+        } else {
+            remove(targetKey);
+        }
+    };
+
+    return (
         <div className="planDetail" id="planDetail">
             <div className="planDetail-header">
-                <h3 className="planDetail-header-displayName">方案一</h3>
+                <h3 style={{ color: colorStyle }}>方案一</h3>
                 <LeftOutlined
                     className="planDetail-header-back"
+                    style={{ color: colorStyle }}
                     onClick={() => {
                         document.getElementById("planList")!.style.display = 'flex';
                         document.getElementById("planDetail")!.style.display = 'none';
                     }}
                 />
             </div>
-            {/* <Row className="planning-planDetail-dayList">
-                <Col span={2}>
-                    <Button className="planning-planDetail-dayList-left" icon={<LeftOutlined />}/>
-                </Col>
-                <Col span={20}>
-                    <List
-                        grid={{ gutter: 0, column: 4 }}
-                        dataSource={days}
-                        renderItem={(item) => (
-                            <List.Item>
-                                <h3>{item.id}</h3>
-                            </List.Item>
-                        )}>
-                    </List>
-                </Col>
-                <Col span={2}>
-                    <Button className="planning-planDetail-dayList-right" icon={<RightOutlined />}></Button>
-                </Col>
-            </Row> */}
             <div className="planDetail-content">
                 <ConfigProvider
                     theme={{
                         components: {
                             Tabs: {
-                                inkBarColor: "#12d198",
-                                itemSelectedColor: "#12d198",
-                                itemHoverColor: "#12d198"
+                                inkBarColor: colorStyle,
+                                itemSelectedColor: colorStyle,
+                                itemHoverColor: colorStyle
                             },
                         },
                     }}
                 >
-                    <Tabs className="planDetail-tabs"
-                        tabBarStyle={{ color: "#12d198" }}
-                        defaultActiveKey="1"
-                        // type="editable-card"
-                        items={
-                            days.map((_, i) => {
-                                const id = String(i + 1);
-                                return {
-                                    label: `第${id}天`,
-                                    key: id,
-                                    children:
-                                        <div>
-                                            <AttracionCard ThisAttraction={testAttraction} colorStyle={"#12d198"} />
-                                            <TransportationCard ThisTransportation={testTransportation} colorStyle={"#12d198"} />
-                                        </div>,
-                                };
-                            })}
+                    <Tabs
+                        type="editable-card"
+                        onChange={onChange}
+                        activeKey={activeKey}
+                        onEdit={onEdit}
+                        items={items}
                     />
                 </ConfigProvider>
             </div>
@@ -97,16 +108,26 @@ export const PlanDetail = () => {
 
     )
 }
-function TestDays(): Day[] {
-    let result: Day[] = []
-    const count: number = Math.floor(1 + Math.random() * 5)
-    for (let i = 0; i < count; i++) {
-        result.push({
-            id: String(i),
-            plan_id: "plan1",
-            start_attraction_id: "attraction" + i,
-            next_day_id: String(i + 1)
-        })
+
+function TestDays(): DayData[] {
+    let result: DayData[] = []
+    const dayNumber: number = Math.floor(1 + Math.random() * 5)
+
+    for (let i = 0; i < dayNumber; i++) {
+        const attractionNumber: number = Math.floor(1 + Math.random() * 5)
+        const attractions: AttractionData[] = []
+        for (let j = 0; j < attractionNumber; j++) {
+            attractions.push({
+                name: "測試Attraction" + (j + 1),
+                address: "address" + (j + 1),
+                start_time: null,
+                end_time: null,
+                phone: "phone" + (j + 1),
+                rating: Math.floor(1 + Math.random() * 5),
+                remark: ""
+            })
+        };
+        result.push({ attractions })
     }
     return result
 }

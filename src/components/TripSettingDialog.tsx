@@ -1,37 +1,20 @@
-import { Button, Layout, Upload } from 'antd';
-import React, { useRef } from 'react';
+import { Button, Layout, Modal, Upload } from 'antd';
 import "../assets/scss/tripSettingDialog.scss";
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import { CloseOutlined, PlusCircleOutlined, SaveOutlined, SendOutlined, UploadOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
 interface Props {
   isOpen: boolean;
-  onClose: () => void;
+  onCancel: () => void;
 }
 
-export const TripSettingDialog = ({ isOpen, onClose }: Props) => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  // 當 `isOpen` 改變時，根據狀態開啟或關閉對話框
-  React.useEffect(() => {
-
-    const dialog = dialogRef.current;
-
-    if (dialog) {
-      if (isOpen) {
-        dialog.showModal(); // 開啟對話框
-      } else {
-        dialog.close(); // 關閉對話框
-      }
-    }
-  }, [isOpen]);
-
+export const TripSettingDialog = ({ isOpen, onCancel }: Props) => {
   return (
-    <dialog ref={dialogRef} className='tripSettingDialog'>
-      <Layout >
+    <Modal width={500} open={isOpen} closable={false} footer={null}>
+      <Layout className='tripSettingDialog'>
         <Header className='tripSettingDialog-title'>Title</Header>
         <Content className='tripSettingDialog-content'>
-          <Upload >
+          <Upload style={{height: "200px"}}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
           <h3>行程介紹</h3>
@@ -60,9 +43,10 @@ export const TripSettingDialog = ({ isOpen, onClose }: Props) => {
         <Footer className='tripSettingDialog-footer'>
           <Button icon={<SendOutlined />}>發布</Button>
           <Button icon={<SaveOutlined />}>儲存</Button>
-          <Button icon={<CloseOutlined />} onClick={onClose}>取消</Button>
+          <Button icon={<CloseOutlined />} onClick={onCancel}>取消</Button>
         </Footer>
       </Layout>
-    </dialog>
+    </Modal>
+
   );
 };

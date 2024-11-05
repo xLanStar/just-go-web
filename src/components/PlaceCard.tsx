@@ -1,9 +1,12 @@
 import { Button, Flex } from "antd";
-import { StarOutlined } from "@ant-design/icons";
+import { PlusOutlined, StarOutlined } from "@ant-design/icons";
 import { Place } from "../types/googleMapInterface";
 import { CollectionMode } from "../types/modeInterface";
 
 import "../assets/scss/placeCard.scss";
+import { useAppDispatch } from "../hooks";
+import { attraction } from "../types/PlanInterface";
+import { addCurrentAttraction } from "../store/Planning/PlanSlice";
 
 interface Props {
   place: Place;
@@ -11,6 +14,8 @@ interface Props {
 }
 
 const PlaceCard: React.FunctionComponent<Props> = ({ place, mode }) => {
+  const dispatch = useAppDispatch();
+
   return (
     <Flex
       className="place_card"
@@ -49,6 +54,27 @@ const PlaceCard: React.FunctionComponent<Props> = ({ place, mode }) => {
             >
               刪除
             </Button>
+          ) : mode === CollectionMode.Planning ? (
+            <>
+              <Button 
+              icon ={<PlusOutlined/>} 
+              type="primary"
+              onClick={() =>{
+                const content: attraction = {
+                  id: "1",
+                  day_id: "1",
+                  start_at: null,
+                  end_at: null,
+                  note: "",
+                  google_place_id: "1",
+                  next_attraction_id: null
+                }
+                // useAppDispatch(addCurrentAttraction(content));
+              }}
+              >
+                新增至方案
+              </Button>
+            </>
           ) : (
             <>
               <Button type="primary">新增</Button>

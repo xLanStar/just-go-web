@@ -2,6 +2,8 @@ import { PlusOutlined, RollbackOutlined, StarOutlined } from "@ant-design/icons"
 import { Button, Layout, List } from "antd"
 import { useState } from "react"
 import "../assets/scss/planList.scss";
+import { useAppDispatch } from "../hooks";
+import { setColorStyle } from "../store/Planning/PlanSlice";
 
 const colorList = ["#12d198","#EA0000", "#7373B9", "#FF8000", "#272727", "#AD5A5A", "#8600FF", "#FFD306", "#8CEA00"]
 const data = [
@@ -30,6 +32,8 @@ const data = [
 ];
 export const PlanList = () => {
     const [Plans, setPlans] = useState<number>(0)
+    const dispatch = useAppDispatch();
+
     return (
         <Layout className="planList" id="planList">
             <RollbackOutlined className="planList-back" />
@@ -49,6 +53,7 @@ export const PlanList = () => {
                             onClick={() => {
                                 document.getElementById("planDetail")!.style.display = 'flex';
                                 document.getElementById("planList")!.style.display = 'none';
+                                dispatch(setColorStyle(item.colorStyle));
                             }}
                         >{item.planName}</Button>
                     </List.Item>

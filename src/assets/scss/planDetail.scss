@@ -7,13 +7,8 @@
     height: 100%;
     z-index: 2;
     justify-content: center;
-    overflow: auto;
     border-radius: 0 10px 10px 0;
     background-color: #ffffff;
-}
-
-.planDetail::-webkit-scrollbar {
-    display: none;
 }
 
 .planDetail-header {
@@ -30,7 +25,6 @@
 }
 
 .planDetail-header-displayName {
-    color: #12d198;
     max-width: 300px;
     text-align: center;
 }
@@ -40,7 +34,6 @@
     top: 50%;
     transform: translate(0%, -50%);
     left: 10px;
-    color: #12d198;
 }
 
 .planDetail-header-back:hover {
@@ -52,20 +45,24 @@
     top: 50px;
     height: 50px;
     width: 100%;
-    background-color: brown;
 }
 
 .planDetail-tabs {
     height: 100%;
-    color: #12d198;
 }
 
 .planDetail-content {
     position: relative;
     top: 50px;
-    height: 100%;
+    height: calc( 100vh - 100px);
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
     gap: 10px;
+    overflow: auto;
 }
+
+.planDetail-content::-webkit-scrollbar {
+    display: none;
+}
+

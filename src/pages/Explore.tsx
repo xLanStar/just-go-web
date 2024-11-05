@@ -49,9 +49,9 @@ const Explore: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
-      navigate("/signin", { replace: true });
-    }
+    // if (!localStorage.getItem("jwtToken")) {
+    //   navigate("/signin", { replace: true });
+    // }
     dispatch(setPage("景點探索"));
     dispatch(setMode("default"));
   }, [navigate]);

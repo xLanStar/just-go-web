@@ -1,5 +1,4 @@
 import { Button, ConfigProvider, Image, Layout, TimePicker } from "antd"
-import { attraction } from "../types/PlanInterface"
 import { Content, Footer, Header } from "antd/es/layout/layout"
 import { CloseOutlined, DoubleLeftOutlined } from "@ant-design/icons"
 import { useState } from "react"
@@ -7,16 +6,20 @@ import Sider from "antd/es/layout/Sider"
 import testImg from "../assets/image/taipei101.jpg"
 import TextArea from "antd/es/input/TextArea"
 import "../assets/scss/attractionCard.scss";
+import { AttractionData } from "../types/PlanUIInterface"
+import { RootState } from "../store"
+import { useSelector } from "react-redux"
 
 interface Props {
-    ThisAttraction: attraction
-    colorStyle: string
+    attractionData: AttractionData
 }
 
-export const AttracionCard = ({ ThisAttraction, colorStyle }: Props) => {
+export const AttracionCard = ({ attractionData }: Props) => {
     const rot: number[] = [-90, 90]
     const footerLabel: string[] = ["顯示詳細地點資訊", "隱藏詳細地點資訊"]
     const [index, setIndex] = useState<number>(0);
+    const colorStyle = useSelector((state: RootState) => state.currentPlan.value.colorStyle);
+
     return (
         <ConfigProvider
             theme={{
@@ -30,7 +33,7 @@ export const AttracionCard = ({ ThisAttraction, colorStyle }: Props) => {
         >
             <Layout className="attractionCard" id="AttractionCard">
                 <Header className="attractionCard-header">
-                    <h3>PlaceName</h3>
+                    <h3>{attractionData.name}</h3>
                     <Button icon={<CloseOutlined />} className="attractionCard-header-close" />
                 </Header>
 
@@ -48,14 +51,14 @@ export const AttracionCard = ({ ThisAttraction, colorStyle }: Props) => {
                         <Content className="attractionCard-content-content">
                             <Layout className="attractionCard-content-content-info">
                                 <h3>地址:</h3>
-                                <h3>Address</h3>
+                                <h3>{attractionData.address}</h3>
                                 <h3>停留時間:</h3>
                                 <TimePicker.RangePicker />
                             </Layout>
                             <Layout className="attractionCard-content-content-moreInfo" id="moreInfo">
-                                <h3>電話:PhoneName</h3>
-                                <h3>評分:Score</h3>
-                                <h3>備註:</h3>
+                                <h3>電話:{attractionData.address}</h3>
+                                <h3>評分:{attractionData.rating}</h3>
+                                <h3>備註:{attractionData.remark}</h3>
                                 <TextArea style={{
                                     width: "100%",
                                     height: "100px",

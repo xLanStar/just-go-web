@@ -16,19 +16,15 @@ export interface Day {
 export interface attraction {
   id: String,
   day_id: String,
-  start_at: Date,
-  end_at: Date,
-  note: String,
+  start_at: Date | null,
+  end_at: Date | null,
+  note: String | null,
   google_place_id: String,
-  next_attraction_id: String
+  next_attraction_id: String | null
 }
 
-//database沒有，要加
-export interface transportationInfo {
-  id: String,
-  day_id: String,
-  place_id_from: String,
-  place_id_to: String,
-  way: String,
-  spend_time:Date
+export interface CollectionData {
+  id: string,
+  google_place_id:string,
+  user_id:string
 }
