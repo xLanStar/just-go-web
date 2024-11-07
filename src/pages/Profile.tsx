@@ -20,22 +20,20 @@ import {
   UploadOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch } from "../hooks";
 import { CommonRules } from "../data/form";
 import { ProfileForm } from "../types/formInterface";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { updateUser } from "../apis/user";
-import { saveUser } from "../store/user/userSlice";
-import axios from "axios";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import useUser from "../hooks/useUser";
 
 import "../assets/scss/profile.scss";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
 
+  const { user, updateUser } = useUser();
   const { getItem } = useLocalStorage();
 
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
@@ -68,26 +66,6 @@ const Profile: React.FunctionComponent = () => {
     },
     maxCount: 1,
     showUploadList: false,
-  };
-
-  const submitForm = async (form: ProfileForm) => {
-    try {
-      const user = await updateUser(form.name, form.email, avatar);
-      dispatch(saveUser(user));
-      navigate(-1);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.status === 401) {
-          localStorage.removeItem("user");
-          localStorage.removeItem("jwtToken");
-          navigate("/signin", { replace: true });
-        } else if (error.status === 500) {
-          message.error("系統發生錯誤");
-        }
-      } else {
-        console.error(error);
-      }
-    }
   };
 
   return (
@@ -152,7 +130,9 @@ const Profile: React.FunctionComponent = () => {
             form={form}
             layout="vertical"
             scrollToFirstError
-            onFinish={submitForm}
+            onFinish={(form: ProfileForm) => {
+              updateUser(form.name, user.email, avatar);
+            }}
             noValidate
             initialValues={{ name: user.name, email: user.email }}
             requiredMark={false}

@@ -6,9 +6,11 @@ import { saveUser } from "../store/user/userSlice";
 import { useLocalStorage } from "./useLocalStorage";
 
 const useAuth = () => {
-  const { message } = App.useApp();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { message } = App.useApp();
+
   const { setItem, setObjectItem, removeItem } = useLocalStorage();
 
   const signin = async (email: string, password: string) => {
@@ -25,6 +27,7 @@ const useAuth = () => {
       setObjectItem("user", user);
       dispatch(saveUser(user));
 
+      message.success("登入成功");
       navigate("/", { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -55,6 +58,7 @@ const useAuth = () => {
       setObjectItem("user", user);
       dispatch(saveUser(user));
 
+      message.success("登入成功");
       navigate("/", { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -77,6 +81,8 @@ const useAuth = () => {
         email,
         password
       });
+
+      message.success("註冊成功");
       navigate("/verify-notice");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -95,6 +101,7 @@ const useAuth = () => {
   const logout = () => {
     removeItem("user");
     removeItem("jwtToken");
+    message.success("登出成功");
     navigate("/signin", { replace: true });
   }
 
