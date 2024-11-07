@@ -24,9 +24,9 @@ export const loadTripsById = async (id: string) => {
   return response.data;
 };
 
-export const loadTripsByMe = async (id: string, type: string) => {
+export const loadTripsByMe = async (userId: string, type: string) => {
   const response: MyTripsResponse = await request.get(
-    `/api/trips/${id}/${type}`
+    `/api/users/${userId}/trips/${type}`
   );
   return response.data;
 };

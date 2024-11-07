@@ -27,21 +27,24 @@ import { setMode, setPage } from "../store/page/pageSlice";
 import { updateUser } from "../apis/user";
 import { saveUser } from "../store/user/userSlice";
 import axios from "axios";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/profile.scss";
-import { getJwtToken } from "../apis/auth";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+
+  const { getItem } = useLocalStorage();
+
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
   const { message } = App.useApp();
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));

@@ -6,19 +6,21 @@ import { setMode, setPage } from "../store/page/pageSlice";
 import UserInfo from "../components/UserInfo";
 import TripTabList from "../components/TripTabList";
 import TripList from "../components/TripList";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/dashboard.scss";
-import { getJwtToken } from "../apis/auth";
 
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
 
+  const { getItem } = useLocalStorage();
+
   const [tabMode, setTabMode] = useState<string>("own");
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("行程管理"));

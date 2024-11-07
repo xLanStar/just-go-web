@@ -8,13 +8,16 @@ import ChatBox from "../components/ChatBox";
 import { PlacesService } from "../types/googleMapInterface";
 import { useGoogleMap } from "../components/GoogleMapProvider";
 import Map from "../components/Map";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import "../assets/scss/tripEdit.scss";
-import { getJwtToken } from "../apis/auth";
 
 const TripEdit: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { getItem } = useLocalStorage();
+
   const [showChatBox, setShowChatBox] = useState<boolean>(false);
   const { isLoaded, loadError } = useGoogleMap();
 
@@ -22,7 +25,7 @@ const TripEdit: React.FunctionComponent = () => {
   const placesServiceRef = useRef<PlacesService>();
 
   useEffect(() => {
-    if (!getJwtToken()) {
+    if (!getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("行程安排"));
