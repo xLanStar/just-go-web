@@ -7,8 +7,8 @@ export type PlaceDetailsRequest = google.maps.places.PlaceDetailsRequest;
 export type FindPlaceFromQueryRequest = google.maps.places.FindPlaceFromQueryRequest;
 export interface Mark {
   name: string;
-  location: LatLngLiteral;
   placeId: string;
+  location: LatLngLiteral;
 }
 
 export interface PlaceDetail {
