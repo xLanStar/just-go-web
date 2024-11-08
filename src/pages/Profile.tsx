@@ -20,26 +20,29 @@ import {
   UploadOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppDispatch } from "../hooks";
 import { CommonRules } from "../data/form";
 import { ProfileForm } from "../types/formInterface";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import useUser from "../hooks/useUser";
 
 import "../assets/scss/profile.scss";
 
 const Profile: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
-  const user = useAppSelector((state) => state.user.user);
+
+  const { user, updateUser } = useUser();
+  const { getItem } = useLocalStorage();
+
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
   const { message } = App.useApp();
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
     dispatch(setPage("個人資料"));
@@ -63,24 +66,6 @@ const Profile: React.FunctionComponent = () => {
     },
     maxCount: 1,
     showUploadList: false,
-  };
-
-  const submitForm = async (form: ProfileForm) => {
-    // try {
-    //   await dispatch(
-    //     updateUser({
-    //       id: user.id,
-    //       name: form.name,
-    //       email: form.email,
-    //       avatar: avatar,
-    //     })
-    //   );
-    //   navigate(-1);
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     message.error(error.message);
-    //   }
-    // }
   };
 
   return (
@@ -145,24 +130,13 @@ const Profile: React.FunctionComponent = () => {
             form={form}
             layout="vertical"
             scrollToFirstError
-            onFinish={submitForm}
+            onFinish={(form: ProfileForm) => {
+              updateUser(form.name, user.email, avatar);
+            }}
             noValidate
             initialValues={{ name: user.name, email: user.email }}
             requiredMark={false}
           >
-            <Form.Item
-              name="name"
-              label="姓名"
-              validateTrigger="onBlur"
-              rules={[CommonRules.Required]}
-            >
-              <Input
-                prefix={<UserOutlined />}
-                size="large"
-                placeholder="姓名"
-                required
-              />
-            </Form.Item>
             <Form.Item
               name="email"
               label="信箱"
@@ -173,6 +147,20 @@ const Profile: React.FunctionComponent = () => {
                 prefix={<MailOutlined />}
                 size="large"
                 placeholder="信箱"
+                disabled
+                required
+              />
+            </Form.Item>
+            <Form.Item
+              name="name"
+              label="姓名"
+              validateTrigger="onBlur"
+              rules={[CommonRules.Required]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                size="large"
+                placeholder="姓名"
                 required
               />
             </Form.Item>

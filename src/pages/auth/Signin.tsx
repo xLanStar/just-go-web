@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   GoogleCircleFilled,
   LockOutlined,
@@ -9,64 +8,34 @@ import { App, Button, Divider, Flex, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonRules } from "../../data/form";
-import { register, signin, googleSignin } from "../../apis/auth";
-import { useAppDispatch } from "../../hooks";
 import { SigninForm } from "../../types/formInterface";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { setUser } from "../../store/user/userSlice";
 import { useGoogleLogin } from "@react-oauth/google";
+import useAuth from "../../hooks/useAuth";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 import "../../assets/scss/signin.scss";
 
 const Signin: React.FunctionComponent = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
-  const [form] = Form.useForm();
+
   const { message } = App.useApp();
+  const [form] = Form.useForm();
+
+  const { getItem } = useLocalStorage();
+  const { signin, register, googleSignin } = useAuth();
+
   const [isSignin, setIsSignin] = useState<boolean>(true);
 
   useEffect(() => {
-    if (localStorage.getItem("jwtToken")) {
+    if (getItem("jwtToken")) {
       navigate("/", { replace: true });
     }
   }, []);
 
-  const submitForm = async (form: SigninForm) => {
-    try {
-      if (isSignin) {
-        const { user, token } = await signin(form.email, form.password);
-        localStorage.setItem("user", user);
-        localStorage.setItem("jwtToken", token);
-        dispatch(setUser(user));
-        navigate("/", { replace: true });
-      } else {
-        await register(form.name as string, form.email, form.password);
-        navigate("/verify-notice");
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.status === 401) {
-          message.error("帳號或密碼錯誤");
-        } else if (error.status === 409) {
-          message.error("帳號已存在");
-        } else if (error.status === 500) {
-          message.error("系統發生錯誤");
-        }
-      }
-      console.error(error);
-    }
-  };
-
   const google = useGoogleLogin({
     onSuccess: async (response) => {
       const accessToken = response.access_token;
-      const { user, token } = await googleSignin(accessToken);
-
-      localStorage.setItem("user", user);
-      localStorage.setItem("jwtToken", token);
-      dispatch(setUser(user));
-      navigate("/", { replace: true });
+      googleSignin(accessToken);
     },
     onError: () => {
       message.error("Google登入失敗");
@@ -87,7 +56,9 @@ const Signin: React.FunctionComponent = () => {
           form={form}
           layout="vertical"
           scrollToFirstError
-          onFinish={submitForm}
+          onFinish={(form: SigninForm) => {
+            isSignin ? signin(form.email, form.password) : register(form.name as string, form.email, form.password);
+          }}
           noValidate
         >
           {!isSignin && (

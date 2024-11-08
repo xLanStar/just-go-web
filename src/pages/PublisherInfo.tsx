@@ -15,7 +15,8 @@ import "../assets/scss/publisherInfo.scss";
 const PublisherInfo: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
+
+  const { getItem } = useLocalStorage();
 
   const { id } = useParams();
   const [user, setUser] = useState<User>({
@@ -27,7 +28,7 @@ const PublisherInfo: React.FunctionComponent = () => {
   const [trips, setTrips] = useState<TripInfo[]>([]);
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
 

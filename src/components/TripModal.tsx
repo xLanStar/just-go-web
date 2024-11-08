@@ -1,12 +1,9 @@
 import { CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, DatePicker, ConfigProvider, App } from "antd";
+import { Form, Input, Modal, DatePicker, ConfigProvider } from "antd";
 import Uploader from "./Uploader";
 import { TripFrom } from "../types/formInterface";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useAppSelector } from "../hooks";
-import { createTrip } from "../apis/trip";
 import { CommonRules } from "../data/form";
+import useTripInfo from "../hooks/useTripInfo";
 
 import "../assets/scss/tripModal.scss";
 
@@ -18,31 +15,16 @@ interface Props {
 }
 
 const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
-  const navigate = useNavigate();
-  const user = useAppSelector((state) => state.user.user);
-  const { message } = App.useApp();
+  const { createTrip } = useTripInfo("");
   const [form] = Form.useForm();
 
   const handleSubmit = async (form: TripFrom) => {
-    try {
-      await createTrip(
-        user.id,
-        form.name,
-        form.image,
-        form.date[0].format("YYYY-MM-DD"),
-        form.date[1].format("YYYY-MM-DD")
-      );
-      navigate("/edit");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.status === 401) {
-          navigate("/", { replace: true });
-        } else if (error.status === 500) {
-          message.error("系統發生錯誤");
-        }
-      }
-      console.error(error);
-    }
+    await createTrip(
+      form.name,
+      form.image,
+      form.date[0].format("YYYY-MM-DD"),
+      form.date[1].format("YYYY-MM-DD")
+    );
   };
 
   return (

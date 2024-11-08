@@ -7,10 +7,11 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 const TripShare: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
+
+  const { getItem } = useLocalStorage();
 
   useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) {
+    if (!getItem("jwtToken")) {
       navigate("/signin", { replace: true });
     }
     dispatch(setPage("別人的行程"));

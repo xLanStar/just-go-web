@@ -26,8 +26,9 @@ import "../assets/scss/explore.scss";
 const Explore: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const localStorage = useLocalStorage();
   const { isLoaded, loadError } = useGoogleMap();
+
+  const { getItem } = useLocalStorage();
 
   const mapRef = useRef<google.maps.Map>();
   const placesServiceRef = useRef<PlacesService>();
@@ -49,11 +50,12 @@ const Explore: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
-    // if (!localStorage.getItem("jwtToken")) {
-    //   navigate("/signin", { replace: true });
-    // }
+    if (!getItem("jwtToken")) {
+      navigate("/signin", { replace: true });
+    }
+    
     dispatch(setPage("景點探索"));
-    dispatch(setMode("default"));
+    dispatch(setMode("explore"));
   }, [navigate]);
 
   if (loadError) {
@@ -171,16 +173,17 @@ const Explore: React.FunctionComponent = () => {
     });
   };
 
-  const savePlace = (place: PlaceDetail) => {
-    setCollection([
-      ...collection,
-      {
-        name: place.name,
-        photo: place.photo,
-        rating: place.rating,
-      },
-    ]);
-  };
+  // 有 Bug，先註解
+  // const savePlace = (place: PlaceDetail) => {
+  //   setCollection([
+  //     ...collection,
+  //     {
+  //       name: place.name,
+  //       photo: place.photo,
+  //       rating: place.rating,
+  //     },
+  //   ]);
+  // };
 
   const onPlaceInfoClose = () => {
     setShowPlaceInfo(false);
@@ -223,7 +226,7 @@ const Explore: React.FunctionComponent = () => {
         <PlaceInfo
           place={placeDetail}
           onPlaceInfoClose={onPlaceInfoClose}
-          savePlace={savePlace}
+          savePlace={() => {}} // 有 Bug，先註解
         />
       ) : null}
       {showCollection ? (

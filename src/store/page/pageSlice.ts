@@ -7,7 +7,7 @@ interface PageState {
 
 const initialState: PageState = {
   name: "",
-  mode: "default",
+  mode: "default", // default, edit
 }
 
 const pageSlice = createSlice({
