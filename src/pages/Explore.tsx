@@ -4,12 +4,7 @@ import { useAppDispatch } from "../hooks";
 import { setMode, setPage } from "../store/page/pageSlice";
 import { Flex, FloatButton, Spin } from "antd";
 import { useGoogleMap } from "../components/GoogleMapProvider";
-import {
-  LatLngLiteral,
-  Mark,
-  Place,
-  PlaceDetail,
-} from "../types/googleMapInterface";
+import { LatLngLiteral, Mark } from "../types/googleMapInterface";
 import SearchBar from "../components/SearchBar";
 import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
@@ -18,6 +13,8 @@ import Collection from "../components/Collection";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import useSearchBar from "../hooks/useSearchBar";
 import useGoogleMapService from "../hooks/useMapService";
+import useCollection from "../hooks/useCollection";
+import usePlaceDetail from "../hooks/usePlaceDetail";
 
 import "../assets/scss/explore.scss";
 
@@ -36,20 +33,12 @@ const Explore: React.FunctionComponent = () => {
     getAutoCompletePlace,
   } = useGoogleMapService();
   const { placeType, changePlaceType } = useSearchBar();
+  const { placeDetail, getPlaceDetail } = usePlaceDetail();
+  const { collection, addPlace } = useCollection();
 
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [showPlaceInfo, setShowPlaceInfo] = useState<boolean>(false);
   const [showCollection, setShowCollection] = useState<boolean>(false);
-  const [placeDetail, setPlaceDetail] = useState<PlaceDetail>({
-    name: "",
-    photo: "",
-    rating: undefined,
-    address: "",
-    phone: undefined,
-    website: undefined,
-    opening_hours: undefined,
-  });
-  const [collection, setCollection] = useState<Place[]>([]);
 
   useEffect(() => {
     if (!getItem("jwtToken")) {
@@ -105,6 +94,11 @@ const Explore: React.FunctionComponent = () => {
     setMarkList(result);
   };
 
+  const onMarkerClicked = async (placeId: string) => {
+    await getPlaceDetail(placeId);
+    setShowPlaceInfo(true);
+  };
+
   if (!isLoaded) {
     return (
       <Flex className="explore" vertical justify="center" align="center">
@@ -126,7 +120,7 @@ const Explore: React.FunctionComponent = () => {
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={markList}
-        onMarkerClicked={() => {}}
+        onMarkerClicked={onMarkerClicked}
       />
       <FloatButton
         className="explore_collection_button"
@@ -138,7 +132,7 @@ const Explore: React.FunctionComponent = () => {
         <PlaceInfo
           place={placeDetail}
           onPlaceInfoClose={() => setShowPlaceInfo(false)}
-          savePlace={() => {}} // 有 Bug，先註解
+          addPlace={addPlace} // 有 Bug，先註解
         />
       ) : null}
       {showCollection ? (

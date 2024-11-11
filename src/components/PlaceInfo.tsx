@@ -9,20 +9,20 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { convertToTraditional } from "../utils/textConverter";
-import { PlaceDetail } from "../types/googleMapInterface";
+import { Place } from "../types/googleMapInterface";
 
 import "../assets/scss/placeInfo.scss";
 
 interface Props {
-  place: PlaceDetail;
+  place: Place;
   onPlaceInfoClose: () => void;
-  savePlace: (place: PlaceDetail) => void;
+  addPlace: (place: Place) => void;
 }
 
 const PlaceInfo: React.FunctionComponent<Props> = ({
   place,
   onPlaceInfoClose,
-  savePlace,
+  addPlace: addPlace,
 }) => {
   return (
     <Flex className="place_info" vertical justify="flex-start" align="center">
@@ -142,7 +142,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
           icon={<PlusOutlined />}
           size="large"
           onClick={() => {
-            savePlace(place);
+            addPlace(place);
           }}
         >
           收藏景點
