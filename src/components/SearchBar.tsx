@@ -15,14 +15,14 @@ import "../assets/scss/searchBar.scss";
 
 interface Props {
   autoCompleteRef: MutableRefObject<AutoComplete | undefined>;
-  onPlaceChanged: () => void;
   onSearchTypeChanged: (key: string) => void;
+  onPlaceChanged: () => void;
 }
 
 const SearchBar: React.FunctionComponent<Props> = ({
   autoCompleteRef,
-  onPlaceChanged,
   onSearchTypeChanged,
+  onPlaceChanged,
 }) => {
   const items: TabsProps["items"] = [
     {
