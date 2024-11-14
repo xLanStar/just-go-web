@@ -34,7 +34,7 @@ const Explore: React.FunctionComponent = () => {
   } = useGoogleMapService();
   const { placeType, changePlaceType } = useSearchBar();
   const { placeDetail, getPlaceDetail } = usePlaceDetail();
-  const { collection, addPlace } = useCollection();
+  const { collection, addPlace, addPlaceToTrip, deletePlace } = useCollection();
 
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [showPlaceInfo, setShowPlaceInfo] = useState<boolean>(false);
@@ -139,6 +139,8 @@ const Explore: React.FunctionComponent = () => {
         <Collection
           places={collection}
           closeCollection={() => setShowCollection(false)}
+          addPlaceToTrip={addPlaceToTrip}
+          deletePlace={deletePlace}
         />
       ) : null}
     </Flex>

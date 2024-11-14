@@ -16,12 +16,12 @@ interface Props {
 const CollectionV2: React.FunctionComponent<Props> = ({
   places,
   closeCollection,
-  mode
+  mode,
 }) => {
   return (
-    <Flex className="collection" vertical justify="flex-start" align="center">
+    <Flex className="collection2" vertical justify="flex-start" align="center">
       <Flex
-        className="collection_header"
+        className="collection2_header"
         vertical={false}
         justify="flex-start"
         align="center"
@@ -29,14 +29,14 @@ const CollectionV2: React.FunctionComponent<Props> = ({
           backgroundColor: Color.blue,
         }}
       >
-        <h1 className="collection_title">我的收藏</h1>
+        <h1 className="collection2_title">我的收藏</h1>
         <CloseOutlined
           className="collection_close_button"
           onClick={() => closeCollection()}
         />
       </Flex>
       <Flex
-        className="collection_content"
+        className="collection2_content"
         vertical
         justify="flex-start"
         align="center"
