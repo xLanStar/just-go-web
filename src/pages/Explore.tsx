@@ -117,6 +117,7 @@ const Explore: React.FunctionComponent = () => {
         onPlaceChanged={onPlaceChanged}
       />
       <Map
+        mode="Explore"
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={markList}
@@ -132,12 +133,13 @@ const Explore: React.FunctionComponent = () => {
         <PlaceInfo
           place={placeDetail}
           onPlaceInfoClose={() => setShowPlaceInfo(false)}
-          addPlace={addPlace} // 有 Bug，先註解
+          addPlace={addPlace}
         />
       ) : null}
       {showCollection ? (
         <Collection
           places={collection}
+          mode="Explore"
           closeCollection={() => setShowCollection(false)}
           addPlaceToTrip={addPlaceToTrip}
           deletePlace={deletePlace}

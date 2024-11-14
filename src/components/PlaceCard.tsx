@@ -8,7 +8,7 @@ import "../assets/scss/placeCard.scss";
 
 interface Props {
   place: Place;
-  mode: string; // Edit or Explore
+  mode: "Edit" | "Explore";
   addPlaceToTrip: () => void;
   deletePlace: (place: Place) => void;
 }

@@ -8,6 +8,7 @@ import "../assets/scss/collection.scss";
 
 interface Props {
   places: Place[];
+  mode: "Edit" | "Explore";
   closeCollection: () => void;
   addPlaceToTrip: () => void;
   deletePlace: (place: Place) => void;
@@ -15,6 +16,7 @@ interface Props {
 
 const Collection: React.FunctionComponent<Props> = ({
   places,
+  mode,
   closeCollection,
   addPlaceToTrip,
   deletePlace,
@@ -46,7 +48,7 @@ const Collection: React.FunctionComponent<Props> = ({
           <PlaceCard
             key={place.placeId}
             place={place}
-            mode={"Edit"}
+            mode={mode}
             addPlaceToTrip={addPlaceToTrip}
             deletePlace={deletePlace}
           />
