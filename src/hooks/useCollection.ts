@@ -15,12 +15,16 @@ const useCollection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await request.get("/api/trips/collections");
+        const collectionResponse = await request.get("/api/trips/collections");
+        const placeIdList = collectionResponse.data.map(
+          (place: any) => place.googlePlaceId
+        );
 
-        const placeIdList = response.data.map((place: any) => place.place_id);
-        console.log(placeIdList);
+        const placeResponse = await request.post("/api/places", {
+          googlePlaceIdList: placeIdList,
+        });
 
-        // 需要把 placeIdList 轉換成 Place[]
+        setCollection(placeResponse.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 401) {
@@ -45,11 +49,14 @@ const useCollection = () => {
       });
 
       setCollection([...collection, place]);
+      message.success("收藏成功");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
           message.error("請重新登入");
           logout();
+        } else if (error.response?.status === 409) {
+          message.error("該景點已在收藏中");
         } else {
           message.error("系統發生錯誤");
         }
@@ -66,9 +73,10 @@ const useCollection = () => {
         data: { googlePlaceId: place.placeId },
       });
       const newCollection = collection.filter(
-        (place) => place.placeId !== place.placeId
+        (oldPlace) => oldPlace.placeId !== place.placeId
       );
       setCollection(newCollection);
+      message.success("刪除成功");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -84,7 +92,9 @@ const useCollection = () => {
     }
   };
 
-  return { collection, addPlace, deletePlace };
+  const addPlaceToTrip = () => {};
+
+  return { collection, addPlace, addPlaceToTrip, deletePlace };
 };
 
 export default useCollection;

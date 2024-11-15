@@ -5,8 +5,12 @@ import {
   Mark,
   PlacesService,
 } from "../types/googleMapInterface";
-import { GoogleMap, MarkerClusterer, MarkerF } from "@react-google-maps/api";
-
+import {
+  GoogleMap,
+  MarkerClusterer,
+  MarkerF,
+  Polyline,
+} from "@react-google-maps/api";
 import "../assets/scss/map.scss";
 import blueDot from "../assets/image/blueDot.png";
 import cluster from "../assets/image/cluster.png";
@@ -47,19 +51,19 @@ const clusterStyles = [
 ];
 
 interface Props {
+  mode: "Edit" | "Explore";
   mapRef: MutableRefObject<google.maps.Map | undefined>;
   placesServiceRef: MutableRefObject<PlacesService | undefined>;
   markList: Mark[];
   onMarkerClicked: (placeId: string) => void;
 }
 
-
-
 const Map: React.FunctionComponent<Props> = ({
   mapRef,
   placesServiceRef,
   markList,
   onMarkerClicked,
+  mode,
 }) => {
   return (
     <div className="map">
@@ -71,47 +75,75 @@ const Map: React.FunctionComponent<Props> = ({
           height: "100%",
         }}
         onLoad={(map) => {
-          console.log("Maps API has loaded.");
-          //paintRoute(map)
           mapRef.current = map;
           placesServiceRef.current = new google.maps.places.PlacesService(map);
-          
         }}
         options={options}
       >
-        <MarkerClusterer
-          options={{
-            gridSize: 50,
-            maxZoom: 17,
-            styles: clusterStyles,
-          }}
-        >
-          {(clusterer) => (
-            <>
-              {markList.map((mark) => (
-                <MarkerF
-                  key={mark.placeId}
-                  position={mark.location}
-                  clusterer={clusterer}
-                  icon={{
-                    url: blueDot,
-                  }}
-                  label={{
-                    text: mark.name,
-                    color: "blue",
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    className: "map_marker",
-                  }}
-                  onClick={() => {
-                    mapRef.current?.panTo(mark.location);
-                    onMarkerClicked(mark.placeId);
-                  }}
-                />
-              ))}
-            </>
-          )}
-        </MarkerClusterer>
+        {mode === "Explore" ? (
+          <MarkerClusterer
+            options={{
+              gridSize: 50,
+              maxZoom: 17,
+              styles: clusterStyles,
+            }}
+          >
+            {(clusterer) => (
+              <>
+                {markList.map((mark) => (
+                  <MarkerF
+                    key={mark.placeId}
+                    position={mark.location}
+                    clusterer={clusterer}
+                    icon={{
+                      url: blueDot,
+                    }}
+                    label={{
+                      text: mark.name,
+                      color: "blue",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      className: "map_marker",
+                    }}
+                    onClick={() => {
+                      mapRef.current?.panTo(mark.location);
+                      onMarkerClicked(mark.placeId);
+                    }}
+                  />
+                ))}
+              </>
+            )}
+          </MarkerClusterer>
+        ) : (
+          <>
+            {markList.map((mark) => (
+              <MarkerF
+                key={mark.placeId}
+                position={mark.location}
+                icon={{ url: blueDot }}
+                label={{
+                  text: mark.name,
+                  color: "blue",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  className: "map_marker",
+                }}
+                onClick={() => {
+                  mapRef.current?.panTo(mark.location);
+                  onMarkerClicked(mark.placeId);
+                }}
+              />
+            ))}
+            <Polyline
+              path={markList.map((mark) => mark.location)}
+              options={{
+                strokeColor: "blue",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+              }}
+            />
+          </>
+        )}
       </GoogleMap>
     </div>
   );

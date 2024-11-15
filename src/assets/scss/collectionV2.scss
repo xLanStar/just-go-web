@@ -1,4 +1,4 @@
-.collection {
+.collection2 {
   width: 400px;
   height: 100%;
   position: absolute;
@@ -8,8 +8,7 @@
   z-index: 3;
 }
 
-
-.collection_header {
+.collection2_header {
   width: 400px;
   height: 64px;
   padding-left: 24px;
@@ -18,12 +17,12 @@
   z-index: 4;
 }
 
-.collection_title {
+.collection2_title {
   color: white;
   font-weight: bold;
 }
 
-.collection_close_button {
+.collection2_close_button {
   font-size: 20px;
   color: white;
   position: absolute;
@@ -31,24 +30,23 @@
   cursor: pointer;
 }
 
-.collection_content {
+.collection2_content {
   width: 100%;
   overflow-y: auto;
   margin-top: 64px;
   padding-bottom: 24px;
 }
 
-.collection_content::-webkit-scrollbar {
+.collection2_content::-webkit-scrollbar {
   display: none;
 }
 
-
 @media screen and (max-width: 575px) {
-  .collection {
+  .collection2 {
     width: 100%;
   }
 
-  .collection_header {
+  .collection2_header {
     width: 100%;
   }
 }
