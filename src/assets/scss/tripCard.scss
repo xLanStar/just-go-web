@@ -1,91 +1,110 @@
-.ant-card-body {
-  padding: 12px !important;
+.trip-card {
+  .ant-card-body {
+    padding: 12px !important;
+    height: calc(100% - 180px - 48.75px);
+  }
 }
 
-.trip_card {
+.trip-card {
   width: 280px;
   border-radius: 12px;
 }
 
-.trip_card_image_box {
-  width: 100%;
+.trip-card-image-container {
   cursor: pointer;
+  text-align: center;
 }
 
-.trip_card_image {
-  width: 240px;
+.trip-card-image {
+  width: 100%;
   height: 180px;
+  object-fit: cover;
   border-radius: 8px;
 }
 
-.trip_card_title_box,
-.trip_card_day_box {
-  width: 100%;
-  height: 52px;
-  padding: 4px 0px;
-}
-
-.trip_card_day {
-  color: #9C9C9C;
-}
-
-.trip_card_user_box {
-  cursor: pointer;
-}
-
-.trip_card_avatar,
-.trip_card_label {
-  width: 100%;
-  height: 41px;
-  padding: 4px 0px;
-}
-
-.trip_card_label_box {
-  padding-right: 4px;
-}
-
-.trip_card_label_name {
-  color: white;
-  background-color: #97CBFF;
-  padding: 4px 8px;
-  border-radius: 20px;
-  text-align: center;
+.trip-card-title {
+  font-size: 18px;
+  font-weight: bold;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trip-card-title-box {
+  width: 100%;
+  height: 100%;
+}
+
+.trip-card-content-header {
+  width: 100%;
+  height: 100%;
+}
+
+.trip-card-days {
+  font-size: 14px;
+  color: #9c9c9c;
+  text-align: right;
+}
+
+.trip-card-user {
+  width: 100%;
+  height: 100%;
+}
+
+.trip-card-username {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.trip-card-labels {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
   overflow-x: hidden;
-  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 4px 0;
 
   &:hover {
     overflow-x: auto;
   }
 
-  &::-webkit-scrollbar{
-    height: 2px;
+  &::-webkit-scrollbar {
+    height: 4px;
+    background: transparent;
   }
+
   &::-webkit-scrollbar-track {
-    background-color: #D9D9D9;
-    border-radius: 12px;
+    background: #f0f0f0;
   }
-  &::-webkit-scrollbar-thumb{
-    border-radius: 12px;
-    background-color: #9C9C9C;
+
+  &::-webkit-scrollbar-thumb {
+    background: #9c9c9c;
+    border-radius: 2px;
   }
 }
 
-.trip_card_day_or_label_box {
-  padding-right: 12px;
+.trip-card-label {
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.trip_card_day_or_label,
-.trip_card_action_box {
-  width: 100%;
-  height: 41px;
-}
-
-.trip_card_action {
+.trip-card-publish-day {
   width: 100%;
   height: 100%;
+  font-size: 12px;
+  color: #9c9c9c;
 }
 
-.trip_card_action_icon {
-  font-size: 24px;
+.trip-card-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 16px;
+
+  span {
+    font-size: 14px;
+    color: #000;
+  }
 }

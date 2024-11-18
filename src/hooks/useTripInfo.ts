@@ -52,11 +52,12 @@ const useTripInfo = (type: string) => {
     }
 
     try {
-      const response = await request.put(`/api/trips/${id}/favor`);
-      const isLike = response.data;
+      const response: any = await request.post(`/api/trips/${id}/favor`);
+      const isLike = response.isLike;
       trip.like = isLike ? trip.like + 1 : trip.like - 1;
       trip.isLike = isLike;
       setTrips([...trips]);
+      message.success(isLike ? "已加入收藏" : "已取消收藏");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
@@ -107,6 +108,7 @@ const useTripInfo = (type: string) => {
           "Content-Type": "multipart/form-data",
         },
       });
+      message.success("建立成功");
       navigate("/edit");
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { Card, Row, Col, Flex, Avatar } from "antd";
+import { Card, Avatar, Row, Col, Tooltip, Tag, Flex } from "antd";
 import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
 import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
+import { useAppSelector } from "../hooks";
 
 import "../assets/scss/tripCard.scss";
 
@@ -13,7 +14,7 @@ interface Props {
   isPublic: boolean;
   isDelete: boolean;
   toggleFavor: (id: string) => void;
-  removeTrip: (id: string) => void;
+  deleteTrip: (id: string) => void;
 }
 
 const TripCard: React.FunctionComponent<Props> = ({
@@ -22,168 +23,109 @@ const TripCard: React.FunctionComponent<Props> = ({
   isPublic,
   isDelete,
   toggleFavor,
-  removeTrip,
+  deleteTrip,
 }) => {
   const navigate = useNavigate();
 
-  const clickLike = () => {
-    toggleFavor(trip.id);
-  };
+  const user = useAppSelector((state) => state.user.user);
 
-  const clickDelete = () => {
-    removeTrip(trip.id);
-  };
+  const labels = ["美食", "景點", "住宿", "交通", "活動"];
+
+  console.log("trip", trip);
 
   return (
     <Card
-      className="trip_card"
-      style={
-        mode === TripInfoMode.Private
-          ? {
-              height: "300px",
-            }
-          : {
-              height: "340px",
-            }
+      className="trip-card"
+      style={{ height: mode === TripInfoMode.Private ? "350px" : "380px" }}
+      cover={
+        <div
+          className="trip-card-image-container"
+          onClick={() => navigate("/edit")}
+        >
+          <img className="trip-card-image" src={trip.image} alt="trip" />
+        </div>
       }
+      actions={[
+        isPublic && (
+          <Tooltip title="點讚">
+            <Flex
+              vertical={false}
+              justify="center"
+              align="center"
+              gap="small"
+              onClick={() => toggleFavor(trip.id)}
+            >
+              {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+              <span>{trip.like > 999 ? "999+" : trip.like}</span>
+            </Flex>
+          </Tooltip>
+        ),
+        isDelete && (
+          <Tooltip title="刪除">
+            <DeleteOutlined
+              onClick={() => deleteTrip(trip.id)}
+              className="trip-card-action"
+            />
+          </Tooltip>
+        ),
+      ]}
     >
       <Flex
-        className="trip_card_image_box"
+        className="trip-card-body"
         vertical
-        justify="center"
+        justify="flex-start"
         align="center"
-        onClick={() => {
-          navigate("/edit");
-        }}
+        gap={4}
       >
-        <img className="trip_card_image" src={trip.image} alt="image" />
-      </Flex>
-      <Row>
-        <Col span={16}>
-          <Flex
-            className="trip_card_title_box"
-            vertical={false}
-            justify="flex-start"
-            align="center"
-          >
-            <h1>{trip.title}</h1>
-          </Flex>
-        </Col>
-        <Col span={8}>
-          <Flex
-            className="trip_card_day_box"
-            vertical={false}
-            justify="flex-end"
-            align="center"
-          >
-            <h3 className="trip_card_day">
-              {trip.day > 30 ? 30 : trip.day} 天的行程
-            </h3>
-          </Flex>
-        </Col>
-      </Row>
-      {mode === TripInfoMode.Public ? (
-        <Row>
-          <Col
-            span={14}
-            className="trip_card_user_box"
-            onClick={() => {
-              navigate(`/user/${trip.userId}`);
-            }}
-          >
-            <Flex
-              className="trip_card_avatar"
-              vertical={false}
-              justify="flex-start"
-              align="center"
-              gap="small"
-            >
-              <Avatar
-                src={<img src="src/assets/image/avatar.jpg" alt="avatar" />}
-                size={36}
-              />
-              <h2>{trip.user}</h2>
-            </Flex>
+        <Row
+          className="trip-card-title-box"
+          justify="space-between"
+          align="middle"
+        >
+          <Col span={16}>
+            <h2 className="trip-card-title">{trip.title}</h2>
           </Col>
-          <Col className="trip_card_label_box" span={10}>
-            <Flex
-              className="trip_card_label"
-              vertical={false}
-              justify="flex-start"
-              align="center"
-              gap="small"
-            >
-              {trip.labels.map((label, index) => (
-                <h3 className="trip_card_label_name" key={index}>
-                  {label}
-                </h3>
-              ))}
-            </Flex>
+          <Col span={8}>
+            <div className="trip-card-days">
+              {trip.day > 30 ? "30+" : trip.day} 天的行程
+            </div>
           </Col>
         </Row>
-      ) : null}
-      <Row>
-        <Col className="trip_card_day_or_label_box" span={isPublic ? 16 : 20}>
+        <Flex
+          className="trip-card-user"
+          vertical={false}
+          justify="flex-start"
+          align="center"
+          gap="small"
+          onClick={() => navigate(`/user/${trip.userId}`)}
+        >
+          <Avatar src={user.avatar} size={36} />
+          <span className="trip-card-username">{user.name}</span>
+        </Flex>
+        <Flex
+          className="trip-card-labels"
+          vertical={false}
+          justify="flex-start"
+          align="center"
+          gap="small"
+        >
+          {labels.map((label, index) => (
+            <Tag key={index} color="blue" className="trip-card-label">
+              {label}
+            </Tag>
+          ))}
+        </Flex>
+        {mode === TripInfoMode.Public && (
           <Flex
-            className="trip_card_day_or_label"
+            className="trip-card-publish-day"
             vertical={false}
             justify="flex-start"
             align="center"
-            gap="small"
           >
-            {mode === TripInfoMode.Private ? (
-              <>
-                {trip.labels.map((label, index) => (
-                  <h3 className="trip_card_label_name" key={index}>
-                    {label}
-                  </h3>
-                ))}
-              </>
-            ) : (
-              <h3>{trip.publishDay} 發佈</h3>
-            )}
+            {trip.publishDay} 發佈
           </Flex>
-        </Col>
-        <Col span={isPublic ? 8 : 4}>
-          <Flex
-            className="trip_card_action_box"
-            vertical={false}
-            justify="flex-end"
-            align="center"
-            gap="small"
-          >
-            {isPublic && (
-              <Flex
-                className="trip_card_action"
-                vertical={false}
-                justify="flex-end"
-                align="center"
-                gap="small"
-              >
-                {trip.isLike ? (
-                  <LikeTwoTone
-                    className="trip_card_action_icon"
-                    onClick={clickLike}
-                  />
-                ) : (
-                  <LikeOutlined
-                    className="trip_card_action_icon"
-                    onClick={clickLike}
-                  />
-                )}
-
-                <h3>{trip.like > 999 ? "999+" : trip.like}</h3>
-              </Flex>
-            )}
-            {isDelete && (
-              <DeleteOutlined
-                className="trip_card_action_icon"
-                onClick={clickDelete}
-              />
-            )}
-          </Flex>
-        </Col>
-      </Row>
+        )}
+      </Flex>
     </Card>
   );
 };
