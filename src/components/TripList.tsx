@@ -31,10 +31,10 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                 <TripCard
                   trip={trip}
                   mode={TripInfoMode.Private}
-                  isPublic={false}
+                  isPublic={true}
                   isDelete={true}
-                  toggleFavor={() => favorTrip(trip.id)}
-                  removeTrip={() => deleteTrip(trip.id)}
+                  toggleFavor={favorTrip}
+                  deleteTrip={deleteTrip}
                 />
               ) : null}
               {type === "coEdit" ? (
@@ -43,8 +43,8 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                   mode={TripInfoMode.Private}
                   isPublic={false}
                   isDelete={false}
-                  toggleFavor={() => favorTrip(trip.id)}
-                  removeTrip={() => deleteTrip(trip.id)}
+                  toggleFavor={favorTrip}
+                  deleteTrip={deleteTrip}
                 />
               ) : null}
               {type === "keep" ? (
@@ -53,8 +53,8 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                   mode={TripInfoMode.Private}
                   isPublic={false}
                   isDelete={false}
-                  toggleFavor={() => favorTrip(trip.id)}
-                  removeTrip={() => deleteTrip(trip.id)}
+                  toggleFavor={favorTrip}
+                  deleteTrip={deleteTrip}
                 />
               ) : null}
               {type === "public" ? (
@@ -63,8 +63,8 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                   mode={TripInfoMode.Public}
                   isPublic={true}
                   isDelete={false}
-                  toggleFavor={() => favorTrip(trip.id)}
-                  removeTrip={() => deleteTrip(trip.id)}
+                  toggleFavor={favorTrip}
+                  deleteTrip={deleteTrip}
                 />
               ) : null}
             </Flex>
