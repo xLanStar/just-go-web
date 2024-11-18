@@ -8,8 +8,6 @@ import TripTabList from "../components/TripTabList";
 import TripList from "../components/TripList";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-import "../assets/scss/dashboard.scss";
-
 const Dashboard: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -28,7 +26,15 @@ const Dashboard: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <Flex className="dashboard" vertical justify="flex-start" align="center">
+    <Flex
+      className="dashboard"
+      vertical
+      justify="flex-start"
+      align="center"
+      style={{
+        width: "100%",
+      }}
+    >
       <UserInfo user={user} />
       <TripTabList
         tabMode={tabMode}
