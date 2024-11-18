@@ -117,7 +117,7 @@ const Explore: React.FunctionComponent = () => {
         onPlaceChanged={onPlaceChanged}
       />
       <Map
-        mode="Explore"
+        mode="Clusterer"
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={markList}

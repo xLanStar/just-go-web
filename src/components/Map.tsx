@@ -51,7 +51,7 @@ const clusterStyles = [
 ];
 
 interface Props {
-  mode: "Edit" | "Explore";
+  mode: "Clusterer" | "Polyline";
   mapRef: MutableRefObject<google.maps.Map | undefined>;
   placesServiceRef: MutableRefObject<PlacesService | undefined>;
   markList: Mark[];
@@ -80,7 +80,7 @@ const Map: React.FunctionComponent<Props> = ({
         }}
         options={options}
       >
-        {mode === "Explore" ? (
+        {mode === "Clusterer" ? (
           <MarkerClusterer
             options={{
               gridSize: 50,

@@ -1,4 +1,10 @@
 .collection {
+  .ant-card-body {
+    padding: 12px !important;
+  }
+}
+
+.collection {
   width: 400px;
   height: calc(100vh - 64px);
   position: absolute;

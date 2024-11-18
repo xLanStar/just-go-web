@@ -5,10 +5,14 @@ import request from "../utils/request";
 import { App } from "antd";
 import axios from "axios";
 import { TripInfo } from "../types/tripInterface";
+import useAuth from "./useAuth";
 
 const useTripInfo = (type: string) => {
-  const [trips, setTrips] = useState<TripInfo[]>([]);
   const { message } = App.useApp();
+
+  const { logout } = useAuth();
+
+  const [trips, setTrips] = useState<TripInfo[]>([]);
   const user = useAppSelector((state) => state.user.user);
   const navigate = useNavigate();
 
@@ -31,9 +35,8 @@ const useTripInfo = (type: string) => {
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.status === 401) {
-            localStorage.removeItem("user");
-            localStorage.removeItem("jwtToken");
-            navigate("/signin", { replace: true });
+            message.error("請重新登入");
+            logout();
           } else if (error.status === 500) {
             message.error("系統發生錯誤");
           }
@@ -61,7 +64,8 @@ const useTripInfo = (type: string) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
-          navigate("/signin", { replace: true });
+          message.error("請重新登入");
+          logout();
         } else if (error.status === 500) {
           message.error("系統發生錯誤");
         }
@@ -76,7 +80,8 @@ const useTripInfo = (type: string) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
-          navigate("/signin", { replace: true });
+          message.error("請重新登入");
+          logout();
         } else if (error.status === 500) {
           message.error("系統發生錯誤");
         }
@@ -113,9 +118,8 @@ const useTripInfo = (type: string) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
-          localStorage.removeItem("user");
-          localStorage.removeItem("jwtToken");
-          navigate("/signin", { replace: true });
+          message.error("請重新登入");
+          logout();
         } else if (error.status === 500) {
           message.error("系統發生錯誤");
         }

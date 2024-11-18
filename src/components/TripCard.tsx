@@ -40,7 +40,7 @@ const TripCard: React.FunctionComponent<Props> = ({
       cover={
         <div
           className="trip-card-image-container"
-          onClick={() => navigate("/edit")}
+          onClick={() => navigate(`/trip/${trip.id}`)}
         >
           <img className="trip-card-image" src={trip.image} alt="trip" />
         </div>

@@ -79,7 +79,7 @@ const useAuth = () => {
       await axios.post("/api/auth/register", {
         username: name,
         email,
-        password
+        password,
       });
 
       message.success("註冊成功");
@@ -101,11 +101,10 @@ const useAuth = () => {
   const logout = () => {
     removeItem("user");
     removeItem("jwtToken");
-    message.success("登出成功");
     navigate("/signin", { replace: true });
-  }
+  };
 
   return { signin, googleSignin, register, logout };
-}
+};
 
 export default useAuth;

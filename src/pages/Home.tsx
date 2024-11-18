@@ -7,7 +7,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import TripList from "../components/TripList";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-import "../assets/scss/home.scss"
+import "../assets/scss/home.scss";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
