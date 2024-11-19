@@ -3,7 +3,11 @@ import { Flex, FloatButton } from "antd";
 import { useAppDispatch } from "../hooks";
 import { useEffect, useState } from "react";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { BookOutlined, RobotOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  RobotOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import ChatBox from "../components/ChatBox";
 import { useGoogleMap } from "../components/GoogleMapProvider";
 import Map from "../components/Map";
@@ -13,6 +17,7 @@ import useCollection from "../hooks/useCollection";
 import Collection from "../components/Collection";
 import { Mark } from "../types/googleMapInterface";
 import useTrip from "../hooks/useTrip";
+import PlanList from "../components/PlanList";
 
 import "../assets/scss/tripEdit.scss";
 
@@ -26,9 +31,13 @@ const TripEdit: React.FunctionComponent = () => {
   const { getItem } = useLocalStorage();
   const { mapRef, placesServiceRef } = useGoogleMapService();
   const { collection, addPlaceToTrip, deletePlace } = useCollection();
-  const { test } = useTrip(id as string);
+  const { tripInfo, plans } = useTrip(id as string);
+
+  console.log("tripInfo", tripInfo);
+  console.log("plans", plans);
 
   const [markList, setMarkList] = useState<Mark[]>([]);
+  const [showPlanList, setShowPlanList] = useState<boolean>(false);
   const [showChatBox, setShowChatBox] = useState<boolean>(false);
   const [showCollection, setShowCollection] = useState<boolean>(false);
 
@@ -59,6 +68,11 @@ const TripEdit: React.FunctionComponent = () => {
         mode="Polyline"
       />
       <FloatButton
+        className="trip_edit_plan_button"
+        icon={<UnorderedListOutlined />}
+        onClick={() => setShowPlanList(true)}
+      />
+      <FloatButton
         className="trip_edit_chatbox_button"
         type="primary"
         icon={<RobotOutlined />}
@@ -70,6 +84,9 @@ const TripEdit: React.FunctionComponent = () => {
         icon={<BookOutlined />}
         onClick={() => setShowCollection(true)}
       />
+      {showPlanList ? (
+        <PlanList closePlanList={() => setShowPlanList(false)} />
+      ) : null}
       {showChatBox ? (
         <ChatBox
           placesServiceRef={placesServiceRef}

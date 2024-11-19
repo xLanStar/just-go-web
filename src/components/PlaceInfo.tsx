@@ -35,9 +35,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
         <h1 className="place_info_title">{place.name}</h1>
         <CloseOutlined
           className="place_info_close_button"
-          onClick={() => {
-            onPlaceInfoClose();
-          }}
+          onClick={onPlaceInfoClose}
         />
       </Flex>
       <div className="place_info_content">

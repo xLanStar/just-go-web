@@ -1,7 +1,8 @@
 export interface TripInfo {
   id: string;
-  user: string;
   userId: string;
+  username: string;
+  avatar: string;
   title: string;
   image: string;
   day: number;
@@ -14,7 +15,7 @@ export interface TripInfo {
 
 export interface Trip {
   tripInfo: TripEditInfo;
-  plans: plan[];
+  plans: Plan[];
 }
 
 export interface TripEditInfo {
@@ -33,7 +34,7 @@ export interface TripEditInfo {
   publishDay: string;
 }
 
-export interface plan {
+export interface Plan {
   id: string;
   name: string;
   days: Day[];

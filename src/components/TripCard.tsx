@@ -4,7 +4,6 @@ import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
 import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
-import { useAppSelector } from "../hooks";
 
 import "../assets/scss/tripCard.scss";
 
@@ -26,12 +25,6 @@ const TripCard: React.FunctionComponent<Props> = ({
   deleteTrip,
 }) => {
   const navigate = useNavigate();
-
-  const user = useAppSelector((state) => state.user.user);
-
-  const labels = ["美食", "景點", "住宿", "交通", "活動"];
-
-  console.log("trip", trip);
 
   return (
     <Card
@@ -99,8 +92,8 @@ const TripCard: React.FunctionComponent<Props> = ({
           gap="small"
           onClick={() => navigate(`/user/${trip.userId}`)}
         >
-          <Avatar src={user.avatar} size={36} />
-          <span className="trip-card-username">{user.name}</span>
+          <Avatar src={trip.avatar} size={36} />
+          <span className="trip-card-username">{trip.username}</span>
         </Flex>
         <Flex
           className="trip-card-labels"
@@ -109,7 +102,7 @@ const TripCard: React.FunctionComponent<Props> = ({
           align="center"
           gap="small"
         >
-          {labels.map((label, index) => (
+          {trip.labels.map((label, index) => (
             <Tag key={index} color="blue" className="trip-card-label">
               {label}
             </Tag>

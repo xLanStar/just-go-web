@@ -1,64 +1,84 @@
-import { PlusOutlined, RollbackOutlined, StarOutlined } from "@ant-design/icons"
-import { Button, Layout, List } from "antd"
-import { useState } from "react"
+import { Button, Flex, List } from "antd";
+import React from "react";
+import { useAppSelector } from "../hooks";
+import { CloseOutlined, PlusOutlined, StarOutlined } from "@ant-design/icons";
+
 import "../assets/scss/planList.scss";
-import { useAppDispatch } from "../hooks";
-import { setColorStyle } from "../store/Planning/PlanSlice";
 
-const colorList = ["#12d198","#EA0000", "#7373B9", "#FF8000", "#272727", "#AD5A5A", "#8600FF", "#FFD306", "#8CEA00"]
-const data = [
-    {
-        planName: '方案一',
-        colorStyle: colorList[0],
-        icon: <StarOutlined/>
-    },
-    {
-        planName: '方案二',
-        colorStyle: colorList[1]
-    },
-    {
-        planName: '方案三',
-        colorStyle: colorList[2]
-    },
-    {
-        planName: '方案四',
-        colorStyle: colorList[3]
-    },
-    {
-        planName: '建立新方案',
-        colorStyle: colorList[4],
-        icon: <PlusOutlined/>
-    },
+const colorList = [
+  "#12d198",
+  "#EA0000",
+  "#7373B9",
+  "#FF8000",
+  "#272727",
+  "#AD5A5A",
+  "#8600FF",
+  "#FFD306",
+  "#8CEA00",
 ];
-export const PlanList = () => {
-    const [Plans, setPlans] = useState<number>(0)
-    const dispatch = useAppDispatch();
 
-    return (
-        <Layout className="planList" id="planList">
-            <RollbackOutlined className="planList-back" />
-            <List
-                split={false}
-                dataSource={data}
-                renderItem={(item) => (
-                    <List.Item>
-                        <Button
-                            icon = {item.icon}
-                            style = {{
-                                width: "100%",
-                                padding: "20px",
-                                textAlign: "center",
-                                color:item.colorStyle
-                            }}
-                            onClick={() => {
-                                document.getElementById("planDetail")!.style.display = 'flex';
-                                document.getElementById("planList")!.style.display = 'none';
-                                dispatch(setColorStyle(item.colorStyle));
-                            }}
-                        >{item.planName}</Button>
-                    </List.Item>
-                )}
-            />
-        </Layout>
-    )
+interface Props {
+  closePlanList: () => void;
 }
+
+const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
+  const tripInfo = useAppSelector((state) => state.trip.tripInfo);
+  const plans = useAppSelector((state) => state.trip.plans);
+
+  return (
+    <Flex className="plan-list" vertical justify="flex-start" align="center">
+      <Flex
+        className="plan-list-header"
+        vertical={false}
+        justify="flex-start"
+        align="center"
+      >
+        <h1 className="plan-list-title">我的方案</h1>
+        <CloseOutlined
+          className="plan-list-close-button"
+          onClick={closePlanList}
+        />
+      </Flex>
+      <div className="plan-list-content">
+        <List split={false}>
+          {plans.map((plan, index) => (
+            <List.Item key={plan.id}>
+              <Flex
+                className="plan-list-button-box"
+                vertical={false}
+                justify="center"
+                align="center"
+              >
+                <Button
+                  className="plan-list-button"
+                  icon={
+                    plan.id === tripInfo.finalPlanId ? <StarOutlined /> : null
+                  }
+                  style={{
+                    color: colorList[index % 9],
+                  }}
+                >
+                  {plan.name ? plan.name : "未命名方案"}
+                </Button>
+              </Flex>
+            </List.Item>
+          ))}
+          <List.Item>
+            <Flex
+              className="plan-list-button-box"
+              vertical={false}
+              justify="center"
+              align="center"
+            >
+              <Button className="plan-list-button" icon={<PlusOutlined />}>
+                建立新方案
+              </Button>
+            </Flex>
+          </List.Item>
+        </List>
+      </div>
+    </Flex>
+  );
+};
+
+export default PlanList;

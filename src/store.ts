@@ -4,13 +4,15 @@ import pageSlice from "./store/page/pageSlice";
 import CurrentViewpointSlice from "./store/viewpointExplore/CurrentViewpointSlice";
 import SearchPropsSlice from "./store/viewpointExplore/searchPropsSlice";
 import currentPlanSlice from "./store/Planning/PlanSlice";
+import tripSlice from "./store/trip/tripSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   page: pageSlice.reducer,
   currentViewpoint: CurrentViewpointSlice.reducer,
-  searchProps:SearchPropsSlice.reducer,
+  searchProps: SearchPropsSlice.reducer,
   currentPlan: currentPlanSlice.reducer,
+  trip: tripSlice.reducer,
 });
 
 const store = configureStore({
