@@ -7,7 +7,7 @@ import { Place } from "../types/googleMapInterface";
 import "../assets/scss/collection.scss";
 
 interface Props {
-  places: Place[];
+  collection: string[];
   mode: "Edit" | "Explore";
   closeCollection: () => void;
   addPlaceToTrip: () => void;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Collection: React.FunctionComponent<Props> = ({
-  places,
+  collection,
   mode,
   closeCollection,
   addPlaceToTrip,
@@ -44,10 +44,10 @@ const Collection: React.FunctionComponent<Props> = ({
         justify="flex-start"
         align="center"
       >
-        {places.map((place) => (
+        {collection.map((placeId) => (
           <PlaceCard
-            key={place.placeId}
-            place={place}
+            key={placeId}
+            placeId={placeId}
             mode={mode}
             addPlaceToTrip={addPlaceToTrip}
             deletePlace={deletePlace}

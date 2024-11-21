@@ -138,7 +138,7 @@ const Explore: React.FunctionComponent = () => {
       ) : null}
       {showCollection ? (
         <Collection
-          places={collection}
+          collection={collection}
           mode="Explore"
           closeCollection={() => setShowCollection(false)}
           addPlaceToTrip={addPlaceToTrip}

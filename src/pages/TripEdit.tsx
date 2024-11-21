@@ -95,7 +95,7 @@ const TripEdit: React.FunctionComponent = () => {
       ) : null}
       {showCollection ? (
         <Collection
-          places={collection}
+          collection={collection}
           mode="Edit"
           closeCollection={() => setShowCollection(false)}
           addPlaceToTrip={addPlaceToTrip}

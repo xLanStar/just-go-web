@@ -22,14 +22,8 @@ const usePlaceDetail = () => {
 
   const getPlaceDetail = async (placeId: string) => {
     try {
-      const response = await request.post("/api/places", {
-        googlePlaceIdList: [placeId],
-      });
-      const placeDetail = response.data[0];
-
-      console.log(placeDetail);
-
-      setPlaceDetail(placeDetail);
+      const response = await request.get(`/api/places/${placeId}`);
+      setPlaceDetail(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
