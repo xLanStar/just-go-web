@@ -1,7 +1,8 @@
 import { Button, Flex, List } from "antd";
-import React from "react";
+import { useState } from "react";
 import { useAppSelector } from "../hooks";
 import { CloseOutlined, PlusOutlined, StarOutlined } from "@ant-design/icons";
+import PlanDetail from "./PlanDetail";
 
 import "../assets/scss/planList.scss";
 
@@ -24,6 +25,10 @@ interface Props {
 const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
   const tripInfo = useAppSelector((state) => state.trip.tripInfo);
   const plans = useAppSelector((state) => state.trip.plans);
+
+  const [showPlanDetail, setShowPlanDetail] = useState<boolean>(false);
+  const [planColor, setPlanColor] = useState<string>("");
+  const [planId, setPlanId] = useState<string>("");
 
   return (
     <Flex className="plan-list" vertical justify="flex-start" align="center">
@@ -57,6 +62,11 @@ const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
                   style={{
                     color: colorList[index % 9],
                   }}
+                  onClick={() => {
+                    setPlanId(plan.id);
+                    setPlanColor(colorList[index % 9]);
+                    setShowPlanDetail(true);
+                  }}
                 >
                   {plan.name ? plan.name : "未命名方案"}
                 </Button>
@@ -77,6 +87,13 @@ const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
           </List.Item>
         </List>
       </div>
+      {showPlanDetail ? (
+        <PlanDetail
+          planId={planId}
+          color={planColor}
+          closePlanDetail={() => setShowPlanDetail(false)}
+        />
+      ) : null}
     </Flex>
   );
 };

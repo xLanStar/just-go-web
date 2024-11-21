@@ -1,138 +1,195 @@
+import { useEffect } from "react";
+import { ConfigProvider, Flex, Tabs } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import { ConfigProvider, Tabs } from "antd";
-import { useState } from "react";
-import "../assets/scss/planDetail.scss";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { AttractionData, DayData } from "../types/PlanUIInterface";
-import DayAttracionList from "./DayAttractionList";
-import { Place } from "../types/googleMapInterface";
+import useDays from "../hooks/useDays";
+import AttractionCard from "./AttractionCard";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { Plan } from "../types/tripInterface";
+import useAttractions from "../hooks/useAttractions";
+import {
+  setCurrentAttractions,
+  setCurrentDay,
+  setCurrentPlan,
+} from "../store/trip/tripSlice";
+import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
-type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
+import type { TabsProps } from "antd";
+
+import "../assets/scss/planDetail.scss";
 
 interface Props {
-    places: Place[][]
+  tripId: string;
+  plan: Plan;
+  color: string;
+  closePlanDetail: () => void;
 }
 
-export const PlanDetail = ({ places }: Props) => {
-    const colorStyle = useSelector((state: RootState) => state.currentPlan.value.colorStyle);
-    const [items, setItems] = useState(PlaceToAttraction(places).map((day, i) => {
-        return {
-            label: "第"+ (i+1) +"天",
-            key: String(i+1),
-            children: <DayAttracionList attractions={day.attractions} />
-        };
-    }));
+const PlanDetail: React.FunctionComponent<Props> = ({
+  tripId,
+  plan,
+  color,
+  closePlanDetail,
+}) => {
+  const dispatch = useAppDispatch();
 
-    const [activeKey, setActiveKey] = useState(items[0].key);
+  const currentDay = useAppSelector((state) => state.trip.currentDay);
 
-    const onChange = (newActiveKey: string) => {
-        setActiveKey(newActiveKey);
-    };
+  const { days } = useDays(tripId, plan.id);
+  const {
+    attractions,
+    loadAttractions,
+    deleteAttraction,
+    changeAttractionOrder,
+  } = useAttractions(tripId, plan.id);
 
-    const add = () => {
-        const newActiveKey = String(items.length + 1);
-        const newPanes = [...items];
-        newPanes.push({ label: "第"+ newActiveKey +"天", children: <DayAttracionList attractions={[]} />, key: newActiveKey });
-        setItems(newPanes);
-        setActiveKey(newActiveKey);
-    };
-
-    const remove = (targetKey: TargetKey) => {
-        let newActiveKey = activeKey;
-        let lastIndex = -1;
-        items.forEach((item, i) => {
-            if (item.key === targetKey) {
-                lastIndex = i - 1;
-            }
-        });
-        const newPanes = items.filter((item) => item.key !== targetKey);
-        if (newPanes.length && newActiveKey === targetKey) {
-            if (lastIndex >= 0) {
-                newActiveKey = newPanes[lastIndex].key;
-            } else {
-                newActiveKey = newPanes[0].key;
-            }
-        }
-        setItems(newPanes.map((pane, i) => {
-            return {
-                label: "第"+ (i + 1) +"天",
-                key: String(i + 1),
-                children: pane.children
-            };
-        }));
-        setActiveKey(newActiveKey);
-    };
-
-    const onEdit = (
-        targetKey: React.MouseEvent | React.KeyboardEvent | string,
-        action: 'add' | 'remove',
-    ) => {
-        if (action === 'add') {
-            add();
-        } else {
-            remove(targetKey);
-        }
-    };
-
-    return (
-        <div className="planDetail" id="planDetail">
-            <div className="planDetail-header">
-                <h3 style={{ color: colorStyle }}>{/* planName */}</h3>
-                <LeftOutlined
-                    className="planDetail-header-back"
-                    style={{ color: colorStyle }}
-                    onClick={() => {
-                        document.getElementById("planList")!.style.display = 'flex';
-                        document.getElementById("planDetail")!.style.display = 'none';
-                    }}
-                />
-            </div>
-            <div className="planDetail-content">
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Tabs: {
-                                inkBarColor: colorStyle,
-                                itemSelectedColor: colorStyle,
-                                itemHoverColor: colorStyle
-                            },
-                        },
-                    }}
-                >
-                    <Tabs
-                        type="editable-card"
-                        onChange={onChange}
-                        activeKey={activeKey}
-                        onEdit={onEdit}
-                        items={items}
-                    />
-                </ConfigProvider>
-            </div>
-        </div>
-
-    )
-}
-
-function PlaceToAttraction(places: Place[][]): DayData[] {
-    let result: DayData[] = []
-    const dayNumber:number = places.length
-
-    for (let i = 0; i < dayNumber; i++) {
-        const attractionNumber: number = places[i].length
-        const attractions: AttractionData[] = []
-        for (let j = 0; j < attractionNumber; j++) {
-            attractions.push({
-                name: places[i][j].name,
-                address: places[i][j].address,
-                start_time: null,
-                end_time: null,
-                phone: places[i][j].phone,
-                rating:  places[i][j].rating,
-                remark: ""
-            })
-        };
-        result.push({ attractions })
+  useEffect(() => {
+    if (days.length === 0) {
+      return;
     }
-    return result
-}
+
+    dispatch(setCurrentDay(days[0]));
+    loadAttractions(days[0].id, days[0].startAttractionId);
+  }, [days]);
+
+  const daysTab: TabsProps["items"] =
+    days.map((day, index) => ({
+      key: day.id,
+      label: `第 ${index + 1} 天`,
+    })) || [];
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = attractions.findIndex((item) => item.id === active.id);
+      const newIndex = attractions.findIndex((item) => item.id === over.id);
+
+      const attractionId = attractions[oldIndex].id;
+      const oldPreAttractionId =
+        oldIndex === 0 ? null : attractions[oldIndex - 1].id;
+      const newPreAttractionId =
+        newIndex === 0 ? null : attractions[newIndex - 1].id;
+
+      await changeAttractionOrder(
+        currentDay?.id as string,
+        attractionId,
+        oldPreAttractionId,
+        newPreAttractionId
+      );
+
+      const newAttractions = arrayMove(attractions, oldIndex, newIndex);
+      dispatch(setCurrentAttractions(newAttractions));
+    }
+  };
+
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Tabs: {
+            cardBg: "white",
+            horizontalItemPadding: "12px 12px",
+            horizontalItemGutter: 16,
+            inkBarColor: color,
+            itemActiveColor: color,
+            itemHoverColor: color,
+            itemSelectedColor: color,
+          },
+        },
+      }}
+    >
+      <Flex
+        className="plan-detail"
+        vertical
+        justify="flex-start"
+        align="center"
+      >
+        <Flex
+          className="plan-detail-header"
+          vertical={false}
+          justify="center"
+          align="center"
+        >
+          <h1
+            className="plan-detail-title"
+            style={{
+              color: color,
+            }}
+          >
+            {plan.name}
+          </h1>
+          <LeftOutlined
+            className="plan-detail-close-button"
+            onClick={() => {
+              dispatch(setCurrentDay(null));
+              dispatch(setCurrentPlan(null));
+              closePlanDetail();
+            }}
+            style={{
+              color: color,
+            }}
+          />
+        </Flex>
+        <div className="plan-detail-content">
+          <Tabs
+            className="plan-detail-tabs"
+            items={daysTab}
+            onChange={(key: string) => {
+              console.log("change", key);
+              const day = days.find((day) => day.id === key);
+              if (!day) return;
+              dispatch(setCurrentDay(day));
+              loadAttractions(day.id, day.startAttractionId);
+            }}
+          />
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={attractions}
+              strategy={verticalListSortingStrategy}
+            >
+              <Flex
+                className="plan-detail-attraction-list"
+                vertical
+                justify="flex-start"
+                align="center"
+                gap="middle"
+              >
+                {attractions.map((attraction, index) => (
+                  <AttractionCard
+                    key={attraction.id}
+                    attraction={attraction}
+                    mode="Edit"
+                    onDelete={() => {
+                      const preAttractionId =
+                        index === 0 ? null : attractions[index - 1].id;
+                      const nextAttractionId =
+                        index === attractions.length - 1
+                          ? null
+                          : attractions[index + 1].id;
+                      deleteAttraction(
+                        currentDay?.id as string,
+                        attraction.id,
+                        preAttractionId,
+                        nextAttractionId
+                      );
+                    }}
+                  />
+                ))}
+              </Flex>
+            </SortableContext>
+          </DndContext>
+        </div>
+      </Flex>
+    </ConfigProvider>
+  );
+};
+
+export default PlanDetail;
