@@ -5,9 +5,15 @@ import { Place } from "../types/googleMapInterface";
 import request from "../utils/request";
 import useAuth from "./useAuth";
 
-const useCollection = () => {
-  const [collection, setCollection] = useState<Place[]>([]);
+const testCollection: Place[] = [
+  { name: "test1", placeId: "placeId1", photo: undefined, rating: 3.9, address: "Test address 1", phone: "0909099099",website: undefined, opening_hours: undefined},
+  { name: "test2", placeId: "placeId2", photo: undefined, rating: 2.9, address: "Test address 2", phone: "0909099099",website: undefined, opening_hours: undefined},
+  { name: "test3", placeId: "placeId3", photo: undefined, rating: 3.9, address: "Test address 3", phone: "0909099099",website: undefined, opening_hours: undefined}
+]
 
+const useCollection = () => {
+  const [collection, setCollection] = useState<Place[]>(testCollection);
+  
   const { message } = App.useApp();
 
   const { logout } = useAuth();

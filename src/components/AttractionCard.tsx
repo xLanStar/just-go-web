@@ -17,6 +17,7 @@ interface Props {
 export const AttracionCard = ({ attractionData }: Props) => {
     const rot: number[] = [-90, 90]
     const footerLabel: string[] = ["顯示詳細地點資訊", "隱藏詳細地點資訊"]
+    const moreInfoDisplay: string[] = ["none", "flex"]
     const [index, setIndex] = useState<number>(0);
     const colorStyle = useSelector((state: RootState) => state.currentPlan.value.colorStyle);
 
@@ -39,8 +40,8 @@ export const AttracionCard = ({ attractionData }: Props) => {
 
                 <Content className="attractionCard-content">
                     <Layout>
-                        <Sider width={120} style={{backgroundColor: "#ffffff"}}>
-                        <Image
+                        <Sider width={120} style={{ backgroundColor: "#ffffff" }}>
+                            <Image
                                 width={120}
                                 height={120}
                                 src={testImg}
@@ -49,7 +50,12 @@ export const AttracionCard = ({ attractionData }: Props) => {
                         </Sider>
 
                         <Content className="attractionCard-content-content">
-                            <Layout className="attractionCard-content-content-info">
+                            <Layout
+                                style={{
+                                    display: moreInfoDisplay[index],
+                                    width: "100%",
+                                    backgroundColor: "#ffffff"
+                                }}>
                                 <h3>地址:</h3>
                                 <h3>{attractionData.address}</h3>
                                 <h3>停留時間:</h3>
@@ -82,7 +88,7 @@ export const AttracionCard = ({ attractionData }: Props) => {
                 }}
                     onClick={() => {
                         setIndex((index + 1) % 2)
-                        if (index === 1) 
+                        if (index === 1)
                             document.getElementById("moreInfo")!.style.display = 'none'
                         else
                             document.getElementById("moreInfo")!.style.display = 'flex'

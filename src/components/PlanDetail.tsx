@@ -6,12 +6,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { AttractionData, DayData } from "../types/PlanUIInterface";
 import DayAttracionList from "./DayAttractionList";
+import { Place } from "../types/googleMapInterface";
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
-export const PlanDetail = () => {
+interface Props {
+    places: Place[][]
+}
+
+export const PlanDetail = ({ places }: Props) => {
     const colorStyle = useSelector((state: RootState) => state.currentPlan.value.colorStyle);
-    const [items, setItems] = useState(TestDays().map((day, i) => {
+    const [items, setItems] = useState(PlaceToAttraction(places).map((day, i) => {
         return {
             label: "第"+ (i+1) +"天",
             key: String(i+1),
@@ -73,7 +78,7 @@ export const PlanDetail = () => {
     return (
         <div className="planDetail" id="planDetail">
             <div className="planDetail-header">
-                <h3 style={{ color: colorStyle }}>方案一</h3>
+                <h3 style={{ color: colorStyle }}>{/* planName */}</h3>
                 <LeftOutlined
                     className="planDetail-header-back"
                     style={{ color: colorStyle }}
@@ -109,21 +114,21 @@ export const PlanDetail = () => {
     )
 }
 
-function TestDays(): DayData[] {
+function PlaceToAttraction(places: Place[][]): DayData[] {
     let result: DayData[] = []
-    const dayNumber: number = Math.floor(1 + Math.random() * 5)
+    const dayNumber:number = places.length
 
     for (let i = 0; i < dayNumber; i++) {
-        const attractionNumber: number = Math.floor(1 + Math.random() * 5)
+        const attractionNumber: number = places[i].length
         const attractions: AttractionData[] = []
         for (let j = 0; j < attractionNumber; j++) {
             attractions.push({
-                name: "測試Attraction" + (j + 1),
-                address: "address" + (j + 1),
+                name: places[i][j].name,
+                address: places[i][j].address,
                 start_time: null,
                 end_time: null,
-                phone: "phone" + (j + 1),
-                rating: Math.floor(1 + Math.random() * 5),
+                phone: places[i][j].phone,
+                rating:  places[i][j].rating,
                 remark: ""
             })
         };

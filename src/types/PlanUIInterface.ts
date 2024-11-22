@@ -3,8 +3,8 @@ export interface AttractionData {
     address: string,
     start_time: Date | null,
     end_time: Date | null,
-    phone: string,
-    rating: number,
+    phone: string | undefined,
+    rating: number | undefined,
     remark: string
 }
 
