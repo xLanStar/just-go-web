@@ -1,4 +1,4 @@
-import { memo, MutableRefObject } from "react";
+import { memo, MutableRefObject, useMemo } from "react";
 import {
   LatLngLiteral,
   MapOptions,

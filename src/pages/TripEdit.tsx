@@ -15,12 +15,12 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import useGoogleMapService from "../hooks/useMapService";
 import useCollection from "../hooks/useCollection";
 import Collection from "../components/Collection";
-import { Mark } from "../types/googleMapInterface";
 import PlanList from "../components/PlanList";
 import useTrip from "../hooks/useTrip";
 import { TripEditInfo } from "../types/tripInterface";
 
 import "../assets/scss/tripEdit.scss";
+import useMarkList from "../hooks/useMarkList";
 
 const TripEdit: React.FunctionComponent = () => {
   const { id } = useParams();
@@ -37,10 +37,11 @@ const TripEdit: React.FunctionComponent = () => {
   const { mapRef, placesServiceRef } = useGoogleMapService();
   const { collection, addPlaceToTrip, deletePlace } = useCollection();
   const { currentTrip } = useTrip(id);
+  const { markList } = useMarkList();
 
-  console.log(currentTrip);
+  console.log("currentTrip", currentTrip);
+  console.log("markList", markList);
 
-  const [markList, setMarkList] = useState<Mark[]>([]);
   const [showPlanList, setShowPlanList] = useState<boolean>(false);
   const [showChatBox, setShowChatBox] = useState<boolean>(false);
   const [showCollection, setShowCollection] = useState<boolean>(false);
