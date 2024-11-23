@@ -2,7 +2,6 @@ import { Flex } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { Color } from "../data/color";
 import PlaceCard from "./PlaceCard";
-import { Place } from "../types/googleMapInterface";
 
 import "../assets/scss/collection.scss";
 
@@ -10,8 +9,8 @@ interface Props {
   collection: string[];
   mode: "Edit" | "Explore";
   closeCollection: () => void;
-  addPlaceToTrip: () => void;
-  deletePlace: (place: Place) => void;
+  addPlaceToTrip: (placeId: string) => void;
+  deletePlace: (placeId: string) => void;
 }
 
 const Collection: React.FunctionComponent<Props> = ({

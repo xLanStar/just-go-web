@@ -37,14 +37,12 @@ export interface TripEditInfo {
 export interface Plan {
   id: string;
   name: string;
-  days: Day[];
 }
 
 export interface Day {
   id: string;
   planId: string;
   startAttractionId: string;
-  attractions: Attraction[];
 }
 
 export interface Attraction {

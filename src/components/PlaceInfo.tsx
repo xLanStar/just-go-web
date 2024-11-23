@@ -16,13 +16,13 @@ import "../assets/scss/placeInfo.scss";
 interface Props {
   place: Place;
   onPlaceInfoClose: () => void;
-  addPlace: (place: Place) => void;
+  addPlace: (placeId: string) => void;
 }
 
 const PlaceInfo: React.FunctionComponent<Props> = ({
   place,
   onPlaceInfoClose,
-  addPlace: addPlace,
+  addPlace,
 }) => {
   return (
     <Flex className="place_info" vertical justify="flex-start" align="center">
@@ -140,7 +140,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
           icon={<PlusOutlined />}
           size="large"
           onClick={() => {
-            addPlace(place);
+            addPlace(place.placeId);
           }}
         >
           收藏景點

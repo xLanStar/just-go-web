@@ -1,7 +1,6 @@
 import React, { memo, useEffect } from "react";
 import { Card, Button, Rate, Flex } from "antd";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Place } from "../types/googleMapInterface";
 import { convertToTraditional } from "../utils/textConverter";
 import usePlaceDetail from "../hooks/usePlaceDetail";
 
@@ -10,8 +9,8 @@ import "../assets/scss/placeCard.scss";
 interface Props {
   placeId: string;
   mode: "Edit" | "Explore";
-  addPlaceToTrip: () => void;
-  deletePlace: (place: Place) => void;
+  addPlaceToTrip: (placeId: string) => void;
+  deletePlace: (placeId: string) => void;
 }
 
 const PlaceCard: React.FunctionComponent<Props> = memo(
@@ -59,7 +58,7 @@ const PlaceCard: React.FunctionComponent<Props> = memo(
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              onClick={addPlaceToTrip}
+              onClick={() => addPlaceToTrip(place.placeId)}
             >
               新增至方案
             </Button>
@@ -68,7 +67,7 @@ const PlaceCard: React.FunctionComponent<Props> = memo(
             type="primary"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => deletePlace(place)}
+            onClick={() => deletePlace(place.placeId)}
           >
             刪除
           </Button>

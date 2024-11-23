@@ -77,6 +77,7 @@ const useTripInfo = (type: string) => {
     try {
       await request.delete(`/api/trips/${id}`);
       setTrips(trips.filter((trip) => trip.id !== id));
+      message.success("刪除成功");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {

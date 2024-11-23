@@ -16,13 +16,18 @@ import useGoogleMapService from "../hooks/useMapService";
 import useCollection from "../hooks/useCollection";
 import Collection from "../components/Collection";
 import { Mark } from "../types/googleMapInterface";
-import useTrip from "../hooks/useTrip";
 import PlanList from "../components/PlanList";
+import useTrip from "../hooks/useTrip";
+import { TripEditInfo } from "../types/tripInterface";
 
 import "../assets/scss/tripEdit.scss";
 
 const TripEdit: React.FunctionComponent = () => {
   const { id } = useParams();
+
+  if (!id) {
+    return null;
+  }
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -31,10 +36,9 @@ const TripEdit: React.FunctionComponent = () => {
   const { getItem } = useLocalStorage();
   const { mapRef, placesServiceRef } = useGoogleMapService();
   const { collection, addPlaceToTrip, deletePlace } = useCollection();
-  const { tripInfo, plans } = useTrip(id as string);
+  const { currentTrip } = useTrip(id);
 
-  console.log("tripInfo", tripInfo);
-  console.log("plans", plans);
+  console.log(currentTrip);
 
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [showPlanList, setShowPlanList] = useState<boolean>(false);
@@ -85,7 +89,10 @@ const TripEdit: React.FunctionComponent = () => {
         onClick={() => setShowCollection(true)}
       />
       {showPlanList ? (
-        <PlanList closePlanList={() => setShowPlanList(false)} />
+        <PlanList
+          tripInfo={currentTrip as TripEditInfo}
+          closePlanList={() => setShowPlanList(false)}
+        />
       ) : null}
       {showChatBox ? (
         <ChatBox

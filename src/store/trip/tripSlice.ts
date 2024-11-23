@@ -1,43 +1,44 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TripEditInfo, Plan } from "../../types/tripInterface";
+import { Attraction, Day, Plan, TripEditInfo } from "../../types/tripInterface";
 
 interface TripState {
-  tripInfo: TripEditInfo;
-  plans: Plan[];
+  currentTrip: TripEditInfo | null;
+  currentPlan: Plan | null;
+  currentDay: Day | null;
+  currentAttractions: Attraction[];
 }
 
 const initialState: TripState = {
-  tripInfo: {
-    id: "",
-    userId: "",
-    title: "",
-    image: "",
-    personalEditPermission: 0,
-    finalPlanId: "",
-    departureDate: "",
-    endDate: "",
-    labels: [],
-    like: 0,
-    linkPermission: false,
-    isPublic: false,
-    publishDay: "",
-  },
-  plans: [],
+  currentTrip: null,
+  currentPlan: null,
+  currentDay: null,
+  currentAttractions: [],
 };
 
 const tripSlice = createSlice({
   name: "trip",
   initialState,
   reducers: {
-    setTripInfo: (state, action: PayloadAction<TripEditInfo>) => {
-      state.tripInfo = action.payload;
+    setCurrentTrip(state, action: PayloadAction<TripEditInfo | null>) {
+      state.currentTrip = action.payload;
     },
-    setPlans: (state, action: PayloadAction<Plan[]>) => {
-      state.plans = action.payload;
+    setCurrentPlan(state, action: PayloadAction<Plan | null>) {
+      state.currentPlan = action.payload;
+    },
+    setCurrentDay(state, action: PayloadAction<Day | null>) {
+      state.currentDay = action.payload;
+    },
+    setCurrentAttractions(state, action: PayloadAction<Attraction[]>) {
+      state.currentAttractions = action.payload;
     },
   },
 });
 
-export const { setTripInfo, setPlans } = tripSlice.actions;
+export const {
+  setCurrentTrip,
+  setCurrentPlan,
+  setCurrentDay,
+  setCurrentAttractions,
+} = tripSlice.actions;
 
 export default tripSlice;

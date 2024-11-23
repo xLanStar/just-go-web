@@ -1,27 +1,23 @@
+import { useEffect, useState } from "react";
 import { App } from "antd";
-import { useEffect } from "react";
 import useAuth from "./useAuth";
-import axios from "axios";
+import { Plan } from "../types/tripInterface";
 import request from "../utils/request";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { setCurrentTrip } from "../store/trip/tripSlice";
+import axios from "axios";
 
-const useTrip = (tripId: string) => {
+const usePlans = (tripId: string) => {
   const { message } = App.useApp();
 
   const { logout } = useAuth();
 
-  const dispatch = useAppDispatch();
-
-  const currentTrip = useAppSelector((state) => state.trip.currentTrip);
+  const [plans, setPlans] = useState<Plan[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: any = await request.get(`/api/trips/${tripId}/details`);
-        const trip = response.data;
-        const tripInfo = trip.tripInfo;
-        dispatch(setCurrentTrip(tripInfo));
+        const response: any = await request.get(`/api/trips/${tripId}/plans`);
+        const plans = response.data;
+        setPlans(plans);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 401) {
@@ -44,8 +40,8 @@ const useTrip = (tripId: string) => {
   }, []);
 
   return {
-    currentTrip,
+    plans,
   };
 };
 
-export default useTrip;
+export default usePlans;

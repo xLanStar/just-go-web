@@ -1,10 +1,13 @@
 import { Button, Flex, List } from "antd";
 import { useState } from "react";
-import { useAppSelector } from "../hooks";
 import { CloseOutlined, PlusOutlined, StarOutlined } from "@ant-design/icons";
+import usePlans from "../hooks/usePlans";
 import PlanDetail from "./PlanDetail";
+import { Plan, TripEditInfo } from "../types/tripInterface";
+import { useAppDispatch, useAppSelector } from "../hooks";
 
 import "../assets/scss/planList.scss";
+import { setCurrentPlan } from "../store/trip/tripSlice";
 
 const colorList = [
   "#12d198",
@@ -19,16 +22,24 @@ const colorList = [
 ];
 
 interface Props {
+  tripInfo: TripEditInfo;
   closePlanList: () => void;
 }
 
-const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
-  const tripInfo = useAppSelector((state) => state.trip.tripInfo);
-  const plans = useAppSelector((state) => state.trip.plans);
+const PlanList: React.FunctionComponent<Props> = ({
+  tripInfo,
+  closePlanList,
+}) => {
+  const dispatch = useAppDispatch();
+
+  const { plans } = usePlans(tripInfo.id);
+
+  const currentPlan = useAppSelector((state) => state.trip.currentPlan);
 
   const [showPlanDetail, setShowPlanDetail] = useState<boolean>(false);
   const [planColor, setPlanColor] = useState<string>("");
-  const [planId, setPlanId] = useState<string>("");
+
+  console.log(plans);
 
   return (
     <Flex className="plan-list" vertical justify="flex-start" align="center">
@@ -41,7 +52,7 @@ const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
         <h1 className="plan-list-title">我的方案</h1>
         <CloseOutlined
           className="plan-list-close-button"
-          onClick={closePlanList}
+          onClick={() => closePlanList()}
         />
       </Flex>
       <div className="plan-list-content">
@@ -63,7 +74,7 @@ const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
                     color: colorList[index % 9],
                   }}
                   onClick={() => {
-                    setPlanId(plan.id);
+                    dispatch(setCurrentPlan(plan));
                     setPlanColor(colorList[index % 9]);
                     setShowPlanDetail(true);
                   }}
@@ -89,7 +100,8 @@ const PlanList: React.FunctionComponent<Props> = ({ closePlanList }) => {
       </div>
       {showPlanDetail ? (
         <PlanDetail
-          planId={planId}
+          tripId={tripInfo.id}
+          plan={currentPlan as Plan}
           color={planColor}
           closePlanDetail={() => setShowPlanDetail(false)}
         />
