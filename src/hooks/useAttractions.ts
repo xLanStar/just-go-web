@@ -51,9 +51,51 @@ const useAttrations = (tripId: string, placeId: string) => {
     }
   };
 
+  const deleteAttraction = async (
+    dayId: string,
+    attractionId: string,
+    preAttractionId: string | null,
+    nextAttractionId: string | null
+  ) => {
+    try {
+      await request.delete(
+        `/api/trips/${tripId}/plans/${placeId}/days/${dayId}/attractions/${attractionId}`,
+        {
+          data: {
+            preAttractionId,
+            nextAttractionId,
+          },
+        }
+      );
+      const newAttractions = attractions.filter(
+        (attraction) => attraction.id !== attractionId
+      );
+      dispatch(setCurrentAttractions(newAttractions));
+
+      message.success("刪除成功");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          message.error("請重新登入");
+          logout();
+        } else if (error.response?.status === 403) {
+          message.error("你沒有權限刪除此景點");
+        } else if (error.response?.status === 404) {
+          message.error("找不到景點");
+        } else {
+          message.error("系統發生錯誤");
+        }
+      } else {
+        console.error(error);
+        message.error("用戶端發生錯誤");
+      }
+    }
+  };
+
   return {
     attractions,
     loadAttractions,
+    deleteAttraction,
   };
 };
 
