@@ -68,7 +68,13 @@ const Map: React.FunctionComponent<Props> = ({
   return (
     <div className="map">
       <GoogleMap
-        center={center}
+        center={
+          mode === "Clusterer"
+            ? center
+            : markList.length > 0
+              ? markList[markList.length - 1].location
+              : center
+        }
         zoom={15}
         mapContainerStyle={{
           width: "100%",

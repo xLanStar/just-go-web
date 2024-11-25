@@ -92,10 +92,45 @@ const useAttrations = (tripId: string, placeId: string) => {
     }
   };
 
+  const changeAttractionOrder = async (
+    dayId: string,
+    attractionId: string,
+    oldPreAttractionId: string | null,
+    newPreAttractionId: string | null
+  ) => {
+    try {
+      await request.patch(
+        `/api/trips/${tripId}/plans/${placeId}/days/${dayId}/attractions/${attractionId}/order`,
+        {
+          oldPreAttractionId,
+          newPreAttractionId,
+        }
+      );
+      message.success("修改成功");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          message.error("請重新登入");
+          logout();
+        } else if (error.response?.status === 403) {
+          message.error("你沒有權限變更此景點");
+        } else if (error.response?.status === 404) {
+          message.error("找不到景點");
+        } else {
+          message.error("系統發生錯誤");
+        }
+      } else {
+        console.error(error);
+        message.error("用戶端發生錯誤");
+      }
+    }
+  };
+
   return {
     attractions,
     loadAttractions,
     deleteAttraction,
+    changeAttractionOrder,
   };
 };
 
