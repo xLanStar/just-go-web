@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import dayjs from "dayjs";
 
 import "../assets/scss/attractionCard.scss";
 
@@ -18,12 +19,14 @@ interface Props {
   attraction: Attraction;
   mode: "Edit" | "Read";
   onDelete: () => void;
+  onTimeChange: (value: any) => void;
 }
 
 const AttractionCard: React.FunctionComponent<Props> = ({
   attraction,
   mode,
   onDelete,
+  onTimeChange,
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: attraction.id });
@@ -116,8 +119,14 @@ const AttractionCard: React.FunctionComponent<Props> = ({
           <h3>時間：</h3>
           <TimePicker.RangePicker
             className="attraction-card-time-picker"
-            format={"HH:mm:ss"}
+            format={"HH:mm"}
+            defaultValue={[
+              dayjs(attraction.startAt, "HH:mm"),
+              dayjs(attraction.endAt, "HH:mm"),
+            ]}
             disabled={mode === "Read"}
+            onChange={onTimeChange}
+            allowClear={false}
           />
         </Flex>
         {isNoteVisible && (

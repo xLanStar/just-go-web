@@ -45,6 +45,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
     loadAttractions,
     deleteAttraction,
     changeAttractionOrder,
+    changeAttractionTime,
   } = useAttractions(tripId, plan.id);
 
   useEffect(() => {
@@ -182,6 +183,20 @@ const PlanDetail: React.FunctionComponent<Props> = ({
                         currentDay?.id as string,
                         attraction.id,
                         preAttractionId
+                      );
+                    }}
+                    onTimeChange={(value: any) => {
+                      const startAt = value[0].format("HH:mm");
+                      const endAt = value[1].format("HH:mm");
+
+                      console.log("startAt", startAt);
+                      console.log("endAt", endAt);
+
+                      changeAttractionTime(
+                        currentDay?.id as string,
+                        attraction.id,
+                        startAt,
+                        endAt
                       );
                     }}
                   />
