@@ -40,26 +40,22 @@ const TripCard: React.FunctionComponent<Props> = ({
       }
       actions={[
         isPublic && (
-          <Tooltip title="點讚">
-            <Flex
-              vertical={false}
-              justify="center"
-              align="center"
-              gap="small"
-              onClick={() => toggleFavor(trip.id)}
-            >
-              {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
-              <span>{trip.like > 999 ? "999+" : trip.like}</span>
-            </Flex>
-          </Tooltip>
+          <Flex
+            vertical={false}
+            justify="center"
+            align="center"
+            gap="small"
+            onClick={() => toggleFavor(trip.id)}
+          >
+            {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+            <span>{trip.like > 999 ? "999+" : trip.like}</span>
+          </Flex>
         ),
         isDelete && (
-          <Tooltip title="刪除">
-            <DeleteOutlined
-              onClick={() => deleteTrip(trip.id)}
-              className="trip-card-action"
-            />
-          </Tooltip>
+          <DeleteOutlined
+            onClick={() => deleteTrip(trip.id)}
+            className="trip-card-action"
+          />
         ),
       ]}
     >

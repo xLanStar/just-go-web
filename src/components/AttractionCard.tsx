@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Rate, TimePicker, Input, Tooltip, Flex } from "antd";
+import { Card, Rate, TimePicker, Input, Flex } from "antd";
 import { Attraction } from "../types/tripInterface";
 import usePlaceDetail from "../hooks/usePlaceDetail";
 import {
@@ -20,6 +20,7 @@ interface Props {
   mode: "Edit" | "Read";
   onDelete: () => void;
   onTimeChange: (value: any) => void;
+  onNoteChange: (value: string) => void;
 }
 
 const AttractionCard: React.FunctionComponent<Props> = ({
@@ -27,13 +28,15 @@ const AttractionCard: React.FunctionComponent<Props> = ({
   mode,
   onDelete,
   onTimeChange,
+  onNoteChange,
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: attraction.id });
   const { placeDetail: place, getPlaceDetail } = usePlaceDetail();
 
-  const [isNoteVisible, setIsNoteVisible] = useState<boolean>(false);
   const [note, setNote] = useState<string>(attraction.note);
+  const [currentNote, setCurrentNote] = useState<string>(attraction.note);
+  const [isNoteVisible, setIsNoteVisible] = useState<boolean>(false);
 
   useEffect(() => {
     getPlaceDetail(attraction.googlePlaceId);
@@ -58,21 +61,17 @@ const AttractionCard: React.FunctionComponent<Props> = ({
         />
       }
       actions={[
-        <Tooltip title="編輯">
-          <Flex vertical={false} justify="center" align="center" gap="small">
-            {isNoteVisible ? (
-              <EyeInvisibleOutlined onClick={() => setIsNoteVisible(false)} />
-            ) : (
-              <FormOutlined onClick={() => setIsNoteVisible(true)} />
-            )}
-          </Flex>
-        </Tooltip>,
+        <Flex vertical={false} justify="center" align="center" gap="small">
+          {isNoteVisible ? (
+            <EyeInvisibleOutlined onClick={() => setIsNoteVisible(false)} />
+          ) : (
+            <FormOutlined onClick={() => setIsNoteVisible(true)} />
+          )}
+        </Flex>,
         mode === "Edit" && (
-          <Tooltip title="刪除">
-            <Flex vertical={false} justify="center" align="center" gap="small">
-              <DeleteOutlined onClick={onDelete} />
-            </Flex>
-          </Tooltip>
+          <Flex vertical={false} justify="center" align="center" gap="small">
+            <DeleteOutlined onClick={onDelete} />
+          </Flex>
         ),
       ]}
       style={style}
@@ -140,15 +139,20 @@ const AttractionCard: React.FunctionComponent<Props> = ({
             <h3>備註：</h3>
             <TextArea
               className="attraction-card-note-textarea"
-              value={note}
               rows={2}
               maxLength={30}
+              value={note}
               placeholder={"請輸入備註..."}
               style={{ resize: "none" }}
               disabled={mode === "Read"}
               onChange={(e) => {
-                e.stopPropagation();
                 setNote(e.target.value);
+              }}
+              onBlur={() => {
+                if (note !== currentNote) {
+                  setCurrentNote(note);
+                  onNoteChange(note);
+                }
               }}
             />
           </Flex>

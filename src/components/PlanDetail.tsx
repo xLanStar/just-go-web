@@ -46,6 +46,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
     deleteAttraction,
     changeAttractionOrder,
     changeAttractionTime,
+    changeAttractionNote,
   } = useAttractions(tripId, plan.id);
 
   useEffect(() => {
@@ -199,6 +200,13 @@ const PlanDetail: React.FunctionComponent<Props> = ({
                         endAt
                       );
                     }}
+                    onNoteChange={(note: string) =>
+                      changeAttractionNote(
+                        currentDay?.id as string,
+                        attraction.id,
+                        note
+                      )
+                    }
                   />
                 ))}
               </Flex>
