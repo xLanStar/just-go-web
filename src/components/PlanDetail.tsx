@@ -4,7 +4,7 @@ import { LeftOutlined } from "@ant-design/icons";
 import useDays from "../hooks/useDays";
 import AttractionCard from "./AttractionCard";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { Plan } from "../types/tripInterface";
+import { Day, Plan } from "../types/tripInterface";
 import useAttractions from "../hooks/useAttractions";
 import {
   setCurrentAttractions,
@@ -84,6 +84,14 @@ const PlanDetail: React.FunctionComponent<Props> = ({
 
       const newAttractions = arrayMove(attractions, oldIndex, newIndex);
       dispatch(setCurrentAttractions(newAttractions));
+
+      if (newIndex === 0) {
+        const newCurrentDay = {
+          ...(currentDay as Day),
+          startAttractionId: attractionId,
+        };
+        dispatch(setCurrentDay(newCurrentDay));
+      }
     }
   };
 
@@ -170,15 +178,10 @@ const PlanDetail: React.FunctionComponent<Props> = ({
                     onDelete={() => {
                       const preAttractionId =
                         index === 0 ? null : attractions[index - 1].id;
-                      const nextAttractionId =
-                        index === attractions.length - 1
-                          ? null
-                          : attractions[index + 1].id;
                       deleteAttraction(
                         currentDay?.id as string,
                         attraction.id,
-                        preAttractionId,
-                        nextAttractionId
+                        preAttractionId
                       );
                     }}
                   />
