@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Card, Avatar, Row, Col, Tooltip, Tag, Flex } from "antd";
+import { Card, Avatar, Row, Col, Tag, Flex } from "antd";
 import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import React from "react";
 import { TripInfo } from "../types/tripInterface";

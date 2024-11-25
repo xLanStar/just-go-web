@@ -1,10 +1,10 @@
 import { App } from "antd";
 import useAuth from "./useAuth";
-import { Attraction, Day } from "../types/tripInterface";
+import { Attraction } from "../types/tripInterface";
 import request from "../utils/request";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setCurrentAttractions, setCurrentDay } from "../store/trip/tripSlice";
+import { setCurrentAttractions } from "../store/trip/tripSlice";
 
 const useAttrations = (tripId: string, placeId: string) => {
   const dispatch = useAppDispatch();
@@ -13,7 +13,6 @@ const useAttrations = (tripId: string, placeId: string) => {
 
   const { logout } = useAuth();
 
-  const currentDay = useAppSelector((state) => state.trip.currentDay);
   const attractions = useAppSelector((state) => state.trip.currentAttractions);
 
   const loadAttractions = async (dayId: string, startAttractionId: string) => {
@@ -69,14 +68,6 @@ const useAttrations = (tripId: string, placeId: string) => {
       const newAttractions = attractions.filter(
         (attraction) => attraction.id !== attractionId
       );
-
-      if (attractionId === currentDay?.startAttractionId) {
-        const newCurrentDay = {
-          ...(currentDay as Day),
-          startAttractionId: newAttractions[0]?.id as string,
-        };
-        dispatch(setCurrentDay(newCurrentDay));
-      }
 
       dispatch(setCurrentAttractions(newAttractions));
 

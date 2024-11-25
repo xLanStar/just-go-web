@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ConfigProvider, Flex, Tabs } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import useDays from "../hooks/useDays";
 import AttractionCard from "./AttractionCard";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { Day, Plan } from "../types/tripInterface";
+import { useAppDispatch } from "../hooks";
+import { Plan } from "../types/tripInterface";
 import useAttractions from "../hooks/useAttractions";
 import {
   setCurrentAttractions,
@@ -37,9 +37,10 @@ const PlanDetail: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const currentDay = useAppSelector((state) => state.trip.currentDay);
-
-  const { days } = useDays(tripId, plan.id);
+  const { currentDay, days, changeDayStartAttraction } = useDays(
+    tripId,
+    plan.id
+  );
   const {
     attractions,
     loadAttractions,
@@ -50,13 +51,10 @@ const PlanDetail: React.FunctionComponent<Props> = ({
   } = useAttractions(tripId, plan.id);
 
   useEffect(() => {
-    if (days.length === 0) {
-      return;
-    }
-
-    dispatch(setCurrentDay(days[0]));
-    loadAttractions(days[0].id, days[0].startAttractionId);
-  }, [days]);
+    console.log("currentDay", currentDay);
+    if (!currentDay) return;
+    loadAttractions(currentDay.id, currentDay.startAttractionId);
+  }, [currentDay]);
 
   const daysTab: TabsProps["items"] =
     days.map((day, index) => ({
@@ -88,11 +86,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
       dispatch(setCurrentAttractions(newAttractions));
 
       if (newIndex === 0) {
-        const newCurrentDay = {
-          ...(currentDay as Day),
-          startAttractionId: attractionId,
-        };
-        dispatch(setCurrentDay(newCurrentDay));
+        changeDayStartAttraction(attractionId);
       }
     }
   };
@@ -150,11 +144,9 @@ const PlanDetail: React.FunctionComponent<Props> = ({
             className="plan-detail-tabs"
             items={daysTab}
             onChange={(key: string) => {
-              console.log("change", key);
               const day = days.find((day) => day.id === key);
               if (!day) return;
               dispatch(setCurrentDay(day));
-              loadAttractions(day.id, day.startAttractionId);
             }}
           />
           <DndContext
@@ -185,6 +177,11 @@ const PlanDetail: React.FunctionComponent<Props> = ({
                         attraction.id,
                         preAttractionId
                       );
+                      if (attraction.id === currentDay?.startAttractionId) {
+                        changeDayStartAttraction(
+                          attractions[index + 1]?.id as string
+                        );
+                      }
                     }}
                     onTimeChange={(value: any) => {
                       const startAt = value[0].format("HH:mm");

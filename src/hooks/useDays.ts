@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 import { Day } from "../types/tripInterface";
 import request from "../utils/request";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setCurrentDay } from "../store/trip/tripSlice";
 
 const useDays = (tripId: string, planId: string) => {
+  const dispatch = useAppDispatch();
+
   const { message } = App.useApp();
 
   const { logout } = useAuth();
 
+  const currentDay = useAppSelector((state) => state.trip.currentDay);
   const [days, setDays] = useState<Day[]>([]);
 
   useEffect(() => {
@@ -25,6 +30,7 @@ const useDays = (tripId: string, planId: string) => {
         });
 
         setDays(newDays);
+        dispatch(setCurrentDay(newDays[0]));
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 401) {
@@ -46,8 +52,28 @@ const useDays = (tripId: string, planId: string) => {
     fetchData();
   }, []);
 
+  const changeDayStartAttraction = async (attractionId: string) => {
+    const newCurrentDay = {
+      ...(currentDay as Day),
+      startAttractionId: attractionId,
+    };
+
+    dispatch(setCurrentDay(newCurrentDay));
+
+    const newDays = days.map((day) => {
+      if (day.id === newCurrentDay.id) {
+        return newCurrentDay;
+      }
+      return day;
+    });
+
+    setDays(newDays);
+  };
+
   return {
+    currentDay,
     days,
+    changeDayStartAttraction,
   };
 };
 
