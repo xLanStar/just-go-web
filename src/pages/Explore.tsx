@@ -117,7 +117,7 @@ const Explore: React.FunctionComponent = () => {
         onPlaceChanged={onPlaceChanged}
       />
       <Map
-        mode="Explore"
+        mode="Clusterer"
         mapRef={mapRef}
         placesServiceRef={placesServiceRef}
         markList={markList}
@@ -138,7 +138,7 @@ const Explore: React.FunctionComponent = () => {
       ) : null}
       {showCollection ? (
         <Collection
-          places={collection}
+          collection={collection}
           mode="Explore"
           closeCollection={() => setShowCollection(false)}
           addPlaceToTrip={addPlaceToTrip}

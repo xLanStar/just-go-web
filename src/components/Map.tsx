@@ -51,7 +51,7 @@ const clusterStyles = [
 ];
 
 interface Props {
-  mode: "Edit" | "Explore";
+  mode: "Clusterer" | "Polyline";
   mapRef: MutableRefObject<google.maps.Map | undefined>;
   placesServiceRef: MutableRefObject<PlacesService | undefined>;
   markList: Mark[];
@@ -68,7 +68,13 @@ const Map: React.FunctionComponent<Props> = ({
   return (
     <div className="map">
       <GoogleMap
-        center={center}
+        center={
+          mode === "Clusterer"
+            ? center
+            : markList.length > 0
+              ? markList[markList.length - 1].location
+              : center
+        }
         zoom={15}
         mapContainerStyle={{
           width: "100%",
@@ -80,7 +86,7 @@ const Map: React.FunctionComponent<Props> = ({
         }}
         options={options}
       >
-        {mode === "Explore" ? (
+        {mode === "Clusterer" ? (
           <MarkerClusterer
             options={{
               gridSize: 50,

@@ -3,6 +3,14 @@
   height: calc(100vh - 64px);
 }
 
+.trip_edit_plan_button {
+  top: 128px;
+  left: 32px;
+  width: 50px;
+  height: 50px;
+  z-index: 1;
+}
+
 .trip_edit_chatbox_button,
 .trip_edit_collection_button {
   width: 50px;

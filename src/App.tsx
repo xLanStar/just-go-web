@@ -13,7 +13,6 @@ import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
 import PublisherInfo from "./pages/PublisherInfo";
 import Result from "./pages/Result";
-import Planning from "./pages/Planning";
 import VerifyNotice from "./pages/auth/VerifyNotice";
 import Verify from "./pages/auth/Verify";
 
@@ -33,13 +32,12 @@ const App: React.FunctionComponent = () => (
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
-          <Route path="edit" element={<TripEdit />} />
+          <Route path="trip/:id" element={<TripEdit />} />
           <Route path="share" element={<TripShare />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
           <Route path="user/:id" element={<PublisherInfo />} />
           <Route path="Result" element={<Result />} />
-          <Route path="/Planning" element={<Planning />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />

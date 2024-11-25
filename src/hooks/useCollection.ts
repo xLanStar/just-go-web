@@ -1,36 +1,37 @@
 import { App } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Place } from "../types/googleMapInterface";
+import { useState, useEffect, useCallback } from "react";
 import request from "../utils/request";
 import useAuth from "./useAuth";
-
-const testCollection: Place[] = [
-  { name: "test1", placeId: "placeId1", photo: undefined, rating: 3.9, address: "Test address 1", phone: "0909099099",website: undefined, opening_hours: undefined},
-  { name: "test2", placeId: "placeId2", photo: undefined, rating: 2.9, address: "Test address 2", phone: "0909099099",website: undefined, opening_hours: undefined},
-  { name: "test3", placeId: "placeId3", photo: undefined, rating: 3.9, address: "Test address 3", phone: "0909099099",website: undefined, opening_hours: undefined}
-]
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setCurrentAttractions } from "../store/trip/tripSlice";
 
 const useCollection = () => {
-  const [collection, setCollection] = useState<Place[]>(testCollection);
-  
+  const dispatch = useAppDispatch();
+
+  const [collection, setCollection] = useState<string[]>([]);
+
   const { message } = App.useApp();
 
   const { logout } = useAuth();
 
+  const currentTrip = useAppSelector((state) => state.trip.currentTrip);
+  const currentPlan = useAppSelector((state) => state.trip.currentPlan);
+  const currentDay = useAppSelector((state) => state.trip.currentDay);
+  const currentAttractions = useAppSelector(
+    (state) => state.trip.currentAttractions
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const collectionResponse = await request.get("/api/trips/collections");
-        const placeIdList = collectionResponse.data.map(
+        const response = await request.get("/api/trips/collections");
+
+        const placeIdList = response.data.map(
           (place: any) => place.googlePlaceId
         );
 
-        const placeResponse = await request.post("/api/places", {
-          googlePlaceIdList: placeIdList,
-        });
-
-        setCollection(placeResponse.data);
+        setCollection(placeIdList);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 401) {
@@ -48,57 +49,109 @@ const useCollection = () => {
     fetchData();
   }, []);
 
-  const addPlace = async (place: Place) => {
-    try {
-      await request.post("/api/trips/collections", {
-        googlePlaceId: place.placeId,
-      });
+  const addPlace = useCallback(
+    async (placeId: string) => {
+      try {
+        await request.post("/api/trips/collections", {
+          googlePlaceId: placeId,
+        });
 
-      setCollection([...collection, place]);
-      message.success("收藏成功");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          message.error("請重新登入");
-          logout();
-        } else if (error.response?.status === 409) {
-          message.error("該景點已在收藏中");
+        setCollection((prevCollection) => [...prevCollection, placeId]);
+        message.success("收藏成功");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            message.error("請重新登入");
+            logout();
+          } else if (error.response?.status === 409) {
+            message.error("該景點已在收藏中");
+          } else {
+            message.error("系統發生錯誤");
+          }
         } else {
-          message.error("系統發生錯誤");
+          console.error(error);
+          message.error("用戶端發生錯誤");
         }
-      } else {
-        console.error(error);
-        message.error("用戶端發生錯誤");
       }
-    }
-  };
+    },
+    [collection]
+  );
 
-  const deletePlace = async (place: Place) => {
-    try {
-      await request.delete("/api/trips/collections", {
-        data: { googlePlaceId: place.placeId },
-      });
-      const newCollection = collection.filter(
-        (oldPlace) => oldPlace.placeId !== place.placeId
-      );
-      setCollection(newCollection);
-      message.success("刪除成功");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          message.error("請重新登入");
-          logout();
-        } else if (error.response?.status === 404) {
-          message.error("找不到該景點");
+  const deletePlace = useCallback(
+    async (placeId: string) => {
+      try {
+        await request.delete("/api/trips/collections", {
+          data: { googlePlaceId: placeId },
+        });
+
+        const newCollection = collection.filter((id) => id !== placeId);
+        setCollection(newCollection);
+
+        message.success("刪除成功");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            message.error("請重新登入");
+            logout();
+          } else if (error.response?.status === 404) {
+            message.error("找不到該景點");
+          }
+        } else {
+          console.error(error);
+          message.error("用戶端發生錯誤");
         }
-      } else {
-        console.error(error);
-        message.error("用戶端發生錯誤");
       }
-    }
-  };
+    },
+    [collection]
+  );
 
-  const addPlaceToTrip = () => {};
+  const addPlaceToTrip = useCallback(
+    async (placeId: string) => {
+      try {
+        if (!currentTrip || !currentPlan || !currentDay) {
+          message.error("找不到行程的方案和日期");
+          return;
+        }
+
+        const tripId = currentTrip.id;
+        const planId = currentPlan.id;
+        const dayId = currentDay.id;
+
+        const preAttraction =
+          currentAttractions.length > 0
+            ? currentAttractions[currentAttractions.length - 1]
+            : null;
+
+        const response = await request.post(
+          `/api/trips/${tripId}/plans/${planId}/days/${dayId}/attractions`,
+          {
+            googlePlaceId: placeId,
+            preAttractionId: preAttraction ? preAttraction.id : null,
+          }
+        );
+
+        const newAttractions = [...currentAttractions, response.data];
+        dispatch(setCurrentAttractions(newAttractions));
+
+        message.success("加入成功");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            message.error("請重新登入");
+            logout();
+          } else if (error.response?.status === 404) {
+            message.error("找不到日程");
+          } else {
+            message.error("系統發生錯誤");
+          }
+        } else {
+          console.error(error);
+          message.error("用戶端發生錯誤");
+        }
+      }
+    },
+    [currentTrip, currentPlan, currentDay, currentAttractions, dispatch]
+  );
 
   return { collection, addPlace, addPlaceToTrip, deletePlace };
 };

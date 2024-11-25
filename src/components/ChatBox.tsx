@@ -16,9 +16,13 @@ import "../assets/scss/chatBox.scss";
 
 interface Props {
   placesServiceRef: MutableRefObject<PlacesService | undefined>;
+  closeChatBox: () => void;
 }
 
-const ChatBox: React.FunctionComponent<Props> = ({ placesServiceRef }) => {
+const ChatBox: React.FunctionComponent<Props> = ({
+  placesServiceRef,
+  closeChatBox,
+}) => {
   const [chatHistory, setChatHistory] = useState<Chat[]>([
     {
       role: "bot",
@@ -96,7 +100,10 @@ const ChatBox: React.FunctionComponent<Props> = ({ placesServiceRef }) => {
         align="center"
       >
         <h1 className="chatbox_title">行程規劃機器人</h1>
-        <CloseOutlined className="chatbox_close_button" onClick={() => {}} />
+        <CloseOutlined
+          className="chatbox_close_button"
+          onClick={closeChatBox}
+        />
       </Flex>
       <Flex
         className="chatbox_content"
@@ -122,35 +129,36 @@ const ChatBox: React.FunctionComponent<Props> = ({ placesServiceRef }) => {
                 >
                   <RobotOutlined className="chatbox_bot_image" />
                 </Flex>
-                {chat.type === "text" ? (
-                  <TextArea
-                    className="chatbox_bot_message"
-                    variant="filled"
-                    readOnly
-                    autoSize
-                    value={chat.content as string}
-                  />
-                ) : (
-                  <>
+                {
+                  chat.type === "text" ? (
                     <TextArea
                       className="chatbox_bot_message"
                       variant="filled"
                       readOnly
                       autoSize
-                      value={"以下是為您規劃的行程"}
+                      value={chat.content as string}
                     />
-                    {(chat.content as Place[]).map((place) => (
-                      <PlaceCard
-                        place={{
-                          name: place.name,
-                          photo: place.photo,
-                          rating: place.rating,
-                        }}
-                        mode={CollectionMode.Edit}
-                      />
-                    ))}
-                  </>
-                )}
+                  ) : null
+                  // <>
+                  //   <TextArea
+                  //     className="chatbox_bot_message"
+                  //     variant="filled"
+                  //     readOnly
+                  //     autoSize
+                  //     value={"以下是為您規劃的行程"}
+                  //   />
+                  //   {(chat.content as Place[]).map((place) => (
+                  //     <PlaceCard
+                  //       place={{
+                  //         name: place.name,
+                  //         photo: place.photo,
+                  //         rating: place.rating,
+                  //       }}
+                  //       mode={CollectionMode.Edit}
+                  //     />
+                  //   ))}
+                  // </>
+                }
               </Flex>
             ) : (
               <Flex

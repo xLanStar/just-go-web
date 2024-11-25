@@ -1,44 +1,31 @@
-.attractionCard {
-    display: flex;
-    width: 100%;
-    border-radius: 10px;
-    border-width: 1px;
-    border-color: #d6d6d6;
-    border-style: solid;
+.attraction-card {
+  .ant-card-body {
+    padding: 12px !important;
+  }
 }
 
-.attractionCard-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    border-radius: 10px 10px 0 0;
+.attraction-card {
+  width: 300px;
+  border-radius: 8px;
 }
 
-.attractionCard-header-close {
-    position: absolute;
-    right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.attraction-card-photo {
+  width: 150px;
+  height: 160px;
+  object-fit: cover;
+  cursor: grab;
 }
 
-.attractionCard-content {
-    widows: 100%;
-    padding: 10px;
-    background-color: #ffffff;
+.attraction-card-title,
+.attraction-card-address,
+.attraction-card-rating,
+.attraction-card-note,
+.attraction-card-time {
+  width: 100%;
 }
 
-.attractionCard-content-content {
-    width: 100%;
-    height: 100%;
-    padding-left: 10px;
-    background-color: #ffffff;
-}
-
-.attractionCard-content-content-info {
-    width: 100%;
-    height: 120px;
-    background-color: #ffffff;
+.attraction-card-time-picker,
+.attraction-card-note-textarea {
+  width: 75%;
+  margin-top: 8px;
 }
