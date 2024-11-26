@@ -10,20 +10,40 @@ import {
 interface Props {
   className?: string;
   mode: string;
-  addTrip: () => void;
+  onCreateTrip: () => void;
+  onTripSetting: () => void;
 }
 
-const ActionMenu: React.FunctionComponent<Props> = ({ className, mode, addTrip }) => {
+const ActionMenu: React.FunctionComponent<Props> = ({
+  className,
+  mode,
+  onCreateTrip,
+  onTripSetting,
+}) => {
   const defaultItems: MenuProps["items"] = [
     {
       key: "add_trip",
       icon: <PlusOutlined />,
       label: "建立行程",
-      onClick: addTrip,
+      onClick: onCreateTrip,
     },
   ];
 
   const editItems: MenuProps["items"] = [
+    {
+      key: "trip_setting",
+      icon: <InfoCircleOutlined />,
+      label: "設定",
+      onClick: onTripSetting,
+    },
+    {
+      key: "co_edit",
+      icon: <LockOutlined />,
+      label: "共用",
+    },
+  ];
+
+  const shareItems: MenuProps["items"] = [
     {
       key: "copy_trip",
       icon: <SaveOutlined />,
@@ -33,19 +53,6 @@ const ActionMenu: React.FunctionComponent<Props> = ({ className, mode, addTrip }
       key: "keep_trip",
       icon: <HeartOutlined />,
       label: "收藏",
-    },
-  ];
-
-  const shareItems: MenuProps["items"] = [
-    {
-      key: "trip_setting",
-      icon: <InfoCircleOutlined />,
-      label: "設定",
-    },
-    {
-      key: "co_edit",
-      icon: <LockOutlined />,
-      label: "共用",
     },
   ];
 

@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { Card, Avatar, Row, Col, Tooltip, Tag, Flex } from "antd";
-import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
+import { Card, Avatar, Row, Col, Tag, Flex } from "antd";
+import {
+  DeleteOutlined,
+  LikeOutlined,
+  LikeTwoTone,
+  UserOutlined,
+} from "@ant-design/icons";
 import React from "react";
 import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
 
 import "../assets/scss/tripCard.scss";
+import defaultTripImage from "../assets/image/defaultTripImage.jpg";
 
 interface Props {
   trip: TripInfo;
   mode: TripInfoMode;
-  isPublic: boolean;
   isDelete: boolean;
   toggleFavor: (id: string) => void;
   deleteTrip: (id: string) => void;
@@ -19,7 +24,6 @@ interface Props {
 const TripCard: React.FunctionComponent<Props> = ({
   trip,
   mode,
-  isPublic,
   isDelete,
   toggleFavor,
   deleteTrip,
@@ -33,35 +37,50 @@ const TripCard: React.FunctionComponent<Props> = ({
       cover={
         <div
           className="trip-card-image-container"
-          onClick={() => navigate(`/trip/${trip.id}`)}
+          onClick={() =>
+            mode === TripInfoMode.Public
+              ? navigate(`/trip/${trip.id}/share`)
+              : navigate(`/trip/${trip.id}`)
+          }
         >
-          <img className="trip-card-image" src={trip.image} alt="trip" />
+          <img
+            className="trip-card-image"
+            src={trip.image ? trip.image : defaultTripImage}
+            alt="trip"
+          />
         </div>
       }
-      actions={[
-        isPublic && (
-          <Tooltip title="點讚">
-            <Flex
-              vertical={false}
-              justify="center"
-              align="center"
-              gap="small"
-              onClick={() => toggleFavor(trip.id)}
-            >
-              {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
-              <span>{trip.like > 999 ? "999+" : trip.like}</span>
-            </Flex>
-          </Tooltip>
-        ),
-        isDelete && (
-          <Tooltip title="刪除">
-            <DeleteOutlined
-              onClick={() => deleteTrip(trip.id)}
-              className="trip-card-action"
-            />
-          </Tooltip>
-        ),
-      ]}
+      actions={
+        isDelete
+          ? [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+                onClick={() => toggleFavor(trip.id)}
+              >
+                {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+                <span>{trip.like > 999 ? "999+" : trip.like}</span>
+              </Flex>,
+              <DeleteOutlined
+                onClick={() => deleteTrip(trip.id)}
+                className="trip-card-action"
+              />,
+            ]
+          : [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+                onClick={() => toggleFavor(trip.id)}
+              >
+                {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+                <span>{trip.like > 999 ? "999+" : trip.like}</span>
+              </Flex>,
+            ]
+      }
     >
       <Flex
         className="trip-card-body"
@@ -90,9 +109,12 @@ const TripCard: React.FunctionComponent<Props> = ({
           justify="flex-start"
           align="center"
           gap="small"
-          onClick={() => navigate(`/user/${trip.userId}`)}
         >
-          <Avatar src={trip.avatar} size={36} />
+          {trip.avatar ? (
+            <Avatar src={trip.avatar} size={36} />
+          ) : (
+            <Avatar icon={<UserOutlined />} size={36} />
+          )}
           <span className="trip-card-username">{trip.username}</span>
         </Flex>
         <Flex
@@ -102,11 +124,17 @@ const TripCard: React.FunctionComponent<Props> = ({
           align="center"
           gap="small"
         >
-          {trip.labels.map((label, index) => (
-            <Tag key={index} color="blue" className="trip-card-label">
-              {label}
-            </Tag>
-          ))}
+          {trip.labels.length > 0 ? (
+            <>
+              {trip.labels.map((label, index) => (
+                <Tag key={index} color="blue" className="trip-card-label">
+                  {label}
+                </Tag>
+              ))}
+            </>
+          ) : (
+            <h3 className="trip-card-no-label">無標籤</h3>
+          )}
         </Flex>
         {mode === TripInfoMode.Public && (
           <Flex
@@ -114,8 +142,16 @@ const TripCard: React.FunctionComponent<Props> = ({
             vertical={false}
             justify="flex-start"
             align="center"
+            gap="small"
           >
-            {trip.publishDay} 發佈
+            <h3>
+              {new Date(trip.publishDay).toLocaleDateString("zh-TW", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
+            </h3>
+            <h3>發布</h3>
           </Flex>
         )}
       </Flex>

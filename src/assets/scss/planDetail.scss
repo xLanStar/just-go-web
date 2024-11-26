@@ -2,6 +2,7 @@
   width: 400px;
   height: calc(100vh - 64px);
   position: absolute;
+  left: 0;
   background-color: white;
   z-index: 2;
 }
@@ -9,7 +10,7 @@
 .plan-detail-header {
   width: 400px;
   height: 64px;
-  padding-left: 24px;
+  padding-left: 64px;
   padding-right: 36px;
   position: fixed;
   border-bottom: 2px solid #d6d6d6;
@@ -21,12 +22,21 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 2em;
+  font-weight: bold;
 }
 
 .plan-detail-close-button {
   font-size: 20px;
   position: absolute;
   left: 16px;
+  cursor: pointer;
+}
+
+.plan-detail-final-plan {
+  font-size: 20px;
+  position: absolute;
+  left: 48px;
   cursor: pointer;
 }
 

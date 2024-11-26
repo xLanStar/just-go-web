@@ -17,3 +17,9 @@ export interface TripFrom {
   image: File | undefined;
   date: [dayjs.Dayjs, dayjs.Dayjs];
 }
+
+export interface TripEditFrom {
+  name: string;
+  image: File | undefined;
+  description: string;
+}

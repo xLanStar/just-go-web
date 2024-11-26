@@ -23,7 +23,8 @@ export interface TripEditInfo {
   userId: string;
   title: string;
   image: string;
-  personalEditPermission: number;
+  description: string;
+  editPermission: number;
   finalPlanId: string;
   departureDate: string;
   endDate: string;

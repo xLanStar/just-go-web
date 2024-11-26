@@ -9,6 +9,7 @@ import ActionButtonList from "./ActionButtonList";
 import ActionMenu from "./ActionMenu";
 
 import "../assets/scss/layout.scss";
+import TripEditModal from "./TripEditModal";
 
 const { Header, Footer, Content } = AntdLayout;
 
@@ -19,6 +20,7 @@ const Layout = () => {
   const mode = useAppSelector((state) => state.page.mode);
 
   const [showTripModal, setShowTripModal] = useState<boolean>(false);
+  const [showTripEditModal, setShowTripEditModal] = useState<boolean>(false);
 
   return (
     <AntdLayout className="layout">
@@ -61,12 +63,14 @@ const Layout = () => {
               <ActionButtonList
                 className="layout_action_button"
                 mode={mode}
-                addTrip={() => setShowTripModal(true)}
+                onCreateTrip={() => setShowTripModal(true)}
+                onTripSetting={() => setShowTripEditModal(true)}
               />
               <ActionMenu
                 className="layout_action_menu"
                 mode={mode}
-                addTrip={() => setShowTripModal(true)}
+                onCreateTrip={() => setShowTripModal(true)}
+                onTripSetting={() => setShowTripEditModal(true)}
               />
               <NavButtonList className="layout_nav_menu" mode="menu" />
               <AvatarMenu avatarUrl={user.avatar} />
@@ -76,12 +80,14 @@ const Layout = () => {
       </Header>
       <Content className="layout_outlet">
         <Outlet />
-        {showTripModal ? (
-          <TripModal
-            open={showTripModal}
-            handleClose={() => setShowTripModal(false)}
-          />
-        ) : null}
+        <TripModal
+          open={showTripModal}
+          handleClose={() => setShowTripModal(false)}
+        />
+        <TripEditModal
+          open={showTripEditModal}
+          handleClose={() => setShowTripEditModal(false)}
+        />
       </Content>
       {mode === "default" ? (
         <Footer className="layout_footer">Copyright©2024 JustGo</Footer>

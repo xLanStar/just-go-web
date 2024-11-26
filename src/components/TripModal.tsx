@@ -4,6 +4,7 @@ import Uploader from "./Uploader";
 import { TripFrom } from "../types/formInterface";
 import { CommonRules } from "../data/form";
 import useTripInfo from "../hooks/useTripInfo";
+import { useNavigate } from "react-router-dom";
 
 import "../assets/scss/tripModal.scss";
 
@@ -15,16 +16,22 @@ interface Props {
 }
 
 const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
+  const navigate = useNavigate();
+
   const { createTrip } = useTripInfo("");
   const [form] = Form.useForm();
 
   const handleSubmit = async (form: TripFrom) => {
-    await createTrip(
+    const tripInfo = await createTrip(
       form.name,
       form.image,
       form.date[0].format("YYYY-MM-DD"),
       form.date[1].format("YYYY-MM-DD")
     );
+
+    console.log(tripInfo);
+    navigate(`/trip/${tripInfo.id}`);
+    handleClose();
   };
 
   return (
@@ -46,7 +53,10 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
         title="建立行程"
         centered
         open={open}
-        onCancel={handleClose}
+        onCancel={() => {
+          handleClose();
+          form.resetFields();
+        }}
         destroyOnClose
         okButtonProps={{
           icon: <SaveOutlined />,

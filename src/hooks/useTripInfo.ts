@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks";
 import request from "../utils/request";
 import { App } from "antd";
@@ -14,7 +13,6 @@ const useTripInfo = (type: string) => {
 
   const [trips, setTrips] = useState<TripInfo[]>([]);
   const user = useAppSelector((state) => state.user.user);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +30,7 @@ const useTripInfo = (type: string) => {
             setTrips(response.data);
             break;
         }
+        console.log("response", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.status === 401) {
@@ -109,13 +108,13 @@ const useTripInfo = (type: string) => {
     }
 
     try {
-      await request.post("/api/trips", formData, {
+      const response = await request.post("/api/trips", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       message.success("建立成功");
-      navigate("/edit");
+      return response.data.tripInfo;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.status === 401) {
@@ -130,7 +129,85 @@ const useTripInfo = (type: string) => {
     }
   };
 
-  return { trips, favorTrip, deleteTrip, createTrip };
+  const updateTripInfo = async (
+    tripId: string,
+    name: string,
+    image: File | undefined,
+    description: string,
+    labels: string[]
+  ) => {
+    const formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("labels", labels.join(","));
+
+    if (description) {
+      formData.append("description", description);
+    } else {
+      formData.append("description", "");
+    }
+
+    if (image) {
+      formData.append("image", image);
+    } else {
+      formData.append("image", "");
+    }
+
+    try {
+      const response = await request.put(`/api/trips/${tripId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      message.success("修改成功");
+      return response.data.tripInfo;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          message.error("請重新登入");
+          logout();
+        } else if (error.status === 403) {
+          message.error("你沒有權限修改此行程");
+        } else if (error.status === 404) {
+          message.error("找不到行程");
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
+      }
+    }
+  };
+
+  const publishTrip = async (tripId: string, isPublic: boolean) => {
+    try {
+      const response = await request.patch(`/api/trips/${tripId}/publish`, {
+        isPublic,
+      });
+      message.success(isPublic ? "發佈成功" : "取消成功");
+      return response.data.tripInfo;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          message.error("請重新登入");
+          logout();
+        } else if (error.status === 403) {
+          message.error("你沒有權限修改此行程");
+        } else if (error.status === 404) {
+          message.error("找不到行程");
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
+      }
+    }
+  };
+
+  return {
+    trips,
+    favorTrip,
+    deleteTrip,
+    createTrip,
+    updateTripInfo,
+    publishTrip,
+  };
 };
 
 export default useTripInfo;

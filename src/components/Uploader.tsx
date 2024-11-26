@@ -10,11 +10,16 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 interface Props {
   value?: UploadFile[];
   onChange?: (fileList: UploadFile[]) => void;
+  defaultImageUrl?: string;
 }
 
-const Uploader: React.FunctionComponent<Props> = ({ value = [], onChange }) => {
+const Uploader: React.FunctionComponent<Props> = ({
+  value = [],
+  onChange,
+  defaultImageUrl,
+}) => {
   const [image, setImage] = useState<UploadFile[]>(value);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>(defaultImageUrl || "");
 
   const handleUpload = (file: FileType) => {
     const isImage = file.type === "image/png" || file.type === "image/jpeg";

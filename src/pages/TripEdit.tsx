@@ -18,9 +18,14 @@ import Collection from "../components/Collection";
 import PlanList from "../components/PlanList";
 import useTrip from "../hooks/useTrip";
 import { TripEditInfo } from "../types/tripInterface";
+import useMarkList from "../hooks/useMarkList";
+import {
+  setCurrentAttractions,
+  setCurrentDay,
+  setCurrentPlan,
+} from "../store/trip/tripSlice";
 
 import "../assets/scss/tripEdit.scss";
-import useMarkList from "../hooks/useMarkList";
 
 const TripEdit: React.FunctionComponent = () => {
   const { id } = useParams();
@@ -37,7 +42,7 @@ const TripEdit: React.FunctionComponent = () => {
   const { mapRef, placesServiceRef } = useGoogleMapService();
   const { collection, addPlaceToTrip, deletePlace } = useCollection();
   const { currentTrip } = useTrip(id);
-  const { markList } = useMarkList();
+  const { markList, loadMarkList } = useMarkList();
 
   console.log("currentTrip", currentTrip);
   console.log("markList", markList);
@@ -52,6 +57,10 @@ const TripEdit: React.FunctionComponent = () => {
     }
     dispatch(setPage("行程安排"));
     dispatch(setMode("edit"));
+    dispatch(setCurrentPlan(null));
+    dispatch(setCurrentDay(null));
+    dispatch(setCurrentAttractions([]));
+    loadMarkList(true);
   }, [navigate]);
 
   if (loadError) {

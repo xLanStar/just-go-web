@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Rate, TimePicker, Input, Tooltip, Flex } from "antd";
+import { Card, Rate, TimePicker, Input, Flex } from "antd";
 import { Attraction } from "../types/tripInterface";
 import usePlaceDetail from "../hooks/usePlaceDetail";
 import {
@@ -9,6 +9,8 @@ import {
 } from "@ant-design/icons";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import dayjs from "dayjs";
+import { convertToTraditional } from "../utils/textConverter";
 
 import "../assets/scss/attractionCard.scss";
 
@@ -18,19 +20,24 @@ interface Props {
   attraction: Attraction;
   mode: "Edit" | "Read";
   onDelete: () => void;
+  onTimeChange: (value: any) => void;
+  onNoteChange: (value: string) => void;
 }
 
 const AttractionCard: React.FunctionComponent<Props> = ({
   attraction,
   mode,
   onDelete,
+  onTimeChange,
+  onNoteChange,
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: attraction.id });
   const { placeDetail: place, getPlaceDetail } = usePlaceDetail();
 
-  const [isNoteVisible, setIsNoteVisible] = useState<boolean>(false);
   const [note, setNote] = useState<string>(attraction.note);
+  const [currentNote, setCurrentNote] = useState<string>(attraction.note);
+  const [isNoteVisible, setIsNoteVisible] = useState<boolean>(false);
 
   useEffect(() => {
     getPlaceDetail(attraction.googlePlaceId);
@@ -54,24 +61,51 @@ const AttractionCard: React.FunctionComponent<Props> = ({
           {...listeners}
         />
       }
-      actions={[
-        <Tooltip title="編輯">
-          <Flex vertical={false} justify="center" align="center" gap="small">
-            {isNoteVisible ? (
-              <EyeInvisibleOutlined onClick={() => setIsNoteVisible(false)} />
-            ) : (
-              <FormOutlined onClick={() => setIsNoteVisible(true)} />
-            )}
-          </Flex>
-        </Tooltip>,
-        mode === "Edit" && (
-          <Tooltip title="刪除">
-            <Flex vertical={false} justify="center" align="center" gap="small">
-              <DeleteOutlined onClick={onDelete} />
-            </Flex>
-          </Tooltip>
-        ),
-      ]}
+      actions={
+        mode === "Edit"
+          ? [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+              >
+                {isNoteVisible ? (
+                  <EyeInvisibleOutlined
+                    onClick={() => setIsNoteVisible(false)}
+                  />
+                ) : (
+                  <FormOutlined onClick={() => setIsNoteVisible(true)} />
+                )}
+              </Flex>,
+              mode === "Edit" && (
+                <Flex
+                  vertical={false}
+                  justify="center"
+                  align="center"
+                  gap="small"
+                >
+                  <DeleteOutlined onClick={onDelete} />
+                </Flex>
+              ),
+            ]
+          : [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+              >
+                {isNoteVisible ? (
+                  <EyeInvisibleOutlined
+                    onClick={() => setIsNoteVisible(false)}
+                  />
+                ) : (
+                  <FormOutlined onClick={() => setIsNoteVisible(true)} />
+                )}
+              </Flex>,
+            ]
+      }
       style={style}
     >
       <Flex
@@ -94,7 +128,7 @@ const AttractionCard: React.FunctionComponent<Props> = ({
           justify="flex-start"
           align="center"
         >
-          <h3>{place.address}</h3>
+          <h3>{convertToTraditional(place.address)}</h3>
         </Flex>
         <Flex
           className="attraction-card-rating"
@@ -116,8 +150,14 @@ const AttractionCard: React.FunctionComponent<Props> = ({
           <h3>時間：</h3>
           <TimePicker.RangePicker
             className="attraction-card-time-picker"
-            format={"HH:mm:ss"}
-            disabled={mode === "Read"}
+            format={"HH:mm"}
+            defaultValue={[
+              dayjs(attraction.startAt, "HH:mm"),
+              dayjs(attraction.endAt, "HH:mm"),
+            ]}
+            disabled={mode === "Read" ? true : false}
+            onChange={onTimeChange}
+            allowClear={false}
           />
         </Flex>
         {isNoteVisible && (
@@ -131,15 +171,20 @@ const AttractionCard: React.FunctionComponent<Props> = ({
             <h3>備註：</h3>
             <TextArea
               className="attraction-card-note-textarea"
-              value={note}
               rows={2}
-              maxLength={30}
+              maxLength={50}
+              value={note}
               placeholder={"請輸入備註..."}
               style={{ resize: "none" }}
-              disabled={mode === "Read"}
+              disabled={mode === "Read" ? true : false}
               onChange={(e) => {
-                e.stopPropagation();
                 setNote(e.target.value);
+              }}
+              onBlur={() => {
+                if (note !== currentNote) {
+                  setCurrentNote(note);
+                  onNoteChange(note);
+                }
               }}
             />
           </Flex>
