@@ -7,8 +7,8 @@ interface PageState {
 
 const initialState: PageState = {
   name: "",
-  mode: "default", // default, edit
-}
+  mode: "default | explore | edit | share",
+};
 
 const pageSlice = createSlice({
   name: "page",
@@ -19,9 +19,9 @@ const pageSlice = createSlice({
     },
     setMode: (state, action: PayloadAction<string>) => {
       state.mode = action.payload;
-    }
-  }
-})
+    },
+  },
+});
 
 export const { setPage, setMode } = pageSlice.actions;
 

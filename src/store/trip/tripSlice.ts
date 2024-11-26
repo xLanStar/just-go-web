@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Attraction, Day, Plan, TripEditInfo } from "../../types/tripInterface";
+import { Mark } from "../../types/googleMapInterface";
 
 interface TripState {
   currentTrip: TripEditInfo | null;
   currentPlan: Plan | null;
   currentDay: Day | null;
   currentAttractions: Attraction[];
+  markList: Mark[];
 }
 
 const initialState: TripState = {
@@ -13,6 +15,7 @@ const initialState: TripState = {
   currentPlan: null,
   currentDay: null,
   currentAttractions: [],
+  markList: [],
 };
 
 const tripSlice = createSlice({
@@ -31,6 +34,9 @@ const tripSlice = createSlice({
     setCurrentAttractions(state, action: PayloadAction<Attraction[]>) {
       state.currentAttractions = action.payload;
     },
+    setMarkList(state, action: PayloadAction<Mark[]>) {
+      state.markList = action.payload;
+    },
   },
 });
 
@@ -39,6 +45,7 @@ export const {
   setCurrentPlan,
   setCurrentDay,
   setCurrentAttractions,
+  setMarkList,
 } = tripSlice.actions;
 
 export default tripSlice;

@@ -11,7 +11,6 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import TripEdit from "./pages/TripEdit";
 import TripShare from "./pages/TripShare";
-import PublisherInfo from "./pages/PublisherInfo";
 import VerifyNotice from "./pages/auth/VerifyNotice";
 import Verify from "./pages/auth/Verify";
 
@@ -31,11 +30,10 @@ const App: React.FunctionComponent = () => (
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
+          <Route path="trip/:id/share" element={<TripShare />} />
           <Route path="trip/:id" element={<TripEdit />} />
-          <Route path="share" element={<TripShare />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="user/:id" element={<PublisherInfo />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
         <Route path="/signin" element={<Signin />} />

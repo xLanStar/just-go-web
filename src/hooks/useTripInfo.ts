@@ -30,6 +30,7 @@ const useTripInfo = (type: string) => {
             setTrips(response.data);
             break;
         }
+        console.log("response", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.status === 401) {
@@ -176,7 +177,37 @@ const useTripInfo = (type: string) => {
     }
   };
 
-  return { trips, favorTrip, deleteTrip, createTrip, updateTripInfo };
+  const publishTrip = async (tripId: string, isPublic: boolean) => {
+    try {
+      const response = await request.patch(`/api/trips/${tripId}/publish`, {
+        isPublic,
+      });
+      message.success(isPublic ? "發佈成功" : "取消成功");
+      return response.data.tripInfo;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.status === 401) {
+          message.error("請重新登入");
+          logout();
+        } else if (error.status === 403) {
+          message.error("你沒有權限修改此行程");
+        } else if (error.status === 404) {
+          message.error("找不到行程");
+        } else if (error.status === 500) {
+          message.error("系統發生錯誤");
+        }
+      }
+    }
+  };
+
+  return {
+    trips,
+    favorTrip,
+    deleteTrip,
+    createTrip,
+    updateTripInfo,
+    publishTrip,
+  };
 };
 
 export default useTripInfo;

@@ -31,19 +31,6 @@ const ActionMenu: React.FunctionComponent<Props> = ({
 
   const editItems: MenuProps["items"] = [
     {
-      key: "copy_trip",
-      icon: <SaveOutlined />,
-      label: "建立副本",
-    },
-    {
-      key: "keep_trip",
-      icon: <HeartOutlined />,
-      label: "收藏",
-    },
-  ];
-
-  const shareItems: MenuProps["items"] = [
-    {
       key: "trip_setting",
       icon: <InfoCircleOutlined />,
       label: "設定",
@@ -53,6 +40,19 @@ const ActionMenu: React.FunctionComponent<Props> = ({
       key: "co_edit",
       icon: <LockOutlined />,
       label: "共用",
+    },
+  ];
+
+  const shareItems: MenuProps["items"] = [
+    {
+      key: "copy_trip",
+      icon: <SaveOutlined />,
+      label: "建立副本",
+    },
+    {
+      key: "keep_trip",
+      icon: <HeartOutlined />,
+      label: "收藏",
     },
   ];
 

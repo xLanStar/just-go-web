@@ -37,7 +37,11 @@ const TripCard: React.FunctionComponent<Props> = ({
       cover={
         <div
           className="trip-card-image-container"
-          onClick={() => navigate(`/trip/${trip.id}`)}
+          onClick={() =>
+            mode === TripInfoMode.Public
+              ? navigate(`/trip/${trip.id}/share`)
+              : navigate(`/trip/${trip.id}`)
+          }
         >
           <img
             className="trip-card-image"
@@ -105,7 +109,6 @@ const TripCard: React.FunctionComponent<Props> = ({
           justify="flex-start"
           align="center"
           gap="small"
-          onClick={() => navigate(`/user/${trip.userId}`)}
         >
           {trip.avatar ? (
             <Avatar src={trip.avatar} size={36} />
@@ -121,11 +124,17 @@ const TripCard: React.FunctionComponent<Props> = ({
           align="center"
           gap="small"
         >
-          {trip.labels.map((label, index) => (
-            <Tag key={index} color="blue" className="trip-card-label">
-              {label}
-            </Tag>
-          ))}
+          {trip.labels.length > 0 ? (
+            <>
+              {trip.labels.map((label, index) => (
+                <Tag key={index} color="blue" className="trip-card-label">
+                  {label}
+                </Tag>
+              ))}
+            </>
+          ) : (
+            <h3 className="trip-card-no-label">無標籤</h3>
+          )}
         </Flex>
         {mode === TripInfoMode.Public && (
           <Flex
@@ -133,8 +142,16 @@ const TripCard: React.FunctionComponent<Props> = ({
             vertical={false}
             justify="flex-start"
             align="center"
+            gap="small"
           >
-            {trip.publishDay} 發佈
+            <h3>
+              {new Date(trip.publishDay).toLocaleDateString("zh-TW", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
+            </h3>
+            <h3>發布</h3>
           </Flex>
         )}
       </Flex>

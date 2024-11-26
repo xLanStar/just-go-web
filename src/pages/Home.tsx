@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 import { useAppDispatch } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { setMode, setPage } from "../store/page/pageSlice";
-import { Flex, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Flex } from "antd";
 import TripList from "../components/TripList";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-
-import "../assets/scss/home.scss";
 
 const Home: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -25,7 +22,7 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <Flex
-      className="Home"
+      className="home"
       vertical
       justify="flex-start"
       align="center"
@@ -34,6 +31,7 @@ const Home: React.FunctionComponent = () => {
       }}
     >
       <Flex
+        className="home-title"
         vertical={false}
         justify="center"
         align="center"
@@ -42,12 +40,7 @@ const Home: React.FunctionComponent = () => {
           height: "80px",
         }}
       >
-        <Input
-          className="search_bar"
-          prefix={<SearchOutlined />}
-          size="large"
-          placeholder="請輸入地點、關鍵字"
-        />
+        <h1>熱門行程</h1>
       </Flex>
       <TripList type="public" />
     </Flex>

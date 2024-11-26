@@ -1,6 +1,6 @@
 import { Button, Flex, List } from "antd";
 import { useState } from "react";
-import { CloseOutlined, PlusOutlined, StarOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined, StarFilled } from "@ant-design/icons";
 import usePlans from "../hooks/usePlans";
 import PlanDetail from "./PlanDetail";
 import { Plan, TripEditInfo } from "../types/tripInterface";
@@ -68,7 +68,7 @@ const PlanList: React.FunctionComponent<Props> = ({
                 <Button
                   className="plan-list-button"
                   icon={
-                    plan.id === tripInfo.finalPlanId ? <StarOutlined /> : null
+                    plan.id === tripInfo.finalPlanId ? <StarFilled /> : null
                   }
                   style={{
                     color: colorList[index % 9],
@@ -101,8 +101,10 @@ const PlanList: React.FunctionComponent<Props> = ({
       {showPlanDetail ? (
         <PlanDetail
           tripId={tripInfo.id}
+          finalPlanId={tripInfo.finalPlanId}
           plan={currentPlan as Plan}
           color={planColor}
+          mode="Edit"
           closePlanDetail={() => setShowPlanDetail(false)}
           onPlanNameChange={(name: string) =>
             changePlanName(currentPlan?.id as string, name)

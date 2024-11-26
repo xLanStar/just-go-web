@@ -1,10 +1,13 @@
-import { CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, ConfigProvider, Flex } from "antd";
+import {
+  CloseCircleOutlined,
+  SaveOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
+import { Form, Input, Modal, ConfigProvider, Flex, Button } from "antd";
 import Uploader from "./Uploader";
 import { CommonRules } from "../data/form";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TagEditList from "./TagEditList";
 import { TripEditFrom } from "../types/formInterface";
 import useTripInfo from "../hooks/useTripInfo";
@@ -23,25 +26,38 @@ const TripEditModal: React.FunctionComponent<Props> = ({
   open,
   handleClose,
 }) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
-  const { updateTripInfo } = useTripInfo("");
+
+  console.log("currentTrip", currentTrip);
+
+  const { updateTripInfo, publishTrip } = useTripInfo("");
 
   const [form] = Form.useForm();
 
   const [labels, setLabels] = useState<string[]>(currentTrip?.labels || []);
 
+  useEffect(() => {
+    setLabels(currentTrip?.labels || []);
+  }, [currentTrip]);
+
   const handleSubmit = async (form: TripEditFrom) => {
-    console.log(form);
-    console.log(labels);
     const tripInfo = await updateTripInfo(
       currentTrip?.id as string,
       form.name,
       form.image,
       form.description,
       labels
+    );
+    dispatch(setCurrentTrip(tripInfo));
+    handleClose();
+  };
+
+  const handlePublish = async () => {
+    const tripInfo = await publishTrip(
+      currentTrip?.id as string,
+      !currentTrip?.isPublic
     );
     dispatch(setCurrentTrip(tripInfo));
     handleClose();
@@ -71,7 +87,24 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           form.resetFields();
           setLabels(currentTrip?.labels || []);
         }}
+        afterClose={() => {
+          form.resetFields();
+          setLabels(currentTrip?.labels || []);
+        }}
         destroyOnClose
+        footer={(_, { OkBtn, CancelBtn }) => (
+          <>
+            <Button
+              className="trip-edit-modal-publish-button"
+              icon={<SendOutlined />}
+              onClick={handlePublish}
+            >
+              {currentTrip?.isPublic ? "取消發布" : "發布"}
+            </Button>
+            <CancelBtn />
+            <OkBtn />
+          </>
+        )}
         okButtonProps={{
           icon: <SaveOutlined />,
           htmlType: "submit",
@@ -119,7 +152,7 @@ const TripEditModal: React.FunctionComponent<Props> = ({
             size="large"
             placeholder="行程介紹"
             rows={3}
-            maxLength={500}
+            maxLength={255}
             style={{ resize: "none" }}
           />
         </Form.Item>

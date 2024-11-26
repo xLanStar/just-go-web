@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { ConfigProvider, Flex, Input, Tabs } from "antd";
-import { LeftOutlined } from "@ant-design/icons";
+import { LeftOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import useDays from "../hooks/useDays";
 import AttractionCard from "./AttractionCard";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { Plan } from "../types/tripInterface";
 import useAttractions from "../hooks/useAttractions";
 import {
@@ -17,6 +17,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import useMarkList from "../hooks/useMarkList";
 
 import type { TabsProps } from "antd";
 
@@ -24,16 +25,20 @@ import "../assets/scss/planDetail.scss";
 
 interface Props {
   tripId: string;
+  finalPlanId: string;
   plan: Plan;
   color: string;
+  mode: "Edit" | "Read";
   closePlanDetail: () => void;
   onPlanNameChange: (name: string) => void;
 }
 
 const PlanDetail: React.FunctionComponent<Props> = ({
   tripId,
+  finalPlanId,
   plan,
   color,
+  mode,
   closePlanDetail,
   onPlanNameChange,
 }) => {
@@ -51,12 +56,19 @@ const PlanDetail: React.FunctionComponent<Props> = ({
     changeAttractionTime,
     changeAttractionNote,
   } = useAttractions(tripId, plan.id);
+  const { loadMarkList } = useMarkList();
+
+  const currentTrip = useAppSelector((state) => state.trip.currentTrip);
 
   useEffect(() => {
     console.log("currentDay", currentDay);
     if (!currentDay) return;
     loadAttractions(currentDay.id, currentDay.startAttractionId);
   }, [currentDay]);
+
+  useEffect(() => {
+    loadMarkList();
+  }, [attractions]);
 
   const daysTab: TabsProps["items"] =
     days.map((day, index) => ({
@@ -126,10 +138,18 @@ const PlanDetail: React.FunctionComponent<Props> = ({
             style={{
               color: color,
             }}
-            defaultValue={plan.name ? plan.name : "未命名方案"}
+            defaultValue={
+              mode === "Read"
+                ? currentTrip?.title
+                : plan.name
+                  ? plan.name
+                  : "未命名方案"
+            }
+            disabled={mode === "Read" ? true : false}
             variant="borderless"
             size="large"
             onBlur={(e) => {
+              if (mode === "Read") return;
               const newName = e.target.value;
               if (newName !== plan.name) {
                 onPlanNameChange(newName);
@@ -147,6 +167,21 @@ const PlanDetail: React.FunctionComponent<Props> = ({
               color: color,
             }}
           />
+          {finalPlanId === plan.id ? (
+            <StarFilled
+              className="plan-detail-final-plan"
+              style={{
+                color: color,
+              }}
+            />
+          ) : (
+            <StarOutlined
+              className="plan-detail-final-plan"
+              style={{
+                color: color,
+              }}
+            />
+          )}
         </Flex>
         <div className="plan-detail-content">
           <Tabs
@@ -158,66 +193,119 @@ const PlanDetail: React.FunctionComponent<Props> = ({
               dispatch(setCurrentDay(day));
             }}
           />
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={attractions}
-              strategy={verticalListSortingStrategy}
+          {mode === "Edit" ? (
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
             >
-              <Flex
-                className="plan-detail-attraction-list"
-                vertical
-                justify="flex-start"
-                align="center"
-                gap="middle"
+              <SortableContext
+                items={attractions}
+                strategy={verticalListSortingStrategy}
               >
-                {attractions.map((attraction, index) => (
-                  <AttractionCard
-                    key={attraction.id}
-                    attraction={attraction}
-                    mode="Edit"
-                    onDelete={() => {
-                      const preAttractionId =
-                        index === 0 ? null : attractions[index - 1].id;
-                      deleteAttraction(
-                        currentDay?.id as string,
-                        attraction.id,
-                        preAttractionId
-                      );
-                      if (attraction.id === currentDay?.startAttractionId) {
-                        changeDayStartAttraction(
-                          attractions[index + 1]?.id as string
+                <Flex
+                  className="plan-detail-attraction-list"
+                  vertical
+                  justify="flex-start"
+                  align="center"
+                  gap="middle"
+                >
+                  {attractions.map((attraction, index) => (
+                    <AttractionCard
+                      key={attraction.id}
+                      attraction={attraction}
+                      mode={mode}
+                      onDelete={() => {
+                        const preAttractionId =
+                          index === 0 ? null : attractions[index - 1].id;
+                        deleteAttraction(
+                          currentDay?.id as string,
+                          attraction.id,
+                          preAttractionId
                         );
+                        if (attraction.id === currentDay?.startAttractionId) {
+                          changeDayStartAttraction(
+                            attractions[index + 1]?.id as string
+                          );
+                        }
+                      }}
+                      onTimeChange={(value: any) => {
+                        const startAt = value[0].format("HH:mm");
+                        const endAt = value[1].format("HH:mm");
+
+                        console.log("startAt", startAt);
+                        console.log("endAt", endAt);
+
+                        changeAttractionTime(
+                          currentDay?.id as string,
+                          attraction.id,
+                          startAt,
+                          endAt
+                        );
+                      }}
+                      onNoteChange={(note: string) =>
+                        changeAttractionNote(
+                          currentDay?.id as string,
+                          attraction.id,
+                          note
+                        )
                       }
-                    }}
-                    onTimeChange={(value: any) => {
-                      const startAt = value[0].format("HH:mm");
-                      const endAt = value[1].format("HH:mm");
-
-                      console.log("startAt", startAt);
-                      console.log("endAt", endAt);
-
-                      changeAttractionTime(
-                        currentDay?.id as string,
-                        attraction.id,
-                        startAt,
-                        endAt
+                    />
+                  ))}
+                </Flex>
+              </SortableContext>
+            </DndContext>
+          ) : (
+            <Flex
+              className="plan-detail-attraction-list"
+              vertical
+              justify="flex-start"
+              align="center"
+              gap="middle"
+            >
+              {attractions.map((attraction, index) => (
+                <AttractionCard
+                  key={attraction.id}
+                  attraction={attraction}
+                  mode={mode}
+                  onDelete={() => {
+                    const preAttractionId =
+                      index === 0 ? null : attractions[index - 1].id;
+                    deleteAttraction(
+                      currentDay?.id as string,
+                      attraction.id,
+                      preAttractionId
+                    );
+                    if (attraction.id === currentDay?.startAttractionId) {
+                      changeDayStartAttraction(
+                        attractions[index + 1]?.id as string
                       );
-                    }}
-                    onNoteChange={(note: string) =>
-                      changeAttractionNote(
-                        currentDay?.id as string,
-                        attraction.id,
-                        note
-                      )
                     }
-                  />
-                ))}
-              </Flex>
-            </SortableContext>
-          </DndContext>
+                  }}
+                  onTimeChange={(value: any) => {
+                    const startAt = value[0].format("HH:mm");
+                    const endAt = value[1].format("HH:mm");
+
+                    console.log("startAt", startAt);
+                    console.log("endAt", endAt);
+
+                    changeAttractionTime(
+                      currentDay?.id as string,
+                      attraction.id,
+                      startAt,
+                      endAt
+                    );
+                  }}
+                  onNoteChange={(note: string) =>
+                    changeAttractionNote(
+                      currentDay?.id as string,
+                      attraction.id,
+                      note
+                    )
+                  }
+                />
+              ))}
+            </Flex>
+          )}
         </div>
       </Flex>
     </ConfigProvider>
