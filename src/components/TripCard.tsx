@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { Card, Avatar, Row, Col, Tag, Flex } from "antd";
-import { DeleteOutlined, LikeOutlined, LikeTwoTone } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  LikeOutlined,
+  LikeTwoTone,
+  UserOutlined,
+} from "@ant-design/icons";
 import React from "react";
 import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
 
 import "../assets/scss/tripCard.scss";
+import defaultTripImage from "../assets/image/defaultTripImage.jpg";
 
 interface Props {
   trip: TripInfo;
   mode: TripInfoMode;
-  isPublic: boolean;
   isDelete: boolean;
   toggleFavor: (id: string) => void;
   deleteTrip: (id: string) => void;
@@ -19,7 +24,6 @@ interface Props {
 const TripCard: React.FunctionComponent<Props> = ({
   trip,
   mode,
-  isPublic,
   isDelete,
   toggleFavor,
   deleteTrip,
@@ -35,29 +39,44 @@ const TripCard: React.FunctionComponent<Props> = ({
           className="trip-card-image-container"
           onClick={() => navigate(`/trip/${trip.id}`)}
         >
-          <img className="trip-card-image" src={trip.image} alt="trip" />
+          <img
+            className="trip-card-image"
+            src={trip.image ? trip.image : defaultTripImage}
+            alt="trip"
+          />
         </div>
       }
-      actions={[
-        isPublic && (
-          <Flex
-            vertical={false}
-            justify="center"
-            align="center"
-            gap="small"
-            onClick={() => toggleFavor(trip.id)}
-          >
-            {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
-            <span>{trip.like > 999 ? "999+" : trip.like}</span>
-          </Flex>
-        ),
-        isDelete && (
-          <DeleteOutlined
-            onClick={() => deleteTrip(trip.id)}
-            className="trip-card-action"
-          />
-        ),
-      ]}
+      actions={
+        isDelete
+          ? [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+                onClick={() => toggleFavor(trip.id)}
+              >
+                {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+                <span>{trip.like > 999 ? "999+" : trip.like}</span>
+              </Flex>,
+              <DeleteOutlined
+                onClick={() => deleteTrip(trip.id)}
+                className="trip-card-action"
+              />,
+            ]
+          : [
+              <Flex
+                vertical={false}
+                justify="center"
+                align="center"
+                gap="small"
+                onClick={() => toggleFavor(trip.id)}
+              >
+                {trip.isLike ? <LikeTwoTone /> : <LikeOutlined />}
+                <span>{trip.like > 999 ? "999+" : trip.like}</span>
+              </Flex>,
+            ]
+      }
     >
       <Flex
         className="trip-card-body"
@@ -88,7 +107,11 @@ const TripCard: React.FunctionComponent<Props> = ({
           gap="small"
           onClick={() => navigate(`/user/${trip.userId}`)}
         >
-          <Avatar src={trip.avatar} size={36} />
+          {trip.avatar ? (
+            <Avatar src={trip.avatar} size={36} />
+          ) : (
+            <Avatar icon={<UserOutlined />} size={36} />
+          )}
           <span className="trip-card-username">{trip.username}</span>
         </Flex>
         <Flex

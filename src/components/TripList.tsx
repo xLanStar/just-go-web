@@ -31,7 +31,6 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                 <TripCard
                   trip={trip}
                   mode={TripInfoMode.Private}
-                  isPublic={true}
                   isDelete={true}
                   toggleFavor={favorTrip}
                   deleteTrip={deleteTrip}
@@ -41,7 +40,6 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                 <TripCard
                   trip={trip}
                   mode={TripInfoMode.Private}
-                  isPublic={false}
                   isDelete={false}
                   toggleFavor={favorTrip}
                   deleteTrip={deleteTrip}
@@ -51,7 +49,6 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                 <TripCard
                   trip={trip}
                   mode={TripInfoMode.Private}
-                  isPublic={false}
                   isDelete={false}
                   toggleFavor={favorTrip}
                   deleteTrip={deleteTrip}
@@ -61,7 +58,6 @@ const TripList: React.FunctionComponent<Props> = ({ type }) => {
                 <TripCard
                   trip={trip}
                   mode={TripInfoMode.Public}
-                  isPublic={true}
                   isDelete={false}
                   toggleFavor={favorTrip}
                   deleteTrip={deleteTrip}

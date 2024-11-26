@@ -5,66 +5,43 @@ import {
   LockOutlined,
   PlusOutlined,
   SaveOutlined,
-  UsergroupAddOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
-import { TripSettingDialog } from "./TripSettingDialog";
-import { ShareSettingDialog } from "./ShareSettingDialog";
 
 interface Props {
   className?: string;
   mode: string;
-  addTrip: () => void;
+  onCreateTrip: () => void;
+  onTripSetting: () => void;
 }
 
-/**
- * `ActionButtonList` is a functional component that renders a list of action buttons
- * based on the provided `mode` prop. It supports three modes: "default", "edit", and "share".
- *
- * @param {Object} props - The props object.
- * @param {string} props.className - The CSS class name to apply to the container div.
- * @param {"default" | "edit" | "share"} props.mode - The mode that determines which buttons to display.
- *
- * @returns {JSX.Element} The rendered list of action buttons.
- */
 const ActionButtonList: React.FunctionComponent<Props> = ({
   className,
   mode,
-  addTrip,
+  onCreateTrip,
+  onTripSetting,
 }) => {
-  const [isTripSettingDialogOpen, setTripSettingDialogOpen] = useState(false);
-  const [isShareSettingDialogOpen, setShareSettingDialogOpen] = useState(false);
   return (
     <>
       {(mode === "default" || mode === "explore") && (
-        <Button className={className} icon={<PlusOutlined />} onClick={addTrip}>
+        <Button
+          className={className}
+          icon={<PlusOutlined />}
+          onClick={onCreateTrip}
+        >
           建立行程
         </Button>
       )}
       {mode === "edit" && (
         <>
-          <TripSettingDialog isOpen={isTripSettingDialogOpen} onCancel={() => { setTripSettingDialogOpen(false) }} />
-          <ShareSettingDialog isOpen={isShareSettingDialogOpen} onCancel={() => { setShareSettingDialogOpen(false) }} />
-          <Button className={className} icon={<InfoCircleOutlined />} onClick={() => { setTripSettingDialogOpen(true) }}>
+          <Button
+            className={className}
+            icon={<InfoCircleOutlined />}
+            onClick={onTripSetting}
+          >
             設定
           </Button>
-          <Button
-            className={className}
-            icon={<LockOutlined />}
-            onClick={() => {
-              setShareSettingDialogOpen(true);
-            }}
-          >
+          <Button className={className} icon={<LockOutlined />}>
             共用
-          </Button>
-          <Button
-            className={className}
-            icon={<UsergroupAddOutlined />}
-            onClick={() => {
-              document.getElementById("memberList")!.style.display = "flex";
-            }}
-          >
-            6
           </Button>
         </>
       )}

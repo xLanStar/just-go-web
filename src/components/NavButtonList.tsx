@@ -11,19 +11,6 @@ interface Props {
   mode: string;
 }
 
-/**
- * NavButtonList component renders a list of navigation buttons or a dropdown menu
- * based on the provided mode. It uses Ant Design components for UI elements.
- *
- * @component
- * @param {Object} props - The properties object.
- * @param {string} props.className - The CSS class name to apply to the container div.
- * @param {"button" | "menu"} props.mode - The mode in which to render the navigation items.
- *   - "button": Renders individual buttons for each navigation item.
- *   - "menu": Renders a dropdown menu containing the navigation items.
- *
- * @returns {JSX.Element} The rendered NavButtonList component.
- */
 const NavButtonList: React.FunctionComponent<Props> = ({ className, mode }) => {
   const navigate = useNavigate();
 

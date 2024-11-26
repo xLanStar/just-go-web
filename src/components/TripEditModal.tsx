@@ -1,36 +1,49 @@
 import { CloseCircleOutlined, SaveOutlined } from "@ant-design/icons";
-import { Form, Input, Modal, DatePicker, ConfigProvider } from "antd";
+import { Form, Input, Modal, ConfigProvider, Flex } from "antd";
 import Uploader from "./Uploader";
-import { TripFrom } from "../types/formInterface";
 import { CommonRules } from "../data/form";
-import useTripInfo from "../hooks/useTripInfo";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { useState } from "react";
+import TagEditList from "./TagEditList";
+import { TripEditFrom } from "../types/formInterface";
+import useTripInfo from "../hooks/useTripInfo";
+import { setCurrentTrip } from "../store/trip/tripSlice";
 
-import "../assets/scss/tripModal.scss";
+import "../assets/scss/tripEditModal.scss";
 
-const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
 interface Props {
   open: boolean;
   handleClose: () => void;
 }
 
-const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
+const TripEditModal: React.FunctionComponent<Props> = ({
+  open,
+  handleClose,
+}) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const { createTrip } = useTripInfo("");
+  const currentTrip = useAppSelector((state) => state.trip.currentTrip);
+  const { updateTripInfo } = useTripInfo("");
+
   const [form] = Form.useForm();
 
-  const handleSubmit = async (form: TripFrom) => {
-    const tripInfo = await createTrip(
+  const [labels, setLabels] = useState<string[]>(currentTrip?.labels || []);
+
+  const handleSubmit = async (form: TripEditFrom) => {
+    console.log(form);
+    console.log(labels);
+    const tripInfo = await updateTripInfo(
+      currentTrip?.id as string,
       form.name,
       form.image,
-      form.date[0].format("YYYY-MM-DD"),
-      form.date[1].format("YYYY-MM-DD")
+      form.description,
+      labels
     );
-
-    console.log(tripInfo);
-    navigate(`/trip/${tripInfo.id}`);
+    dispatch(setCurrentTrip(tripInfo));
     handleClose();
   };
 
@@ -49,13 +62,14 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
       }}
     >
       <Modal
-        className="trip_modal"
-        title="建立行程"
+        className="trip-edit-modal"
+        title="編輯行程"
         centered
         open={open}
         onCancel={() => {
           handleClose();
           form.resetFields();
+          setLabels(currentTrip?.labels || []);
         }}
         destroyOnClose
         okButtonProps={{
@@ -84,27 +98,44 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
           valuePropName="value"
           getValueFromEvent={(e) => e?.[0]}
         >
-          <Uploader />
+          <Uploader defaultImageUrl={currentTrip?.image} />
         </Form.Item>
         <Form.Item
           name="name"
           label="行程名稱"
           validateTrigger="onBlur"
+          initialValue={currentTrip?.title}
           rules={[CommonRules.Required]}
         >
           <Input size="large" placeholder="行程名稱" required />
         </Form.Item>
         <Form.Item
-          name="date"
-          label="行程日期"
+          name="description"
+          label="行程介紹"
           validateTrigger="onBlur"
-          rules={[CommonRules.Required]}
+          initialValue={currentTrip?.description}
         >
-          <RangePicker className="trip_modal_form_item" size="large" />
+          <TextArea
+            size="large"
+            placeholder="行程介紹"
+            rows={3}
+            maxLength={500}
+            style={{ resize: "none" }}
+          />
         </Form.Item>
+        <Flex
+          className="trip-edit-modal-tags"
+          vertical
+          justify="center"
+          align="flex-start"
+          gap="small"
+        >
+          <h3>行程標籤</h3>
+          <TagEditList tags={labels} setTags={setLabels} />
+        </Flex>
       </Modal>
     </ConfigProvider>
   );
 };
 
-export default TripModal;
+export default TripEditModal;
