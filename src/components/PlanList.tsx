@@ -32,7 +32,7 @@ const PlanList: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const { plans } = usePlans(tripInfo.id);
+  const { plans, changePlanName } = usePlans(tripInfo.id);
 
   const currentPlan = useAppSelector((state) => state.trip.currentPlan);
 
@@ -104,6 +104,9 @@ const PlanList: React.FunctionComponent<Props> = ({
           plan={currentPlan as Plan}
           color={planColor}
           closePlanDetail={() => setShowPlanDetail(false)}
+          onPlanNameChange={(name: string) =>
+            changePlanName(currentPlan?.id as string, name)
+          }
         />
       ) : null}
     </Flex>

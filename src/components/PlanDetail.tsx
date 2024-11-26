@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ConfigProvider, Flex, Tabs } from "antd";
+import { useEffect } from "react";
+import { ConfigProvider, Flex, Input, Tabs } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import useDays from "../hooks/useDays";
 import AttractionCard from "./AttractionCard";
@@ -27,6 +27,7 @@ interface Props {
   plan: Plan;
   color: string;
   closePlanDetail: () => void;
+  onPlanNameChange: (name: string) => void;
 }
 
 const PlanDetail: React.FunctionComponent<Props> = ({
@@ -34,6 +35,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
   plan,
   color,
   closePlanDetail,
+  onPlanNameChange,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -119,14 +121,21 @@ const PlanDetail: React.FunctionComponent<Props> = ({
           justify="center"
           align="center"
         >
-          <h1
+          <Input
             className="plan-detail-title"
             style={{
               color: color,
             }}
-          >
-            {plan.name}
-          </h1>
+            defaultValue={plan.name ? plan.name : "未命名方案"}
+            variant="borderless"
+            size="large"
+            onBlur={(e) => {
+              const newName = e.target.value;
+              if (newName !== plan.name) {
+                onPlanNameChange(newName);
+              }
+            }}
+          />
           <LeftOutlined
             className="plan-detail-close-button"
             onClick={() => {
