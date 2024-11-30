@@ -32,7 +32,9 @@ const PlanList: React.FunctionComponent<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const { plans, changePlanName } = usePlans(tripInfo.id);
+  const { plans, createPlan, changePlanName, changePlanFinal } = usePlans(
+    tripInfo.id
+  );
 
   const currentPlan = useAppSelector((state) => state.trip.currentPlan);
 
@@ -91,7 +93,11 @@ const PlanList: React.FunctionComponent<Props> = ({
               justify="center"
               align="center"
             >
-              <Button className="plan-list-button" icon={<PlusOutlined />}>
+              <Button
+                className="plan-list-button"
+                icon={<PlusOutlined />}
+                onClick={createPlan}
+              >
                 建立新方案
               </Button>
             </Flex>
@@ -106,9 +112,8 @@ const PlanList: React.FunctionComponent<Props> = ({
           color={planColor}
           mode="Edit"
           closePlanDetail={() => setShowPlanDetail(false)}
-          onPlanNameChange={(name: string) =>
-            changePlanName(currentPlan?.id as string, name)
-          }
+          onPlanNameChange={changePlanName}
+          onFinalPlanChange={changePlanFinal}
         />
       ) : null}
     </Flex>
