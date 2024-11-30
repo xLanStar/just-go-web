@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import request from "../utils/request";
 import useAuth from "./useAuth";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setCurrentAttractions } from "../store/trip/tripSlice";
+import { setCurrentAttractions, setCurrentDay, setCurrentDays } from "../store/trip/tripSlice";
 
 const useCollection = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +17,7 @@ const useCollection = () => {
 
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
   const currentPlan = useAppSelector((state) => state.trip.currentPlan);
+  const currentDays = useAppSelector((state) => state.trip.currentDays);
   const currentDay = useAppSelector((state) => state.trip.currentDay);
   const currentAttractions = useAppSelector(
     (state) => state.trip.currentAttractions
@@ -133,6 +134,25 @@ const useCollection = () => {
         const newAttractions = [...currentAttractions, response.data];
         dispatch(setCurrentAttractions(newAttractions));
 
+        // 如果是第一個景點，則更新行程的開始時間
+        if (!preAttraction) {
+          const newCurrentDay = {
+            ...(currentDay as any),
+            startAttractionId: response.data.id,
+          };
+
+          dispatch(setCurrentDay(newCurrentDay));
+
+          const newDays = currentDays.map((day) => {
+            if (day.id === newCurrentDay.id) {
+              return newCurrentDay;
+            }
+            return day;
+          });
+
+          dispatch(setCurrentDays(newDays));
+        }
+
         message.success("加入成功");
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -150,7 +170,7 @@ const useCollection = () => {
         }
       }
     },
-    [currentTrip, currentPlan, currentDay, currentAttractions, dispatch]
+    [currentTrip, currentPlan, currentDays, currentDay, currentAttractions, dispatch]
   );
 
   return { collection, addPlace, addPlaceToTrip, deletePlace };

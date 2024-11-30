@@ -5,6 +5,7 @@ import { Mark } from "../../types/googleMapInterface";
 interface TripState {
   currentTrip: TripEditInfo | null;
   currentPlan: Plan | null;
+  currentDays: Day[];
   currentDay: Day | null;
   currentAttractions: Attraction[];
   markList: Mark[];
@@ -13,6 +14,7 @@ interface TripState {
 const initialState: TripState = {
   currentTrip: null,
   currentPlan: null,
+  currentDays: [],
   currentDay: null,
   currentAttractions: [],
   markList: [],
@@ -27,6 +29,9 @@ const tripSlice = createSlice({
     },
     setCurrentPlan(state, action: PayloadAction<Plan | null>) {
       state.currentPlan = action.payload;
+    },
+    setCurrentDays(state, action: PayloadAction<Day[]>) {
+      state.currentDays = action.payload;
     },
     setCurrentDay(state, action: PayloadAction<Day | null>) {
       state.currentDay = action.payload;
@@ -43,6 +48,7 @@ const tripSlice = createSlice({
 export const {
   setCurrentTrip,
   setCurrentPlan,
+  setCurrentDays,
   setCurrentDay,
   setCurrentAttractions,
   setMarkList,

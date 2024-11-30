@@ -57,6 +57,9 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
           handleClose();
           form.resetFields();
         }}
+        afterClose={() => {
+          form.resetFields();
+        }}
         destroyOnClose
         okButtonProps={{
           icon: <SaveOutlined />,
