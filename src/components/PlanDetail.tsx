@@ -63,7 +63,6 @@ const PlanDetail: React.FunctionComponent<Props> = ({
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
 
   useEffect(() => {
-    console.log("currentDay", currentDay);
     if (!currentDay) return;
     loadAttractions(currentDay.id, currentDay.startAttractionId);
   }, [currentDay]);

@@ -29,7 +29,6 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
       form.date[1].format("YYYY-MM-DD")
     );
 
-    console.log(tripInfo);
     navigate(`/trip/${tripInfo.id}`);
     handleClose();
   };

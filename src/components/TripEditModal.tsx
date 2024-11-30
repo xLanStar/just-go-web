@@ -32,8 +32,6 @@ const TripEditModal: React.FunctionComponent<Props> = ({
 
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
 
-  console.log("currentTrip", currentTrip);
-
   const { updateTripInfo, publishTrip } = useTripInfo("");
 
   const [form] = Form.useForm();
@@ -62,7 +60,6 @@ const TripEditModal: React.FunctionComponent<Props> = ({
       !currentTrip?.isPublic
     );
     dispatch(setCurrentTrip(tripInfo));
-    handleClose();
   };
 
   return (

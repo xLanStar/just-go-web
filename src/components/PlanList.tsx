@@ -41,8 +41,6 @@ const PlanList: React.FunctionComponent<Props> = ({
   const [showPlanDetail, setShowPlanDetail] = useState<boolean>(false);
   const [planColor, setPlanColor] = useState<string>("");
 
-  console.log(plans);
-
   return (
     <Flex className="plan-list" vertical justify="flex-start" align="center">
       <Flex

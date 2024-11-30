@@ -21,8 +21,6 @@ const PlaceCard: React.FunctionComponent<Props> = memo(
       getPlaceDetail(placeId);
     }, [placeId]);
 
-    console.log("render placeId", placeId);
-
     return (
       <Card
         className="place_card"

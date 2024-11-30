@@ -30,7 +30,6 @@ const useTripInfo = (type: string) => {
             setTrips(response.data);
             break;
         }
-        console.log("response", response);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.status === 401) {
