@@ -1,10 +1,8 @@
 import { Button } from "antd";
 import {
-  HeartOutlined,
   InfoCircleOutlined,
   LockOutlined,
   PlusOutlined,
-  SaveOutlined,
 } from "@ant-design/icons";
 
 interface Props {
@@ -47,11 +45,12 @@ const ActionButtonList: React.FunctionComponent<Props> = ({
       )}
       {mode === "share" && (
         <>
-          <Button className={className} icon={<SaveOutlined />}>
-            建立副本
-          </Button>
-          <Button className={className} icon={<HeartOutlined />}>
-            收藏
+          <Button
+            className={className}
+            icon={<InfoCircleOutlined />}
+            onClick={onTripSetting}
+          >
+            行程資訊
           </Button>
         </>
       )}
