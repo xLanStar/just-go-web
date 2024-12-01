@@ -8,13 +8,14 @@ import { LatLngLiteral, Mark } from "../types/googleMapInterface";
 import SearchBar from "../components/SearchBar";
 import Map from "../components/Map";
 import PlaceInfo from "../components/PlaceInfo";
-import { BookOutlined } from "@ant-design/icons";
+import { BookOutlined, RobotOutlined } from "@ant-design/icons";
 import Collection from "../components/Collection";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import useSearchBar from "../hooks/useSearchBar";
 import useGoogleMapService from "../hooks/useMapService";
 import useCollection from "../hooks/useCollection";
 import usePlaceDetail from "../hooks/usePlaceDetail";
+import ChatBox from "../components/ChatBox";
 
 import "../assets/scss/explore.scss";
 
@@ -39,6 +40,7 @@ const Explore: React.FunctionComponent = () => {
   const [markList, setMarkList] = useState<Mark[]>([]);
   const [showPlaceInfo, setShowPlaceInfo] = useState<boolean>(false);
   const [showCollection, setShowCollection] = useState<boolean>(false);
+  const [showChatBox, setShowChatBox] = useState<boolean>(false);
 
   useEffect(() => {
     if (!getItem("jwtToken")) {
@@ -129,6 +131,12 @@ const Explore: React.FunctionComponent = () => {
         icon={<BookOutlined />}
         onClick={() => setShowCollection(true)}
       />
+      <FloatButton
+        className="explore_chatbox_button"
+        type="primary"
+        icon={<RobotOutlined />}
+        onClick={() => setShowChatBox(true)}
+      />
       {showPlaceInfo ? (
         <PlaceInfo
           place={placeDetail}
@@ -144,6 +152,9 @@ const Explore: React.FunctionComponent = () => {
           addPlaceToTrip={addPlaceToTrip}
           deletePlace={deletePlace}
         />
+      ) : null}
+      {showChatBox ? (
+        <ChatBox closeChatBox={() => setShowChatBox(false)} />
       ) : null}
     </Flex>
   );

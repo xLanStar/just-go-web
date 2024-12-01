@@ -4,7 +4,7 @@
 }
 
 .explore_loading {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .explore_loading_box {
@@ -12,8 +12,13 @@
   height: 100%;
 }
 
+.explore_chatbox_button,
 .explore_collection_button {
   width: 50px;
   height: 50px;
   z-index: 1;
+}
+
+.explore_chatbox_button {
+  inset-inline-end: 100px;
 }

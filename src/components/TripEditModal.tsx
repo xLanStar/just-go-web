@@ -3,7 +3,7 @@ import {
   SaveOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Modal, ConfigProvider, Flex, Button } from "antd";
+import { Form, Input, Modal, ConfigProvider, Flex, Button, Tag } from "antd";
 import Uploader from "./Uploader";
 import { CommonRules } from "../data/form";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -19,18 +19,18 @@ const { TextArea } = Input;
 
 interface Props {
   open: boolean;
+  mode: "Read" | "Edit";
   handleClose: () => void;
 }
 
 const TripEditModal: React.FunctionComponent<Props> = ({
   open,
+  mode,
   handleClose,
 }) => {
   const dispatch = useAppDispatch();
 
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
-
-  console.log("currentTrip", currentTrip);
 
   const { updateTripInfo, publishTrip } = useTripInfo("");
 
@@ -60,7 +60,6 @@ const TripEditModal: React.FunctionComponent<Props> = ({
       !currentTrip?.isPublic
     );
     dispatch(setCurrentTrip(tripInfo));
-    handleClose();
   };
 
   return (
@@ -79,7 +78,7 @@ const TripEditModal: React.FunctionComponent<Props> = ({
     >
       <Modal
         className="trip-edit-modal"
-        title="編輯行程"
+        title={mode === "Read" ? "行程資訊" : "編輯行程"}
         centered
         open={open}
         onCancel={() => {
@@ -94,15 +93,19 @@ const TripEditModal: React.FunctionComponent<Props> = ({
         destroyOnClose
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
-            <Button
-              className="trip-edit-modal-publish-button"
-              icon={<SendOutlined />}
-              onClick={handlePublish}
-            >
-              {currentTrip?.isPublic ? "取消發布" : "發布"}
-            </Button>
-            <CancelBtn />
-            <OkBtn />
+            {mode === "Edit" && (
+              <>
+                <Button
+                  className="trip-edit-modal-publish-button"
+                  icon={<SendOutlined />}
+                  onClick={handlePublish}
+                >
+                  {currentTrip?.isPublic ? "取消發布" : "發布"}
+                </Button>
+                <CancelBtn />
+                <OkBtn />
+              </>
+            )}
           </>
         )}
         okButtonProps={{
@@ -131,7 +134,15 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           valuePropName="value"
           getValueFromEvent={(e) => e?.[0]}
         >
-          <Uploader defaultImageUrl={currentTrip?.image} />
+          {mode === "Read" ? (
+            <img
+              className="trip-edit-modal-image"
+              src={currentTrip?.image}
+              alt="trip"
+            />
+          ) : (
+            <Uploader defaultImageUrl={currentTrip?.image} />
+          )}
         </Form.Item>
         <Form.Item
           name="name"
@@ -140,7 +151,12 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           initialValue={currentTrip?.title}
           rules={[CommonRules.Required]}
         >
-          <Input size="large" placeholder="行程名稱" required />
+          <Input
+            size="large"
+            placeholder="行程名稱"
+            disabled={mode === "Read"}
+            required
+          />
         </Form.Item>
         <Form.Item
           name="description"
@@ -151,6 +167,7 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           <TextArea
             size="large"
             placeholder="行程介紹"
+            disabled={mode === "Read"}
             rows={3}
             maxLength={255}
             style={{ resize: "none" }}
@@ -164,7 +181,29 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           gap="small"
         >
           <h3>行程標籤</h3>
-          <TagEditList tags={labels} setTags={setLabels} />
+          {mode === "Read" ? (
+            <>
+              <Flex
+                vertical={false}
+                justify="flex-start"
+                align="center"
+                gap="small"
+              >
+                {labels.length === 0 && (
+                  <h3 className="trip-edit-modal-no-label">無標籤</h3>
+                )}
+                {labels.map((label, index) => (
+                  <Tag key={index} color="blue">
+                    {label}
+                  </Tag>
+                ))}
+              </Flex>
+            </>
+          ) : (
+            <>
+              <TagEditList tags={labels} setTags={setLabels} />
+            </>
+          )}
         </Flex>
       </Modal>
     </ConfigProvider>

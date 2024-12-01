@@ -44,9 +44,6 @@ const TripEdit: React.FunctionComponent = () => {
   const { currentTrip } = useTrip(id);
   const { markList, loadMarkList } = useMarkList();
 
-  console.log("currentTrip", currentTrip);
-  console.log("markList", markList);
-
   const [showPlanList, setShowPlanList] = useState<boolean>(false);
   const [showChatBox, setShowChatBox] = useState<boolean>(false);
   const [showCollection, setShowCollection] = useState<boolean>(false);
@@ -87,16 +84,16 @@ const TripEdit: React.FunctionComponent = () => {
         onClick={() => setShowPlanList(true)}
       />
       <FloatButton
-        className="trip_edit_chatbox_button"
-        type="primary"
-        icon={<RobotOutlined />}
-        onClick={() => setShowChatBox(true)}
-      />
-      <FloatButton
         className="trip_edit_collection_button"
         type="primary"
         icon={<BookOutlined />}
         onClick={() => setShowCollection(true)}
+      />
+      <FloatButton
+        className="trip_edit_chatbox_button"
+        type="primary"
+        icon={<RobotOutlined />}
+        onClick={() => setShowChatBox(true)}
       />
       {showPlanList ? (
         <PlanList
@@ -105,10 +102,7 @@ const TripEdit: React.FunctionComponent = () => {
         />
       ) : null}
       {showChatBox ? (
-        <ChatBox
-          placesServiceRef={placesServiceRef}
-          closeChatBox={() => setShowChatBox(false)}
-        />
+        <ChatBox closeChatBox={() => setShowChatBox(false)} />
       ) : null}
       {showCollection ? (
         <Collection

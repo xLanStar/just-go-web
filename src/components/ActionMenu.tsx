@@ -45,14 +45,10 @@ const ActionMenu: React.FunctionComponent<Props> = ({
 
   const shareItems: MenuProps["items"] = [
     {
-      key: "copy_trip",
-      icon: <SaveOutlined />,
-      label: "建立副本",
-    },
-    {
-      key: "keep_trip",
-      icon: <HeartOutlined />,
-      label: "收藏",
+      key: "trip_setting",
+      icon: <InfoCircleOutlined />,
+      label: "行程資訊",
+      onClick: onTripSetting,
     },
   ];
 

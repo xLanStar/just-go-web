@@ -1,7 +1,6 @@
 export interface Chat {
   role: "bot" | "user";
-  type: "text" | "attraction";
-  content: Place[] | string;
+  content: string;
 }
 
 export interface Place {

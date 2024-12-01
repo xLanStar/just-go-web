@@ -30,7 +30,8 @@ interface Props {
   color: string;
   mode: "Edit" | "Read";
   closePlanDetail: () => void;
-  onPlanNameChange: (name: string) => void;
+  onPlanNameChange: (planId: string, name: string) => void;
+  onFinalPlanChange: (planId: string) => void;
 }
 
 const PlanDetail: React.FunctionComponent<Props> = ({
@@ -41,6 +42,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
   mode,
   closePlanDetail,
   onPlanNameChange,
+  onFinalPlanChange,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -61,7 +63,6 @@ const PlanDetail: React.FunctionComponent<Props> = ({
   const currentTrip = useAppSelector((state) => state.trip.currentTrip);
 
   useEffect(() => {
-    console.log("currentDay", currentDay);
     if (!currentDay) return;
     loadAttractions(currentDay.id, currentDay.startAttractionId);
   }, [currentDay]);
@@ -152,7 +153,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
               if (mode === "Read") return;
               const newName = e.target.value;
               if (newName !== plan.name) {
-                onPlanNameChange(newName);
+                onPlanNameChange(plan.id, newName);
               }
             }}
           />
@@ -177,6 +178,7 @@ const PlanDetail: React.FunctionComponent<Props> = ({
           ) : (
             <StarOutlined
               className="plan-detail-final-plan"
+              onClick={() => onFinalPlanChange(plan.id)}
               style={{
                 color: color,
               }}

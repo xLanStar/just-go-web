@@ -29,7 +29,6 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
       form.date[1].format("YYYY-MM-DD")
     );
 
-    console.log(tripInfo);
     navigate(`/trip/${tripInfo.id}`);
     handleClose();
   };
@@ -55,6 +54,9 @@ const TripModal: React.FunctionComponent<Props> = ({ open, handleClose }) => {
         open={open}
         onCancel={() => {
           handleClose();
+          form.resetFields();
+        }}
+        afterClose={() => {
           form.resetFields();
         }}
         destroyOnClose

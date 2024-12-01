@@ -86,6 +86,7 @@ const Layout = () => {
         />
         <TripEditModal
           open={showTripEditModal}
+          mode={mode === "edit" ? "Edit" : "Read"}
           handleClose={() => setShowTripEditModal(false)}
         />
       </Content>
