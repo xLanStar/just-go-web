@@ -53,7 +53,7 @@ const Uploader: React.FunctionComponent<Props> = ({
       {imageUrl ? (
         <img
           className="uploader_image"
-          src={"https://voidcloud.net/" + imageUrl}
+          src={"https://voidcloud.net" + imageUrl}
           alt="image"
         />
       ) : (

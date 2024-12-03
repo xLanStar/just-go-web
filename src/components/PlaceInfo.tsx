@@ -47,7 +47,7 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
         >
           <img
             className="place_info_image"
-            src={"https://voidcloud.net/" + place.photo}
+            src={"https://voidcloud.net" + place.photo}
             alt="image"
           />
         </Flex>
