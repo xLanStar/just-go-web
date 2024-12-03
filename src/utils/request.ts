@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 
 const request = axios.create({
-  baseURL: "http://voidcloud.net/",
+  baseURL: "https://voidcloud.net/",
   timeout: 3000,
   headers: {
     "Content-Type": "application/json",
