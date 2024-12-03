@@ -12,8 +12,8 @@ import {
   Polyline,
 } from "@react-google-maps/api";
 import "../assets/scss/map.scss";
-import blueDot from "../assets/image/blueDot.png";
-import cluster from "../assets/image/cluster.png";
+import blueDot from "/blueDot.png";
+import cluster from "/cluster.png";
 
 const center: LatLngLiteral = {
   lat: 25.03796633677417,
