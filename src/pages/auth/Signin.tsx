@@ -47,7 +47,7 @@ const Signin: React.FunctionComponent = () => {
       <Flex className="signin_content" vertical align="center">
         <img
           className="signin_logo"
-          src="/src/assets/image/logo.png"
+          src="src/assets/image/logo.png"
           alt="logo.png"
         />
         <h2>{isSignin ? "登入" : "註冊"}</h2>
@@ -57,7 +57,9 @@ const Signin: React.FunctionComponent = () => {
           layout="vertical"
           scrollToFirstError
           onFinish={(form: SigninForm) => {
-            isSignin ? signin(form.email, form.password) : register(form.name as string, form.email, form.password);
+            isSignin
+              ? signin(form.email, form.password)
+              : register(form.name as string, form.email, form.password);
           }}
           noValidate
         >
