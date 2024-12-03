@@ -1,10 +1,8 @@
 import { Button, Dropdown, MenuProps } from "antd";
 import {
-  HeartOutlined,
   InfoCircleOutlined,
   LockOutlined,
   PlusOutlined,
-  SaveOutlined,
 } from "@ant-design/icons";
 
 interface Props {
