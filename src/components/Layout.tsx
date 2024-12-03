@@ -73,7 +73,7 @@ const Layout = () => {
                 onTripSetting={() => setShowTripEditModal(true)}
               />
               <NavButtonList className="layout_nav_menu" mode="menu" />
-              <AvatarMenu avatarUrl={"https://voidcloud.net" + user.avatar} />
+              <AvatarMenu avatarUrl={user.avatar} />
             </Flex>
           </Col>
         </Row>

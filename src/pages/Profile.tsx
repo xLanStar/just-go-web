@@ -38,6 +38,7 @@ const Profile: React.FunctionComponent = () => {
 
   const [avatarUrl, setAvatarUrl] = useState<string>(user.avatar);
   const [avatar, setAvatar] = useState<File | null>(null);
+  const [isUpload, setIsUpload] = useState<boolean>(false);
   const { message } = App.useApp();
   const [form] = Form.useForm();
 
@@ -61,6 +62,7 @@ const Profile: React.FunctionComponent = () => {
 
       setAvatar(avatar);
       setAvatarUrl(URL.createObjectURL(avatar));
+      setIsUpload(true);
 
       return false;
     },
@@ -99,7 +101,11 @@ const Profile: React.FunctionComponent = () => {
                   <Avatar
                     src={
                       <img
-                        src={"https://voidcloud.net" + avatarUrl}
+                        src={
+                          isUpload
+                            ? avatarUrl
+                            : "https://voidcloud.net" + avatarUrl
+                        }
                         alt="avatar"
                       />
                     }
