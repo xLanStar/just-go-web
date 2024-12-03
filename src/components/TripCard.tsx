@@ -47,7 +47,7 @@ const TripCard: React.FunctionComponent<Props> = ({
             className="trip-card-image"
             src={
               trip.image
-                ? "https://voidcloud.net/" + trip.image
+                ? "https://voidcloud.net" + trip.image
                 : defaultTripImage
             }
             alt="trip"
@@ -115,7 +115,7 @@ const TripCard: React.FunctionComponent<Props> = ({
           gap="small"
         >
           {trip.avatar ? (
-            <Avatar src={"https://voidcloud.net/" + trip.avatar} size={36} />
+            <Avatar src={"https://voidcloud.net" + trip.avatar} size={36} />
           ) : (
             <Avatar icon={<UserOutlined />} size={36} />
           )}

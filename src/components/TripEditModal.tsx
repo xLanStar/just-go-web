@@ -137,12 +137,12 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           {mode === "Read" ? (
             <img
               className="trip-edit-modal-image"
-              src={"https://voidcloud.net/" + currentTrip?.image}
+              src={"https://voidcloud.net" + currentTrip?.image}
               alt="trip"
             />
           ) : (
             <Uploader
-              defaultImageUrl={"https://voidcloud.net/" + currentTrip?.image}
+              defaultImageUrl={"https://voidcloud.net" + currentTrip?.image}
             />
           )}
         </Form.Item>

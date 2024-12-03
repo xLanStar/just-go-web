@@ -67,7 +67,7 @@ const AvatarMenu: React.FunctionComponent<Props> = ({ avatarUrl }) => {
       {avatarUrl ? (
         <Avatar
           className="avatar_menu_image"
-          src={<img src={"https://voidcloud.net/" + avatarUrl} alt="avatar" />}
+          src={<img src={"https://voidcloud.net" + avatarUrl} alt="avatar" />}
           size="large"
         />
       ) : (
