@@ -99,7 +99,7 @@ const Profile: React.FunctionComponent = () => {
                   <Avatar
                     src={
                       <img
-                        src={"https://voidcloud.net/" + avatarUrl}
+                        src={"https://voidcloud.net" + avatarUrl}
                         alt="avatar"
                       />
                     }
