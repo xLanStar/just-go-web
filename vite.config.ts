@@ -10,16 +10,4 @@ export default defineConfig({
       include: "**/*.svg",
     }),
   ],
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://voidcloud.net",
-        changeOrigin: true,
-      },
-      "/uploads": {
-        target: "http://voidcloud.net",
-        changeOrigin: true,
-      },
-    },
-  },
 });

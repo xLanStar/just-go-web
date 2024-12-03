@@ -1,13 +1,20 @@
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 const request = axios.create({
+  baseURL: "http://voidcloud.net/",
   timeout: 3000,
   headers: {
     "Content-Type": "application/json",
-  }
-})
+  },
+});
 
-const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
   const controller = new AbortController();
   const token = localStorage.getItem("jwtToken");
   config.signal = controller.signal;
@@ -21,7 +28,7 @@ const requestInterceptor = (config: InternalAxiosRequestConfig): InternalAxiosRe
   }
 
   return config;
-}
+};
 
 const requestErrorHandler = (error: AxiosError) => {
   console.error("Request Error : ", error);
