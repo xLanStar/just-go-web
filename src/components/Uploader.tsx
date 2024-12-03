@@ -51,7 +51,11 @@ const Uploader: React.FunctionComponent<Props> = ({
       maxCount={1}
     >
       {imageUrl ? (
-        <img className="uploader_image" src={imageUrl} alt="image" />
+        <img
+          className="uploader_image"
+          src={"https://voidcloud.net/" + imageUrl}
+          alt="image"
+        />
       ) : (
         <button className="uploader_button" type="button">
           <PlusOutlined />

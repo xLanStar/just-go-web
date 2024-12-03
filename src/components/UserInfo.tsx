@@ -18,7 +18,12 @@ const UserInfo: React.FunctionComponent<Props> = ({ user }) => {
       gap="middle"
     >
       {user.avatar ? (
-        <Avatar src={<img src={user.avatar} alt="avatar" />} size={80} />
+        <Avatar
+          src={
+            <img src={"https://voidcloud.net/" + user.avatar} alt="avatar" />
+          }
+          size={80}
+        />
       ) : (
         <Avatar size={80} icon={<UserOutlined />} />
       )}

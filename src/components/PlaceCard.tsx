@@ -28,7 +28,7 @@ const PlaceCard: React.FunctionComponent<Props> = memo(
           <img
             className="place_card_photo"
             alt={place.name}
-            src={place.photo}
+            src={"https://voidcloud.net/" + place.photo}
           />
         }
       >

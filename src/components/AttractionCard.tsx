@@ -55,7 +55,7 @@ const AttractionCard: React.FunctionComponent<Props> = ({
       cover={
         <img
           className="attraction-card-photo"
-          src={place.photo}
+          src={"https://voidcloud.net/" + place.photo}
           alt={place.name}
           {...attributes}
           {...listeners}
