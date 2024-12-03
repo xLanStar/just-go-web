@@ -94,6 +94,7 @@ const TripShare: React.FunctionComponent = () => {
           mode="Read"
           closePlanDetail={() => setShowPlanDetail(false)}
           onPlanNameChange={() => {}}
+          onFinalPlanChange={() => {}}
         />
       ) : null}
     </Flex>

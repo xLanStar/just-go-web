@@ -13,11 +13,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:80",
+        target: "http://voidcloud.net",
         changeOrigin: true,
       },
       "/uploads": {
-        target: "http://localhost:80",
+        target: "http://voidcloud.net",
         changeOrigin: true,
       },
     },
