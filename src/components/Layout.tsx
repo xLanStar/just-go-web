@@ -35,7 +35,7 @@ const Layout = () => {
             >
               <img
                 className="layout_logo"
-                src="src/assets/image/logo.png"
+                src="/logo.png"
                 alt="logo"
                 onClick={() => navigate("/")}
               />

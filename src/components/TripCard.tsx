@@ -11,7 +11,7 @@ import { TripInfo } from "../types/tripInterface";
 import { TripInfoMode } from "../types/modeInterface";
 
 import "../assets/scss/tripCard.scss";
-import defaultTripImage from "../assets/image/defaultTripImage.jpg";
+import defaultTripImage from "/defaultTripImage.jpg";
 
 interface Props {
   trip: TripInfo;

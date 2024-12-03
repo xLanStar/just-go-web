@@ -45,11 +45,7 @@ const Signin: React.FunctionComponent = () => {
   return (
     <Flex className="signin" vertical justify="center" align="center">
       <Flex className="signin_content" vertical align="center">
-        <img
-          className="signin_logo"
-          src="src/assets/image/logo.png"
-          alt="logo.png"
-        />
+        <img className="signin_logo" src="logo.png" alt="logo.png" />
         <h2>{isSignin ? "登入" : "註冊"}</h2>
         <Form
           className="signin_form"
