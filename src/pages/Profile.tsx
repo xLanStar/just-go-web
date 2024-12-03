@@ -97,7 +97,12 @@ const Profile: React.FunctionComponent = () => {
               >
                 {avatarUrl ? (
                   <Avatar
-                    src={<img src={avatarUrl} alt="avatar" />}
+                    src={
+                      <img
+                        src={"https://voidcloud.net/" + avatarUrl}
+                        alt="avatar"
+                      />
+                    }
                     size={80}
                   />
                 ) : (

@@ -45,7 +45,11 @@ const PlaceInfo: React.FunctionComponent<Props> = ({
           justify="center"
           align="center"
         >
-          <img className="place_info_image" src={place.photo} alt="image" />
+          <img
+            className="place_info_image"
+            src={"https://voidcloud.net/" + place.photo}
+            alt="image"
+          />
         </Flex>
         <Flex
           className="place_info_rating_box"
