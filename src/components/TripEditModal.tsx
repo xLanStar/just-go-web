@@ -141,9 +141,7 @@ const TripEditModal: React.FunctionComponent<Props> = ({
               alt="trip"
             />
           ) : (
-            <Uploader
-              defaultImageUrl={"https://voidcloud.net" + currentTrip?.image}
-            />
+            <Uploader defaultImageUrl={currentTrip?.image} />
           )}
         </Form.Item>
         <Form.Item

@@ -19,6 +19,7 @@ const Uploader: React.FunctionComponent<Props> = ({
   defaultImageUrl,
 }) => {
   const [image, setImage] = useState<UploadFile[]>(value);
+  const [isUpload, setIsUpload] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>(defaultImageUrl || "");
 
   const handleUpload = (file: FileType) => {
@@ -31,6 +32,7 @@ const Uploader: React.FunctionComponent<Props> = ({
 
     setImage([file]);
     setImageUrl(URL.createObjectURL(file));
+    setIsUpload(true);
 
     // 通知 Form 組件更新
     if (onChange) {
@@ -53,7 +55,7 @@ const Uploader: React.FunctionComponent<Props> = ({
       {imageUrl ? (
         <img
           className="uploader_image"
-          src={"https://voidcloud.net" + imageUrl}
+          src={isUpload ? imageUrl : "https://voidcloud.net" + imageUrl}
           alt="image"
         />
       ) : (
