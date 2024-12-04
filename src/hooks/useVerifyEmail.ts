@@ -11,7 +11,9 @@ const useVerifyEmail = (token: string) => {
 
   const verifyEmail = async (token: string) => {
     try {
-      const response = await axios.get(`/api/auth/verify/${token}`);
+      const response = await axios.get(
+        ` https://voidcloud.net/api/auth/verify/${token}`
+      );
       setLoading(false);
       return response.data;
     } catch (error) {

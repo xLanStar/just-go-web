@@ -102,7 +102,7 @@ const Profile: React.FunctionComponent = () => {
                     src={
                       <img
                         src={
-                          isUpload
+                          isUpload || !avatarUrl.startsWith("/uploads")
                             ? avatarUrl
                             : "https://voidcloud.net" + avatarUrl
                         }

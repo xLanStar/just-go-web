@@ -21,3 +21,9 @@
 .place_card_footer {
   margin-top: 8px;
 }
+
+.place_card_title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
