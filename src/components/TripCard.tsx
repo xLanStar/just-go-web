@@ -115,7 +115,14 @@ const TripCard: React.FunctionComponent<Props> = ({
           gap="small"
         >
           {trip.avatar ? (
-            <Avatar src={"https://voidcloud.net" + trip.avatar} size={36} />
+            <Avatar
+              src={
+                trip.avatar.startsWith("/uploads")
+                  ? "https://voidcloud.net" + trip.avatar
+                  : trip.avatar
+              }
+              size={36}
+            />
           ) : (
             <Avatar icon={<UserOutlined />} size={36} />
           )}

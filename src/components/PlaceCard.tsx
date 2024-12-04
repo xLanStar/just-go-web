@@ -33,6 +33,7 @@ const PlaceCard: React.FunctionComponent<Props> = memo(
         }
       >
         <Card.Meta
+          className="place_card_title"
           title={place.name}
           description={convertToTraditional(place.address)}
         />
