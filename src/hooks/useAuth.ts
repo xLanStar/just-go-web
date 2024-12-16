@@ -16,7 +16,7 @@ const useAuth = () => {
   const signin = async (email: string, password: string) => {
     try {
       const response = await axios.post(
-        "https://voidcloud.net/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
         {
           email,
           password,
@@ -51,7 +51,7 @@ const useAuth = () => {
   const googleSignin = async (accessToken: string) => {
     try {
       const response = await axios.post(
-        "https://voidcloud.net/api/auth/google",
+        `${import.meta.env.VITE_API_URL}/api/auth/google`,
         {
           token: accessToken,
         }
@@ -82,7 +82,7 @@ const useAuth = () => {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      await axios.post("https://voidcloud.net/api/auth/register", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         username: name,
         email,
         password,

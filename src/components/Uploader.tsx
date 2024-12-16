@@ -55,7 +55,7 @@ const Uploader: React.FunctionComponent<Props> = ({
       {imageUrl ? (
         <img
           className="uploader_image"
-          src={isUpload ? imageUrl : "https://voidcloud.net" + imageUrl}
+          src={isUpload ? imageUrl : import.meta.env.VITE_API_URL + imageUrl}
           alt="image"
         />
       ) : (

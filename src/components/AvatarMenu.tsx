@@ -69,7 +69,10 @@ const AvatarMenu: React.FunctionComponent<Props> = ({ avatarUrl }) => {
           className="avatar_menu_image"
           src={
             avatarUrl.startsWith("/uploads") ? (
-              <img src={"https://voidcloud.net" + avatarUrl} alt="avatar" />
+              <img
+                src={import.meta.env.VITE_API_URL + avatarUrl}
+                alt="avatar"
+              />
             ) : (
               <img src={avatarUrl} alt="avatar" />
             )
