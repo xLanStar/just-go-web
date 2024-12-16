@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 
 const request = axios.create({
-  baseURL: "https://voidcloud.net/",
+  baseURL: import.meta.env.VITE_API_URL as string,
   timeout: 3000,
   headers: {
     "Content-Type": "application/json",
