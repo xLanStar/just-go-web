@@ -19,7 +19,12 @@ const UserInfo: React.FunctionComponent<Props> = ({ user }) => {
     >
       {user.avatar ? (
         <Avatar
-          src={<img src={"https://voidcloud.net" + user.avatar} alt="avatar" />}
+          src={
+            <img
+              src={import.meta.env.VITE_API_URL + user.avatar}
+              alt="avatar"
+            />
+          }
           size={80}
         />
       ) : (

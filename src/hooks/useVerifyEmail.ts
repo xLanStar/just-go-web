@@ -12,7 +12,7 @@ const useVerifyEmail = (token: string) => {
   const verifyEmail = async (token: string) => {
     try {
       const response = await axios.get(
-        ` https://voidcloud.net/api/auth/verify/${token}`
+        `${import.meta.env.VITE_API_URL}/api/auth/verify/${token}`
       );
       setLoading(false);
       return response.data;

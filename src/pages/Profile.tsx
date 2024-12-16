@@ -104,7 +104,7 @@ const Profile: React.FunctionComponent = () => {
                         src={
                           isUpload || !avatarUrl.startsWith("/uploads")
                             ? avatarUrl
-                            : "https://voidcloud.net" + avatarUrl
+                            : import.meta.env.VITE_API_URL + avatarUrl
                         }
                         alt="avatar"
                       />

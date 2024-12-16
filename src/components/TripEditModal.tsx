@@ -137,7 +137,7 @@ const TripEditModal: React.FunctionComponent<Props> = ({
           {mode === "Read" ? (
             <img
               className="trip-edit-modal-image"
-              src={"https://voidcloud.net" + currentTrip?.image}
+              src={import.meta.env.VITE_API_URL + currentTrip?.image}
               alt="trip"
             />
           ) : (
